@@ -1,7 +1,8 @@
 package de.aikiit.mailversendala;
 
 import org.junit.Test;
-import org.junit.Assert;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Unit test for simple App.
@@ -12,6 +13,6 @@ public class AppTest {
      */
     @Test
     public void testApp() {
-        Assert.assertTrue(true);
+        assertThat(new App()).isNotNull();
     }
 }
