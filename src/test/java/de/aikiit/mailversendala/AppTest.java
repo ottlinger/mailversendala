@@ -8,11 +8,11 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Unit test for simple App.
  */
 public class AppTest {
-    /**
-     * Rigourous Test :-)
-     */
+
     @Test
-    public void testApp() {
+    public void appIsNotNullAndLaunchable() {
         assertThat(new App()).isNotNull();
+        App.main(null);
     }
+
 }
