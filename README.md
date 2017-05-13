@@ -5,3 +5,7 @@ Prototyp to send out mass emails
 
 * JavaMail
 * CSV stuff from Apache
+
+## Copyright
+
+(c) P. Ottlinger, 2017
