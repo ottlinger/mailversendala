@@ -17,7 +17,7 @@
         <javadoc.version>2.10.4</javadoc.version>
         <surefire.version>2.19.1</surefire.version>
         <rat.version>0.12</rat.version>
-        <guava.version>21.0</guava.version>
+        <guava.version>22.0-rc1</guava.version>
         <encoding.utf8>UTF-8</encoding.utf8>
         <shade.version>2.4.3</shade.version>
         <project.reporting.outputEncoding>${encoding.utf8}</project.reporting.outputEncoding>
