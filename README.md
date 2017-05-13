@@ -31,6 +31,8 @@ In order to just play around with it I've integrated a CI run:
 
 ### VersionEye - dependency update management
 
+Not activated for this project, but still a very cool integration: example PHP project
+
 [![Dependency versions](https://www.versioneye.com/user/projects/58978d3ea35eb6002e873a36/badge.svg)](https://www.versioneye.com/user/projects/58978d3ea35eb6002e873a36?child=summary)
 
 
