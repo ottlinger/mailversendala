@@ -133,6 +133,21 @@
     </build>
     <dependencies>
         <dependency>
+            <groupId>org.apache.tamaya</groupId>
+            <artifactId>tamaya-core</artifactId>
+            <version>0.2-incubating</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-email</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <version>${assertj.version}</version>
