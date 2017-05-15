@@ -24,10 +24,10 @@ public class SendOut {
     }
 
     public static void main(String... args) throws Exception {
-        new SendOut().send();
+        new SendOut().send(false);
     }
 
-    public void send() throws EmailException {
+    public void send(boolean isTest) throws EmailException {
         email.setFrom(MailConfig.FROM);
         email.addTo(MailConfig.TO);
 
@@ -35,7 +35,9 @@ public class SendOut {
 
         email.setSubject("TestMail " + new Date());
         email.setMsg("This is a test mail from Mailversendala... :-)");
-        email.send();
+        if (!isTest) {
+            email.send();
+        }
     }
 
 }
