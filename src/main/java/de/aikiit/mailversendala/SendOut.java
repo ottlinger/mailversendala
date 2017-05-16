@@ -58,13 +58,14 @@ public class SendOut {
     public void sendComplex(boolean isTest) throws EmailException, MalformedURLException {
         htmlEmail.addTo(MailConfig.TO, "John Doe Recipiento");
         htmlEmail.setFrom(MailConfig.FROM, "Me");
+        htmlEmail.setSubject("HTML" + MailConfig.SUBJECT + new Date());
 
         // embed the image and get the content id
         URL url = new URL("http://www.apache.org/images/asf_logo_wide.gif");
         String cid = htmlEmail.embed(url, "Apache logo");
 
         // set the html message
-        htmlEmail.setHtmlMsg("<html>The apache logo - <img src=\"cid:"+cid+"\"></html>");
+        htmlEmail.setHtmlMsg("<html>The apache logo - <img src=\"cid:" + cid + "\"></html>");
 
         // set the alternative message
         htmlEmail.setTextMsg("Your email client does not support HTML messages - thus no Apache logo");
