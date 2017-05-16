@@ -24,12 +24,17 @@ public class SendOut {
         email.setAuthenticator(authenticator);
         email.setSSLOnConnect(true);
         email.setBounceAddress(MailConfig.FROM);
+        // is transformed into User-Agent-Header
+        email.addHeader("X-Mailer", "Mailversendala - https://github.com/ottlinger/mailversendala");
 
         this.htmlEmail = new HtmlEmail();
         htmlEmail.setHostName(MailConfig.SMTP_HOST);
         htmlEmail.setSSLOnConnect(true);
         htmlEmail.setBounceAddress(MailConfig.FROM);
         htmlEmail.setAuthenticator(authenticator);
+
+        // is transformed into User-Agent-Header
+        htmlEmail.addHeader("X-Mailer", "Mailversendala - https://github.com/ottlinger/mailversendala");
     }
 
     public static void main(String... args) throws Exception {
