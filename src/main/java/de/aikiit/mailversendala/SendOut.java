@@ -11,6 +11,9 @@ import java.util.Date;
  * Created by hirsch on 15.05.17.
  */
 public class SendOut {
+    // is transformed into User-Agent-Header
+    private static final String SENT_BY = "X-Mailer";
+    private static final String SENT_BY_ME = "Mailversendala - https://github.com/ottlinger/mailversendala";
 
     private Email email;
     private HtmlEmail htmlEmail;
@@ -24,17 +27,14 @@ public class SendOut {
         email.setAuthenticator(authenticator);
         email.setSSLOnConnect(true);
         email.setBounceAddress(MailConfig.FROM);
-        // is transformed into User-Agent-Header
-        email.addHeader("X-Mailer", "Mailversendala - https://github.com/ottlinger/mailversendala");
+        email.addHeader(SENT_BY, SENT_BY_ME);
 
         this.htmlEmail = new HtmlEmail();
         htmlEmail.setHostName(MailConfig.SMTP_HOST);
         htmlEmail.setSSLOnConnect(true);
         htmlEmail.setBounceAddress(MailConfig.FROM);
         htmlEmail.setAuthenticator(authenticator);
-
-        // is transformed into User-Agent-Header
-        htmlEmail.addHeader("X-Mailer", "Mailversendala - https://github.com/ottlinger/mailversendala");
+        htmlEmail.addHeader(SENT_BY, SENT_BY_ME);
     }
 
     public static void main(String... args) throws Exception {
