@@ -3,6 +3,8 @@ package de.aikiit.mailversendala;
 import org.apache.commons.mail.EmailException;
 import org.junit.Test;
 
+import java.net.MalformedURLException;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -20,5 +22,12 @@ public class SendOutTest {
         SendOut sendOut = new SendOut();
         assertThat(sendOut).isNotNull();
         sendOut.send(true);
+    }
+
+    @Test
+    public void sendOutHtmlMessageWithoutSendingInTestMode() throws EmailException, MalformedURLException {
+        SendOut sendOut = new SendOut();
+        assertThat(sendOut).isNotNull();
+        sendOut.sendComplex(true);
     }
 }
