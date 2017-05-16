@@ -12,4 +12,5 @@ public interface MailConfig {
      String PASSWORD = "password";
      String FROM = "from@bar.com";
      String TO = "to@bar.com";
+     String SUBJECT = "My subject";
 }

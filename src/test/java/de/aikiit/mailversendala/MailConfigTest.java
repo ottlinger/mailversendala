@@ -13,7 +13,7 @@ public class MailConfigTest {
 
     @Test
     public void ensureConfigurationIsValid() {
-        for(String token : Arrays.asList(MailConfig.FROM, MailConfig.PASSWORD, MailConfig.SMTP_HOST, MailConfig.TO, MailConfig.USERNAME)) {
+        for(String token : Arrays.asList(MailConfig.SUBJECT, MailConfig.FROM, MailConfig.PASSWORD, MailConfig.SMTP_HOST, MailConfig.TO, MailConfig.USERNAME)) {
             assertThat(token).isNotNull();
         }
 

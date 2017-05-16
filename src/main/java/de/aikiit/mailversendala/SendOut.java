@@ -33,7 +33,7 @@ public class SendOut {
 
         email.setCharset(Charsets.UTF_8.name());
 
-        email.setSubject("TestMail " + new Date());
+        email.setSubject(MailConfig.SUBJECT + new Date());
         email.setMsg("This is a test mail from Mailversendala... :-)");
         if (!isTest) {
             email.send();
