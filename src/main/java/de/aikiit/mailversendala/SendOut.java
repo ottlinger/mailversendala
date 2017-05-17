@@ -49,11 +49,11 @@ public class SendOut {
     public static void main(String... args) throws Exception {
 
         SendOut sendOut = new SendOut();
-        System.out.println("Init: DONE");
+        LOG.debug("Init: DONE");
         sendOut.send(false);
-        System.out.println("Send simple text-based message: DONE");
+        LOG.info("Send simple text-based message: DONE");
         sendOut.sendComplex(false);
-        System.out.println("Send complex HTML and text-based message: DONE");
+        LOG.info("Send complex HTML and text-based message: DONE");
     }
 
     public void send(boolean isTest) throws EmailException {
