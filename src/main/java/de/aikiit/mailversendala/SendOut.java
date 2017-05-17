@@ -7,10 +7,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * Created by hirsch on 15.05.17.
  */
 public class SendOut {
+    private static final Logger LOG =
+            LogManager.getLogger(SendOut.class);
+
     // is transformed into User-Agent-Header
     private static final String SENT_BY = "X-Mailer";
     private static final String SENT_BY_ME = "Mailversendala - https://github.com/ottlinger/mailversendala";
@@ -19,6 +25,7 @@ public class SendOut {
     private HtmlEmail htmlEmail;
 
     public SendOut() {
+        LOG.info("Initialized authentication.");
         DefaultAuthenticator authenticator = new DefaultAuthenticator(MailConfig.USERNAME, MailConfig.PASSWORD);
 
         this.email = new SimpleEmail();
@@ -28,6 +35,7 @@ public class SendOut {
         email.setSSLOnConnect(true);
         email.setBounceAddress(MailConfig.FROM);
         email.addHeader(SENT_BY, SENT_BY_ME);
+        LOG.info("Simple email initialized.");
 
         this.htmlEmail = new HtmlEmail();
         htmlEmail.setHostName(MailConfig.SMTP_HOST);
@@ -35,6 +43,7 @@ public class SendOut {
         htmlEmail.setBounceAddress(MailConfig.FROM);
         htmlEmail.setAuthenticator(authenticator);
         htmlEmail.addHeader(SENT_BY, SENT_BY_ME);
+        LOG.info("HTML and text email initialized.");
     }
 
     public static void main(String... args) throws Exception {
