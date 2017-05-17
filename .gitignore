@@ -16,4 +16,7 @@ hs_err_pid*
 *.iml
 target
 .idea
+# Do not put logs in SCM 
+*.log
+# Prevent accidentally checking in real configurations
 MailConfig.java.template
