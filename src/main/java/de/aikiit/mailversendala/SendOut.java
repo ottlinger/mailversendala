@@ -9,6 +9,7 @@ import java.util.Date;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.tamaya.ConfigurationProvider;
 
 /**
  * Created by hirsch on 15.05.17.
@@ -25,6 +26,8 @@ public class SendOut {
     private HtmlEmail htmlEmail;
 
     public SendOut() {
+        LOG.info("Read from Tamaya config: " + ConfigurationProvider.getConfiguration().getOrDefault("a", "aDefault"));
+
         LOG.info("Initialized authentication.");
         DefaultAuthenticator authenticator = new DefaultAuthenticator(MailConfig.USERNAME, MailConfig.PASSWORD);
 
