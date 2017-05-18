@@ -12,6 +12,8 @@ Prototyp to send out mass emails
 [![Stories in Ready](https://badge.waffle.io/ottlinger/mailversendala.png?label=ready&title=Ready)](https://waffle.io/ottlinger/mailversendala)
 [![Stories in Progress](https://badge.waffle.io/ottlinger/mailversendala.png?label=in%20progress&title=In%20Progress)](https://waffle.io/ottlinger/mailversendala)
 
+[![Known Vulnerabilities](https://snyk.io/test/npm/ottlinger/mailversendala/badge.svg)](https://snyk.io/test/npm/ottlinger/mailversendala)
+
 [![GPL v3.0](https://img.shields.io/github/license/ottlinger/mailversendala.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
 ## Github integration
