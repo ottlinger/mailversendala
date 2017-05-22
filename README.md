@@ -39,7 +39,7 @@ Not activated for this project, but still a very cool integration: example PHP p
 ## How to configure the application
 
 In order to properly configure the application you need to set some mai-related properties.
-Please use the file [javaconfig.properties.template](./src/main/resources/META-INF/javaconfig.properties) and save it as *javaconfig.properties*.
+Please use the file [javaconfiguration.properties.template](./src/main/resources/META-INF/javaconfiguration.properties.template) and save it as *javaconfiguration.properties*.
 
 ## Copyright
 
