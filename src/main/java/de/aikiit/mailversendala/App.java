@@ -11,6 +11,6 @@ public class App {
             LogManager.getLogger(App.class);
 
     public static void main(String[] args) {
-        LOG.info("Hello World!");
+        LOG.info("Hello Mailversendala configured with the help of Tamaya!");
     }
 }
