@@ -36,6 +36,10 @@ Not activated for this project, but still a very cool integration: example PHP p
 [![Dependency versions](https://www.versioneye.com/user/projects/58978d3ea35eb6002e873a36/badge.svg)](https://www.versioneye.com/user/projects/58978d3ea35eb6002e873a36?child=summary)
 
 
+## How to configure the application
+
+In order to properly configure the application you need to set some mai-related properties.
+Please use the file [javaconfig.properties.template](./src/main/resources/META-INF/javaconfig.properties) and save it as *javaconfig.properties*.
 
 ## Copyright
 

@@ -19,4 +19,4 @@ target
 # Do not put logs in SCM 
 *.log
 # Prevent accidentally checking in real configurations
-MailConfig.java.template
+**/javaconfiguration.properties

@@ -11,12 +11,14 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class MailConfigTest {
 
+    private MailConfig mailConfig = new MailConfig();
+
     @Test
     public void ensureConfigurationIsValid() {
-        for(String token : Arrays.asList(MailConfig.SUBJECT, MailConfig.FROM, MailConfig.PASSWORD, MailConfig.SMTP_HOST, MailConfig.TO, MailConfig.USERNAME)) {
+        for (String token : Arrays.asList(mailConfig.getSubject(), mailConfig.getFrom(), mailConfig.getPassword(), mailConfig.getHost(), mailConfig.getTo(), mailConfig.getUsername())) {
             assertThat(token).isNotNull();
         }
 
-        assertThat(MailConfig.SMTP_PORT).isEqualTo(465);
+        assertThat(mailConfig.getPort()).isEqualTo(465);
     }
 }

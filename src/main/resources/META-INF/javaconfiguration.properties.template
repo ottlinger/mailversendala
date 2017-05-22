@@ -1,0 +1,7 @@
+host=smtp.example.com
+port=465
+username=user@example.com
+password=chooseMeWisely
+to=xmas@man.com
+from=santa@cruz.com
+subject=Do adapt your configuration - will not work

@@ -24,26 +24,28 @@ public class SendOut {
 
     private Email email;
     private HtmlEmail htmlEmail;
+    private MailConfig mailConfig;
 
     public SendOut() {
-        LOG.info("Read from Tamaya config: " + ConfigurationProvider.getConfiguration().getOrDefault("a", "aDefault"));
+
+        this.mailConfig = new MailConfig();
 
         LOG.info("Initialized authentication.");
-        DefaultAuthenticator authenticator = new DefaultAuthenticator(MailConfig.USERNAME, MailConfig.PASSWORD);
+        DefaultAuthenticator authenticator = new DefaultAuthenticator(mailConfig.getUsername(), mailConfig.getPassword());
 
         this.email = new SimpleEmail();
-        email.setHostName(MailConfig.SMTP_HOST);
-        email.setSmtpPort(MailConfig.SMTP_PORT);
+        email.setHostName(mailConfig.getHost());
+        email.setSmtpPort(mailConfig.getPort());
         email.setAuthenticator(authenticator);
         email.setSSLOnConnect(true);
-        email.setBounceAddress(MailConfig.FROM);
+        email.setBounceAddress(mailConfig.getFrom());
         email.addHeader(SENT_BY, SENT_BY_ME);
         LOG.info("Simple email initialized.");
 
         this.htmlEmail = new HtmlEmail();
-        htmlEmail.setHostName(MailConfig.SMTP_HOST);
+        htmlEmail.setHostName(mailConfig.getHost());
         htmlEmail.setSSLOnConnect(true);
-        htmlEmail.setBounceAddress(MailConfig.FROM);
+        htmlEmail.setBounceAddress(mailConfig.getFrom());
         htmlEmail.setAuthenticator(authenticator);
         htmlEmail.addHeader(SENT_BY, SENT_BY_ME);
         LOG.info("HTML and text email initialized.");
@@ -60,12 +62,12 @@ public class SendOut {
     }
 
     public void send(boolean isTest) throws EmailException {
-        email.setFrom(MailConfig.FROM);
-        email.addTo(MailConfig.TO);
+        email.setFrom(mailConfig.getFrom());
+        email.addTo(mailConfig.getTo());
 
         email.setCharset(Charsets.UTF_8.name());
 
-        email.setSubject(MailConfig.SUBJECT + " " + new Date());
+        email.setSubject(mailConfig.getSubject() + " " + new Date());
         email.setMsg("This is a test mail from Mailversendala... :-)");
         if (!isTest) {
             email.send();
@@ -73,9 +75,9 @@ public class SendOut {
     }
 
     public void sendComplex(boolean isTest) throws EmailException, MalformedURLException {
-        htmlEmail.addTo(MailConfig.TO, "John Doe Recipiento");
-        htmlEmail.setFrom(MailConfig.FROM, "Me");
-        htmlEmail.setSubject("HTML" + MailConfig.SUBJECT + " " + new Date());
+        htmlEmail.addTo(mailConfig.getTo(), "John Doe Recipiento");
+        htmlEmail.setFrom(mailConfig.getFrom(), "Me");
+        htmlEmail.setSubject("HTML" + mailConfig.getSubject() + " " + new Date());
 
         // embed the image and get the content id
         URL url = new URL("http://www.apache.org/images/asf_logo_wide.gif");
