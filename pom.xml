@@ -136,7 +136,7 @@
         <dependency>
             <groupId>org.apache.tamaya</groupId>
             <artifactId>tamaya-core</artifactId>
-            <version>0.3-incubating-SNAPSHOT</version>
+            <version>0.3-incubating</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -187,4 +187,11 @@
             <version>${logger.version}</version>
         </dependency>
     </dependencies>
+  <!-- To be able to use the latest version/release candidate -->
+    <repositories>
+      <repository>
+        <id>staged-releases</id>
+        <url>https://repository.apache.org/content/repositories/orgapachetamaya-1024/</url>
+      </repository>
+    </repositories>
 </project>
