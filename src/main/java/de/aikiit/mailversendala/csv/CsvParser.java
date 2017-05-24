@@ -21,7 +21,7 @@ public class CsvParser {
             LOG.info("Will parse for all languages, which may mean more mails being sent out.");
         }
 
-        Mailing mailing = new Mailing();
+        Mailing mailing = new Mailing("my name", "may@mail.com");
         return results;
     }
 }
