@@ -13,7 +13,7 @@
         <assertj.version>3.7.0</assertj.version>
         <mockito.version>2.6.3</mockito.version>
         <cobertura.version>2.6</cobertura.version>
-        <lombok.version>1.16.12</lombok.version>
+        <lombok.version>1.16.16</lombok.version>
         <javadoc.version>2.10.4</javadoc.version>
         <surefire.version>2.19.1</surefire.version>
         <rat.version>0.12</rat.version>
@@ -133,6 +133,11 @@
         </plugins>
     </build>
     <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.tamaya</groupId>
             <artifactId>tamaya-core</artifactId>
