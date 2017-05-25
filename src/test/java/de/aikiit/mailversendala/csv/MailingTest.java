@@ -24,7 +24,7 @@ public class MailingTest {
 
     @Test
     public void objectCreationWithoutBuilder() {
-        Mailing mailing = new Mailing(EMAIL, NAME);
+        Mailing mailing = new Mailing(NAME, EMAIL);
 
         assertThat(mailing).isNotNull();
         assertThat(mailing.toString()).isNotNull();
