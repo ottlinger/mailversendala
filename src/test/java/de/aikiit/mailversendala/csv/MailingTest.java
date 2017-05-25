@@ -8,17 +8,28 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Created by hirsch on 25.05.17.
  */
 public class MailingTest {
+    private static final String EMAIL = "foo@bar.uk";
+    private static final String NAME = "FooBarUK";
 
     @Test
     public void objectCreationWithBuilder() {
-        String email = "foo@bar.uk";
-        String name = "FooBarUK";
-        Mailing mailing = new Mailing.MailingBuilder().email(email).name(name).build();
+        Mailing mailing = new Mailing.MailingBuilder().email(EMAIL).name(NAME).build();
 
         assertThat(mailing).isNotNull();
         assertThat(mailing.toString()).isNotNull();
 
-        assertThat(mailing.getEmail()).isEqualTo(email);
-        assertThat(mailing.getName()).isEqualTo(name);
+        assertThat(mailing.getEmail()).isEqualTo(EMAIL);
+        assertThat(mailing.getName()).isEqualTo(NAME);
+    }
+
+    @Test
+    public void objectCreationWithoutBuilder() {
+        Mailing mailing = new Mailing(EMAIL, NAME);
+
+        assertThat(mailing).isNotNull();
+        assertThat(mailing.toString()).isNotNull();
+
+        assertThat(mailing.getEmail()).isEqualTo(EMAIL);
+        assertThat(mailing.getName()).isEqualTo(NAME);
     }
 }
