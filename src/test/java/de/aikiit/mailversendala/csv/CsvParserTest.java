@@ -2,6 +2,7 @@ package de.aikiit.mailversendala.csv;
 
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -11,14 +12,17 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class CsvParserTest {
 
+// TODO add test data source  Reader in = new FileReader("path/to/file.csv");
+
     @Test
     public void objectCreation() {
-        assertThat(new CsvParser()).isNotNull();
+        assertThat(new CsvParser(Optional.empty())).isNotNull();
     }
 
     @Test
-    public void launchParsing() {
-        assertThat(new CsvParser().parse(Optional.empty())).hasSize(1);
-        assertThat(new CsvParser().parse(Optional.of("de"))).hasSize(1);
+    public void launchParsing() throws IOException {
+        CsvParser parser = new CsvParser(Optional.empty());
+        assertThat(parser.parse(Optional.empty())).hasSize(1);
+        assertThat(parser.parse(Optional.of("de"))).hasSize(1);
     }
 }
