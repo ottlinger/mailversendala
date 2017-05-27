@@ -7,8 +7,10 @@ import lombok.Data;
  * Created by hirsch on 24.05.17.
  */
 @Builder
-@Data
+@Data(staticConstructor = "of")
 public class Mailing {
-    private String name;
+    private String firstname;
+    private String surname;
     private String email;
+    private String language;
 }
