@@ -23,6 +23,7 @@ public class CsvParser {
         }
 
         Mailing mailing = Mailing.builder().email("my@mail.com").firstname("Your name").surname("Is my name").language(Locale.GERMAN.getLanguage()).build();
+        LOG.info("Parsed mailing: {}", mailing);
         return results;
     }
 }
