@@ -2,14 +2,12 @@ package de.aikiit.mailversendala;
 
 import com.google.common.base.Charsets;
 import org.apache.commons.mail.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.tamaya.ConfigurationProvider;
 
 /**
  * Created by hirsch on 15.05.17.
