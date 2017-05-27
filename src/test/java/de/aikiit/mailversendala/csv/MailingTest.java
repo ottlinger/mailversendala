@@ -1,6 +1,5 @@
 package de.aikiit.mailversendala.csv;
 
-import javafx.scene.input.KeyCode;
 import org.junit.Test;
 
 import java.util.Locale;
