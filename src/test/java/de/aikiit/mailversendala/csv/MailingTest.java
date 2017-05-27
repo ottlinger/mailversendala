@@ -18,7 +18,7 @@ public class MailingTest {
 
     @Test
     public void objectCreationWithBuilder() {
-        Mailing mailing = new Mailing.MailingBuilder().email(EMAIL).surname(NAME).language(LANGUAGE).firstname(FIRSTNAME).build();
+        Mailing mailing = Mailing.builder().email(EMAIL).surname(NAME).language(LANGUAGE).firstname(FIRSTNAME).build();
 
         assertThat(mailing).isNotNull();
         assertThat(mailing.toString()).isNotNull();

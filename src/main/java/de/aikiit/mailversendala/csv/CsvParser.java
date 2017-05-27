@@ -22,7 +22,7 @@ public class CsvParser {
             LOG.info("Will parse for all languages, which may mean more mails being sent out.");
         }
 
-        Mailing mailing = new Mailing.MailingBuilder().email("my@mail.com").firstname("Your name").surname("Is my name").language(Locale.GERMAN.getLanguage()).build();
+        Mailing mailing = Mailing.builder().email("my@mail.com").firstname("Your name").surname("Is my name").language(Locale.GERMAN.getLanguage()).build();
         return results;
     }
 }
