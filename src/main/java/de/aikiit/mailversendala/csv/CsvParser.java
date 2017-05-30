@@ -31,11 +31,13 @@ public class CsvParser {
             LOG.info("Will parse for all languages, which may mean more mails being sent out.");
         }
 
-        if (reader != null && reader.ready()) {
+        if (reader != null) {
             Iterable<CSVRecord> records = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(reader);
-            records.forEach(record ->
-                    results.add(Mailing.builder().email(record.get(Headers.EMAIL)).firstname(record.get(Headers.FIRSTNAME)).language(record.get(Headers.LANGUAGE)).surname(record.get(Headers.SURNAME)).build())
-            );
+            if (records != null) {
+                records.forEach(record ->
+                        results.add(Mailing.builder().email(record.get(Headers.EMAIL)).firstname(record.get(Headers.FIRSTNAME)).language(record.get(Headers.LANGUAGE)).surname(record.get(Headers.SURNAME)).build())
+                );
+            }
         }
 
 

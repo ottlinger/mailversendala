@@ -38,6 +38,6 @@ public class SendOutTest {
     @Test
     public void whenSendOutLacksRuntimeParameterNothingHappens() throws Exception {
         SendOut.main("");
-        SendOut.main(null);
+        SendOut.main((String[]) null);
     }
 }
