@@ -7,3 +7,4 @@ password=chooseMeWisely
 to=xmas@man.com
 from=santa@cruz.com
 subject=Do adapt your configuration - will not work
+csvpath=mailversendala-example.csv
