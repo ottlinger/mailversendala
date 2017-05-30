@@ -5,6 +5,7 @@ import org.apache.commons.mail.EmailException;
 import org.junit.Test;
 
 import java.net.MalformedURLException;
+import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,6 +37,7 @@ public class SendOutTest {
 
     @Test
     public void whenSendOutLacksRuntimeParameterNothingHappens() throws Exception {
+        SendOut.main("");
         SendOut.main(null);
     }
 }

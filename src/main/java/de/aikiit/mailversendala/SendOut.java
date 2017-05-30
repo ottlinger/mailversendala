@@ -45,8 +45,10 @@ public class SendOut {
         email.setAuthenticator(authenticator);
         email.setSSLCheckServerIdentity(true);
         if (465 == port) {
+            LOG.info("Using SSL.");
             email.setSSLOnConnect(true);
         } else {
+            LOG.info("Using TLS.");
             email.setStartTLSRequired(true);
         }
         email.setBounceAddress(mailConfig.getFrom());
@@ -58,8 +60,10 @@ public class SendOut {
         htmlEmail.setSmtpPort(port);
         htmlEmail.setSSLCheckServerIdentity(true);
         if (465 == port) {
+            LOG.info("Using SSL.");
             htmlEmail.setSSLOnConnect(true);
         } else {
+            LOG.info("Using TLS.");
             htmlEmail.setStartTLSRequired(true);
         }
         htmlEmail.setBounceAddress(mailConfig.getFrom());
@@ -69,12 +73,11 @@ public class SendOut {
     }
 
     public static void main(String... args) throws Exception {
-        if (args != null && (args.length >= 1 || Strings.isNullOrEmpty(args[0]))) {
+        if (args == null || args.length < 1 || Strings.isNullOrEmpty(args[0])) {
             LOG.error("Please call this method with a mail address to send to.");
-            return;
         } else {
             String email = args[0];
-            LOG.info("Init: Using mail address from runtime parameter: {}", email);
+            LOG.warn("Init: Using mail address from runtime parameter: {}", email);
 
             Mailing mailing = Mailing.builder().email(email).firstname("Your name").surname("Is my name").language(Locale.GERMAN.getLanguage()).build();
             SendOut sendOut = new SendOut(mailing);
