@@ -31,18 +31,31 @@ public class SendOut {
         LOG.info("Initialized authentication.");
         DefaultAuthenticator authenticator = new DefaultAuthenticator(mailConfig.getUsername(), mailConfig.getPassword());
 
+        int port = mailConfig.getPort();
+
         this.email = new SimpleEmail();
         email.setHostName(mailConfig.getHost());
-        email.setSmtpPort(mailConfig.getPort());
+        email.setSmtpPort(port);
         email.setAuthenticator(authenticator);
-        email.setSSLOnConnect(true);
+        email.setSSLCheckServerIdentity(true);
+        if (465 == port) {
+            email.setSSLOnConnect(true);
+        } else {
+            email.setStartTLSRequired(true);
+        }
         email.setBounceAddress(mailConfig.getFrom());
         email.addHeader(SENT_BY, SENT_BY_ME);
         LOG.info("Simple email initialized.");
 
         this.htmlEmail = new HtmlEmail();
         htmlEmail.setHostName(mailConfig.getHost());
-        htmlEmail.setSSLOnConnect(true);
+        htmlEmail.setSmtpPort(port);
+        htmlEmail.setSSLCheckServerIdentity(true);
+        if (465 == port) {
+            htmlEmail.setSSLOnConnect(true);
+        } else {
+            htmlEmail.setStartTLSRequired(true);
+        }
         htmlEmail.setBounceAddress(mailConfig.getFrom());
         htmlEmail.setAuthenticator(authenticator);
         htmlEmail.addHeader(SENT_BY, SENT_BY_ME);
