@@ -1,5 +1,6 @@
 package de.aikiit.mailversendala;
 
+import de.aikiit.mailversendala.csv.CsvParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,6 +12,9 @@ public class App {
             LogManager.getLogger(App.class);
 
     public static void main(String[] args) {
+
         LOG.info("Hello Mailversendala configured with the help of Tamaya!");
+
+        MailConfig configuration = new MailConfig();
     }
 }
