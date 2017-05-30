@@ -1,5 +1,6 @@
 package de.aikiit.mailversendala;
 
+import de.aikiit.mailversendala.csv.Mailing;
 import org.apache.commons.mail.EmailException;
 import org.junit.Test;
 
@@ -12,22 +13,29 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class SendOutTest {
 
+    private static final Mailing DUMMY_RECIPIENT = Mailing.builder().email("my@address.com").build();
+
     @Test
     public void initializeMailSenderProperly() {
-        assertThat(new SendOut()).isNotNull();
+        assertThat(new SendOut(DUMMY_RECIPIENT)).isNotNull();
     }
 
     @Test
     public void sendOutWithoutSendingInTestMode() throws EmailException {
-        SendOut sendOut = new SendOut();
+        SendOut sendOut = new SendOut(DUMMY_RECIPIENT);
         assertThat(sendOut).isNotNull();
         sendOut.send(true);
     }
 
     @Test
     public void sendOutHtmlMessageWithoutSendingInTestMode() throws EmailException, MalformedURLException {
-        SendOut sendOut = new SendOut();
+        SendOut sendOut = new SendOut(DUMMY_RECIPIENT);
         assertThat(sendOut).isNotNull();
         sendOut.sendComplex(true);
+    }
+
+    @Test
+    public void whenSendOutLacksRuntimeParameterNothingHappens() throws Exception {
+        SendOut.main(null);
     }
 }

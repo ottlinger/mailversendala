@@ -1,6 +1,8 @@
 package de.aikiit.mailversendala;
 
 import com.google.common.base.Charsets;
+import com.google.common.base.Strings;
+import de.aikiit.mailversendala.csv.Mailing;
 import org.apache.commons.mail.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by hirsch on 15.05.17.
@@ -23,8 +26,11 @@ public class SendOut {
     private Email email;
     private HtmlEmail htmlEmail;
     private MailConfig mailConfig;
+    private Mailing recipient;
 
-    public SendOut() {
+    public SendOut(Mailing recipient) {
+
+        this.recipient = recipient;
 
         this.mailConfig = new MailConfig();
 
@@ -63,18 +69,26 @@ public class SendOut {
     }
 
     public static void main(String... args) throws Exception {
+        if (args != null && (args.length >= 1 || Strings.isNullOrEmpty(args[0]))) {
+            LOG.error("Please call this method with a mail address to send to.");
+            return;
+        } else {
+            String email = args[0];
+            LOG.info("Init: Using mail address from runtime parameter: {}", email);
 
-        SendOut sendOut = new SendOut();
-        LOG.debug("Init: DONE");
-        sendOut.send(false);
-        LOG.info("Send simple text-based message: DONE");
-        sendOut.sendComplex(false);
-        LOG.info("Send complex HTML and text-based message: DONE");
+            Mailing mailing = Mailing.builder().email(email).firstname("Your name").surname("Is my name").language(Locale.GERMAN.getLanguage()).build();
+            SendOut sendOut = new SendOut(mailing);
+            LOG.info("Init: DONE");
+            sendOut.send(false);
+            LOG.info("Send simple text-based message: DONE");
+            sendOut.sendComplex(false);
+            LOG.info("Send complex HTML and text-based message: DONE");
+        }
     }
 
     public void send(boolean isTest) throws EmailException {
         email.setFrom(mailConfig.getFrom());
-        email.addTo(mailConfig.getTo());
+        email.addTo(this.recipient.getEmail());
 
         email.setCharset(Charsets.UTF_8.name());
 
@@ -86,7 +100,7 @@ public class SendOut {
     }
 
     public void sendComplex(boolean isTest) throws EmailException, MalformedURLException {
-        htmlEmail.addTo(mailConfig.getTo(), "John Doe Recipiento");
+        htmlEmail.addTo(this.recipient.getEmail(), this.recipient.getFirstname() + " " + this.recipient.getSurname());
         htmlEmail.setFrom(mailConfig.getFrom(), "Me");
         htmlEmail.setSubject("HTML" + mailConfig.getSubject() + " " + new Date());
 
