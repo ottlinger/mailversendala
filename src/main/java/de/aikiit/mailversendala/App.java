@@ -28,8 +28,13 @@ public class App {
         if (!Strings.isNullOrEmpty(csvPath)) {
             LOG.info(configuration.getCsvPath());
 
-            CsvParser parser = new CsvParser(new FileReader(new File(configuration.getCsvPath())));
-            parser.parse(Optional.empty());
+            File asFile = new File(configuration.getCsvPath());
+            if (asFile.exists()) {
+                CsvParser parser = new CsvParser(new FileReader(asFile));
+                parser.parse(Optional.empty());
+            } else {
+                LOG.warn("Nothing to do - please configure your CSV path properly.");
+            }
         }
     }
 }
