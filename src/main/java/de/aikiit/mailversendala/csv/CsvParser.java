@@ -18,9 +18,9 @@ import java.util.Optional;
 public class CsvParser {
     private static final Logger LOG =
             LogManager.getLogger(CsvParser.class);
-    private final Optional<Reader> reader;
+    private final Reader reader;
 
-    public CsvParser(Optional<Reader> csvInput) {
+    public CsvParser(Reader csvInput) {
         this.reader = csvInput;
     }
 
@@ -31,8 +31,8 @@ public class CsvParser {
             LOG.info("Will parse for all languages, which may mean more mails being sent out.");
         }
 
-        if (reader.isPresent() && reader.get().ready()) {
-            Iterable<CSVRecord> records = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(reader.get());
+        if (reader != null && reader.ready()) {
+            Iterable<CSVRecord> records = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(reader);
             records.forEach(record ->
                     results.add(Mailing.builder().email(record.get(Headers.EMAIL)).firstname(record.get(Headers.FIRSTNAME)).language(record.get(Headers.LANGUAGE)).surname(record.get(Headers.SURNAME)).build())
             );

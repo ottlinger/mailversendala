@@ -16,12 +16,12 @@ public class CsvParserTest {
 
     @Test
     public void objectCreation() {
-        assertThat(new CsvParser(Optional.empty())).isNotNull();
+        assertThat(new CsvParser(null)).isNotNull();
     }
 
     @Test
     public void launchParsing() throws IOException {
-        CsvParser parser = new CsvParser(Optional.empty());
+        CsvParser parser = new CsvParser(null);
         assertThat(parser.parse(Optional.empty())).hasSize(1);
         assertThat(parser.parse(Optional.of("de"))).hasSize(1);
     }
