@@ -65,16 +65,4 @@ public class MailConfig {
     public String getSubject() {
         return subject;
     }
-
-    /*
-     String SMTP_HOST =
-     int SMTP_PORT =
-
-     String USERNAME =
-     String PASSWORD =
-
-     String TO =
-     String FROM =
-     String SUBJECT =
-      */
 }
