@@ -9,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -37,7 +36,7 @@ public class CsvParser {
             LOG.warn(CSVFormat.DEFAULT.withFirstRecordAsHeader());
             records.forEach(record -> {
                         String lang = record.get(Headers.LANGUAGE);
-                        if (language.isPresent() && language.get().contains(lang) || !language.isPresent()) {
+                        if (!language.isPresent() || language.get().contains(lang)) {
                             Mailing mailing = Mailing.builder().//
                                     email(record.get(Headers.EMAIL)).//
                                     firstname(record.get(Headers.FIRSTNAME)).//
