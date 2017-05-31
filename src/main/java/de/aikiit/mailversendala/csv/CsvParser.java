@@ -36,16 +36,18 @@ public class CsvParser {
             LOG.warn(records);
             LOG.warn(CSVFormat.DEFAULT.withFirstRecordAsHeader());
             records.forEach(record -> {
-                        Mailing mailing = Mailing.builder().//
-                                email(record.get(Headers.EMAIL)).//
-                                firstname(record.get(Headers.FIRSTNAME)).//
-                                language(record.get(Headers.LANGUAGE)).//
-                                surname(record.get(Headers.SURNAME)).//
-                                build();
-                        LOG.info("Parsed mailing: {}", mailing);
-                        results.add(mailing);
+                        String lang = record.get(Headers.LANGUAGE);
+                        if (language.isPresent() && language.get().contains(lang) || !language.isPresent()) {
+                            Mailing mailing = Mailing.builder().//
+                                    email(record.get(Headers.EMAIL)).//
+                                    firstname(record.get(Headers.FIRSTNAME)).//
+                                    language(lang).//
+                                    surname(record.get(Headers.SURNAME)).//
+                                    build();
+                            LOG.info("Parsed mailing: {}", mailing);
+                            results.add(mailing);
+                        }
                     }
-
             );
         }
         return results;
