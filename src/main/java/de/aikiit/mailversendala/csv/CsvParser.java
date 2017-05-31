@@ -33,18 +33,14 @@ public class CsvParser {
 
         if (reader != null) {
             Iterable<CSVRecord> records = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(reader);
-            if (records != null) {
-                records.forEach(record ->
-                        results.add(Mailing.builder().email(record.get(Headers.EMAIL)).firstname(record.get(Headers.FIRSTNAME)).language(record.get(Headers.LANGUAGE)).surname(record.get(Headers.SURNAME)).build())
-                );
-            }
+            records.forEach(record -> {
+                        Mailing mailing = Mailing.builder().email(record.get(Headers.EMAIL)).firstname(record.get(Headers.FIRSTNAME)).language(record.get(Headers.LANGUAGE)).surname(record.get(Headers.SURNAME)).build();
+                        LOG.info("Parsed mailing: {}", mailing);
+                        results.add(mailing);
+                    }
+
+            );
         }
-
-
-        Mailing mailing = Mailing.builder().email("my@mail.com").firstname("Your name").surname("Is my name").language(Locale.GERMAN.getLanguage()).build();
-        LOG.info("Parsed mailing: {}", mailing);
-        results.add(mailing);
-
         return results;
     }
 }

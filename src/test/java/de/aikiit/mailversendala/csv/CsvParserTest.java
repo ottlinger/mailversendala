@@ -22,7 +22,7 @@ public class CsvParserTest {
     @Test
     public void launchParsing() throws IOException {
         CsvParser parser = new CsvParser(null);
-        assertThat(parser.parse(Optional.empty())).hasSize(1);
-        assertThat(parser.parse(Optional.of("de"))).hasSize(1);
+        assertThat(parser.parse(Optional.empty())).isEmpty();
+        assertThat(parser.parse(Optional.of("de"))).isEmpty();
     }
 }
