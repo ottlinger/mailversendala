@@ -32,8 +32,6 @@ public class CsvParser {
 
         if (reader != null) {
             Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader);
-            LOG.warn(records);
-            LOG.warn(CSVFormat.DEFAULT.withFirstRecordAsHeader());
             records.forEach(record -> {
                         String lang = record.get(Headers.LANGUAGE);
                         if (!language.isPresent() || language.get().contains(lang)) {
