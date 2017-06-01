@@ -13,15 +13,15 @@ public class MailConfig {
     private static final Logger LOG =
             LogManager.getLogger(MailConfig.class);
 
-    private String host;
-    private int port;
-    private String username;
-    private String password;
-    private String to;
-    private String from;
-    private String subject;
-    private String csvpath;
-    private boolean isDemoMode;
+    private final String host;
+    private final int port;
+    private final String username;
+    private final String password;
+    private final String to;
+    private final String from;
+    private final String subject;
+    private final String csvpath;
+    private final boolean isDemoMode;
 
     /**
      * Read from Tamaya configuration or fallback to dummy default values.
@@ -79,7 +79,7 @@ public class MailConfig {
      *
      * @return {@code true} if in demo mode, thus no mails will be sent by default.
      */
-    public boolean isDemoMode() {
-        return isDemoMode;
+    public boolean sendOutMails() {
+        return !isDemoMode;
     }
 }

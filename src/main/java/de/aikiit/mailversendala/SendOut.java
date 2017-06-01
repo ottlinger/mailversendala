@@ -23,10 +23,10 @@ public class SendOut {
     private static final String SENT_BY = "X-Mailer";
     private static final String SENT_BY_ME = "Mailversendala - https://github.com/ottlinger/mailversendala";
 
-    private Email email;
-    private HtmlEmail htmlEmail;
-    private MailConfig mailConfig;
-    private Mailing recipient;
+    private final Email email;
+    private final HtmlEmail htmlEmail;
+    private final MailConfig mailConfig;
+    private final Mailing recipient;
 
     public SendOut(Mailing recipient) {
 
@@ -34,7 +34,7 @@ public class SendOut {
 
         this.mailConfig = new MailConfig();
 
-        if (!mailConfig.isDemoMode()) {
+        if (mailConfig.sendOutMails()) {
             LOG.warn("Running in DEMO mode, thus no mails will be sent out.");
         }
 
@@ -101,7 +101,7 @@ public class SendOut {
 
         email.setSubject(mailConfig.getSubject() + " " + new Date());
         email.setMsg("This is a test mail from Mailversendala... :-)");
-        if (!mailConfig.isDemoMode()) {
+        if (mailConfig.sendOutMails()) {
             email.send();
         }
     }
@@ -121,7 +121,7 @@ public class SendOut {
         // set the alternative message
         htmlEmail.setTextMsg("Your email client does not support HTML messages - thus no Apache logo");
 
-        if (!mailConfig.isDemoMode()) {
+        if (mailConfig.sendOutMails()) {
             htmlEmail.send();
         }
     }
