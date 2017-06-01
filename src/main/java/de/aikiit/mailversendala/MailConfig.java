@@ -21,6 +21,7 @@ public class MailConfig {
     private String from;
     private String subject;
     private String csvpath;
+    private boolean isDemoMode;
 
     /**
      * Read from Tamaya configuration or fallback to dummy default values.
@@ -36,7 +37,8 @@ public class MailConfig {
         this.to = configuration.getOrDefault("to", "xmas@man.com");
         this.from = configuration.getOrDefault("from", "santa@cruz.com");
         this.subject = configuration.getOrDefault("subject", "Do adapt your configuration - will not work");
-        this.csvpath = configuration.getOrDefault("csvpath", "mailversendala--example.csv");
+        this.csvpath = configuration.getOrDefault("csvpath", "mailversendala-example.csv");
+        this.isDemoMode = Boolean.valueOf(configuration.getOrDefault("demomode", "true"));
         LOG.info("Configuration: DONE.");
     }
 
