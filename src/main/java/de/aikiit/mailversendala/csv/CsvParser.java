@@ -41,7 +41,7 @@ public class CsvParser {
                                     language(lang).//
                                     surname(record.get(Headers.SURNAME)).//
                                     build();
-                            LOG.info("Parsed mailing: {}", mailing);
+                            LOG.debug("Parsed mailing: {}", mailing);
                             results.add(mailing);
                         }
                     }
