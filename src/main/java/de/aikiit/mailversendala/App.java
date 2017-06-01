@@ -5,8 +5,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.assertj.core.util.Strings;
 
-import java.io.*;
-import java.nio.file.Paths;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Optional;
 
 /**
@@ -33,7 +34,7 @@ public class App {
                 CsvParser parser = new CsvParser(new FileReader(asFile));
                 parser.parse(Optional.empty());
             } else {
-                LOG.warn("Nothing to do - please configure your CSV path properly.");
+                LOG.warn("Nothing to do - please configure your CSV path properly, either as environment variable or as a runtime parameter. Example: java -Dcsvpath=foo -jar fatJar.jar");
             }
         }
     }
