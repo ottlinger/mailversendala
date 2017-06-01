@@ -24,7 +24,7 @@ public class CsvParser {
     }
 
     public List<Mailing> parse(Optional<String> language) throws IOException {
-        List<Mailing> results = Lists.newArrayList();
+        final List<Mailing> results = Lists.newArrayList();
 
         if (!language.isPresent()) {
             LOG.info("Will parse for all languages, which may mean more mails being sent out.");
@@ -34,7 +34,10 @@ public class CsvParser {
             Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader);
             records.forEach(record -> {
                         String lang = record.get(Headers.LANGUAGE);
-                        if (!language.isPresent() || language.get().contains(lang)) {
+
+                        if(language.isPresent())
+                        LOG.error(lang + " / anfragende Sprache: " + language.get());
+                        if (!language.isPresent() || language.get().equalsIgnoreCase(lang)) {
                             Mailing mailing = Mailing.builder().//
                                     email(record.get(Headers.EMAIL)).//
                                     firstname(record.get(Headers.FIRSTNAME)).//

@@ -5,13 +5,9 @@ import org.apache.commons.mail.EmailException;
 import org.junit.Test;
 
 import java.net.MalformedURLException;
-import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Created by hirsch on 15.05.17.
- */
 public class SendOutTest {
 
     private static final Mailing DUMMY_RECIPIENT = Mailing.builder().email("my@address.com").build();

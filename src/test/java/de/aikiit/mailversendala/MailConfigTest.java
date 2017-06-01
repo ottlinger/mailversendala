@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class MailConfigTest {
 
-    private MailConfig mailConfig = new MailConfig();
+    private final MailConfig mailConfig = new MailConfig();
 
     @Test
     public void ensureConfigurationIsValid() {

@@ -5,6 +5,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,11 +39,25 @@ public class CsvParserTest {
         assertThat(parser.parse(Optional.empty())).hasSize(3);
     }
 
-    @Ignore
+    @Test
     public void parseRealCSVDataIntoMailingsForASpecificLanguages() throws IOException {
         CsvParser parser = new CsvParser(new StringReader(CSV_INPUT));
+
+        Arrays.asList("de","en","ru").forEach(
+                language -> {
+                    List<Mailing> parsedMailings = null;
+                    try {
+                        parsedMailings = parser.parse(Optional.of(language));
+                        assertThat(parsedMailings).hasSize(1);
+                    } catch (IOException e) {
+                            e.printStackTrace();
+                    }
+                }
+
+        );
+
         assertThat(parser.parse(Optional.of("de"))).hasSize(1);
-        assertThat(parser.parse(Optional.of("ru"))).hasSize(1);
         assertThat(parser.parse(Optional.of("en"))).hasSize(1);
+        assertThat(parser.parse(Optional.of("ru"))).hasSize(1);
     }
 }
