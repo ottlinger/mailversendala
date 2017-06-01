@@ -27,7 +27,7 @@ public class MailConfig {
      * Read from Tamaya configuration or fallback to dummy default values.
      */
     public MailConfig() {
-        LOG.info("Reading Tamaya configuration ...");
+        LOG.debug("Reading Tamaya configuration ...");
         final Configuration configuration = ConfigurationProvider.getConfiguration();
 
         this.host = configuration.getOrDefault("host", "smtp.example.com");
@@ -39,7 +39,7 @@ public class MailConfig {
         this.subject = configuration.getOrDefault("subject", "Do adapt your configuration - will not work");
         this.csvpath = configuration.getOrDefault("csvpath", "mailversendala-example.csv");
         this.isDemoMode = Boolean.valueOf(configuration.getOrDefault("demomode", "true"));
-        LOG.info("Configuration: DONE.");
+        LOG.debug("Configuration: DONE.");
     }
 
     public String getHost() {
