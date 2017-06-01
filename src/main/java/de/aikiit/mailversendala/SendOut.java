@@ -34,6 +34,10 @@ public class SendOut {
 
         this.mailConfig = new MailConfig();
 
+        if (!mailConfig.isDemoMode()) {
+            LOG.warn("Running in DEMO mode, thus no mails will be sent out.");
+        }
+
         LOG.info("Initialized authentication.");
         DefaultAuthenticator authenticator = new DefaultAuthenticator(mailConfig.getUsername(), mailConfig.getPassword());
 
@@ -82,14 +86,14 @@ public class SendOut {
             Mailing mailing = Mailing.builder().email(email).firstname("Your name").surname("Is my name").language(Locale.GERMAN.getLanguage()).build();
             SendOut sendOut = new SendOut(mailing);
             LOG.info("Init: DONE");
-            sendOut.send(false);
+            sendOut.send();
             LOG.info("Send simple text-based message: DONE");
-            sendOut.sendComplex(false);
+            sendOut.sendComplex();
             LOG.info("Send complex HTML and text-based message: DONE");
         }
     }
 
-    public void send(boolean isTest) throws EmailException {
+    public void send() throws EmailException {
         email.setFrom(mailConfig.getFrom());
         email.addTo(this.recipient.getEmail());
 
@@ -97,12 +101,12 @@ public class SendOut {
 
         email.setSubject(mailConfig.getSubject() + " " + new Date());
         email.setMsg("This is a test mail from Mailversendala... :-)");
-        if (!isTest) {
+        if (!mailConfig.isDemoMode()) {
             email.send();
         }
     }
 
-    public void sendComplex(boolean isTest) throws EmailException, MalformedURLException {
+    public void sendComplex() throws EmailException, MalformedURLException {
         htmlEmail.addTo(this.recipient.getEmail(), this.recipient.getFirstname() + " " + this.recipient.getSurname());
         htmlEmail.setFrom(mailConfig.getFrom(), "Me");
         htmlEmail.setSubject("HTML" + mailConfig.getSubject() + " " + new Date());
@@ -117,7 +121,7 @@ public class SendOut {
         // set the alternative message
         htmlEmail.setTextMsg("Your email client does not support HTML messages - thus no Apache logo");
 
-        if (!isTest) {
+        if (!mailConfig.isDemoMode()) {
             htmlEmail.send();
         }
     }

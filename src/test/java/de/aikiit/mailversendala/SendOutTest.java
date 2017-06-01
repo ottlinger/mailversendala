@@ -25,14 +25,14 @@ public class SendOutTest {
     public void sendOutWithoutSendingInTestMode() throws EmailException {
         SendOut sendOut = new SendOut(DUMMY_RECIPIENT);
         assertThat(sendOut).isNotNull();
-        sendOut.send(true);
+        sendOut.send();
     }
 
     @Test
     public void sendOutHtmlMessageWithoutSendingInTestMode() throws EmailException, MalformedURLException {
         SendOut sendOut = new SendOut(DUMMY_RECIPIENT);
         assertThat(sendOut).isNotNull();
-        sendOut.sendComplex(true);
+        sendOut.sendComplex();
     }
 
     @Test

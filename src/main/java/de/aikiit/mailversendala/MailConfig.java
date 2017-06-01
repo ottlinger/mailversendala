@@ -27,7 +27,7 @@ public class MailConfig {
      * Read from Tamaya configuration or fallback to dummy default values.
      */
     public MailConfig() {
-        LOG.info("Reading configuration with the help of Tamaya ... from Tamaya config.");
+        LOG.info("Reading Tamaya configuration ...");
         final Configuration configuration = ConfigurationProvider.getConfiguration();
 
         this.host = configuration.getOrDefault("host", "smtp.example.com");
