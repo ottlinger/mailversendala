@@ -73,4 +73,13 @@ public class MailConfig {
     public String getCsvPath() {
         return csvpath;
     }
+
+    /**
+     * If in demo mode <strong>NO</strong> mails should be send out!
+     *
+     * @return {@code true} if in demo mode, thus no mails will be sent by default.
+     */
+    public boolean isDemoMode() {
+        return isDemoMode;
+    }
 }
