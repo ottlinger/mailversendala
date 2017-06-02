@@ -43,21 +43,17 @@ public class CsvParserTest {
     public void parseRealCSVDataIntoMailingsForASpecificLanguages() throws IOException {
         CsvParser parser = new CsvParser(new StringReader(CSV_INPUT));
 
-        Arrays.asList("de","en","ru").forEach(
+        Arrays.asList("de", "en", "ru").forEach(
                 language -> {
                     List<Mailing> parsedMailings = null;
                     try {
                         parsedMailings = parser.parse(Optional.of(language));
                         assertThat(parsedMailings).hasSize(1);
                     } catch (IOException e) {
-                            e.printStackTrace();
+                        e.printStackTrace();
                     }
                 }
 
         );
-
-        assertThat(parser.parse(Optional.of("de"))).hasSize(1);
-        assertThat(parser.parse(Optional.of("en"))).hasSize(1);
-        assertThat(parser.parse(Optional.of("ru"))).hasSize(1);
     }
 }

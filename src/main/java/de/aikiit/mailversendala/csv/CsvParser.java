@@ -35,16 +35,15 @@ public class CsvParser {
             records.forEach(record -> {
                         String lang = record.get(Headers.LANGUAGE);
 
-                        if(language.isPresent())
-                        LOG.error(lang + " / anfragende Sprache: " + language.get());
-                        if (!language.isPresent() || language.get().equalsIgnoreCase(lang)) {
-                            Mailing mailing = Mailing.builder().//
-                                    email(record.get(Headers.EMAIL)).//
-                                    firstname(record.get(Headers.FIRSTNAME)).//
-                                    language(lang).//
-                                    surname(record.get(Headers.SURNAME)).//
-                                    build();
-                            LOG.debug("Parsed mailing: {}", mailing);
+                        Mailing mailing = Mailing.builder().//
+                                email(record.get(Headers.EMAIL)).//
+                                firstname(record.get(Headers.FIRSTNAME)).//
+                                language(lang).//
+                                surname(record.get(Headers.SURNAME)).//
+                                build();
+
+                        LOG.debug("Parsed mailing: {}", mailing);
+                        if (!language.isPresent() || lang.equalsIgnoreCase(language.get())) {
                             results.add(mailing);
                         }
                     }
