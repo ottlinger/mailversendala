@@ -43,6 +43,8 @@ public class CsvParser {
                                 build();
 
                         LOG.debug("Parsed mailing: {}", mailing);
+
+                        LOG.debug("asdasdasd: " + (!language.isPresent() || lang.equalsIgnoreCase(language.get())));
                         if (!language.isPresent() || lang.equalsIgnoreCase(language.get())) {
                             results.add(mailing);
                         }
