@@ -1,12 +1,10 @@
 package de.aikiit.mailversendala.csv;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,19 +39,17 @@ public class CsvParserTest {
 
     @Test
     public void parseRealCSVDataIntoMailingsForASpecificLanguages() throws IOException {
-        CsvParser parser = new CsvParser(new StringReader(CSV_INPUT));
+        Arrays.asList("de", "en", "ru")
+                .forEach(
+                        language -> {
+                            try {
+                                CsvParser parser = new CsvParser(new StringReader(CSV_INPUT));
+                                assertThat(parser.parse(Optional.of(language))).hasSize(1);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
 
-        Arrays.asList("de", "en", "ru").forEach(
-                language -> {
-                    List<Mailing> parsedMailings = null;
-                    try {
-                        parsedMailings = parser.parse(Optional.of(language));
-                        assertThat(parsedMailings).hasSize(1);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-        );
+                );
     }
 }
