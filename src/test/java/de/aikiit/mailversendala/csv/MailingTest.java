@@ -40,4 +40,5 @@ public class MailingTest {
         assertThat(mailing.getFirstname()).isEqualTo(FIRSTNAME);
         assertThat(mailing.getLanguage()).isEqualTo(LANGUAGE);
     }
+
 }

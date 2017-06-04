@@ -4,10 +4,10 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
- * Created by hirsch on 24.05.17.
+ * Comprises a mailing recipient.
  */
 @Builder
-@Data(staticConstructor = "of")
+@Data
 public class Mailing {
     private String firstname;
     private String surname;

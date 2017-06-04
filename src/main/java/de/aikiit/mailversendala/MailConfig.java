@@ -5,8 +5,9 @@ import org.apache.logging.log4j.Logger;
 import org.apache.tamaya.Configuration;
 import org.apache.tamaya.ConfigurationProvider;
 
+
 /**
- * Created by hirsch on 15.05.17.
+ * Encapsulates the configuration of this application.
  */
 public class MailConfig {
 
