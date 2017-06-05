@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class CsvParserTest {
 
-    private static final String CSV_INPUT = "firstname,surname,email,language\n" +
+    public static final String CSV_INPUT = "firstname,surname,email,language\n" +
             "Me,Again,foo@bar.com,en\n" +
             "Ich,wieder,foo@bar.de,de\n" +
             "я,то́же,foo@bar.ru,ru\n";
