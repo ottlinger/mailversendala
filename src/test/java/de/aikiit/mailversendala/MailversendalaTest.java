@@ -47,7 +47,8 @@ public class MailversendalaTest {
         assertThat(result.getErrorCounter()).isEmpty();
 
         final Optional<AtomicInteger> mailCounter = result.getMailCounter();
-        assertThat(mailCounter).isNotEmpty().hasValue(new AtomicInteger(3));
+        assertThat(mailCounter).isNotEmpty();
+        assertThat(mailCounter.get().get()).isEqualTo(3);
     }
 
 }
