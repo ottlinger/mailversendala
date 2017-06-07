@@ -40,15 +40,14 @@ public class MailversendalaTest {
     @Test
     public void parseCSVFromARealFolder() throws IOException {
 
-        when(configuration.getCsvPath()).thenReturn(testFolder.toString() + "/" + CSV_NAME);
+        when(configuration.getCsvPath()).thenReturn(testFolder.getRoot().toString() + "/" + CSV_NAME);
 
         final MailingResult result = Mailversendala.sendOut(configuration);
         assertThat(result).isNotNull();
         assertThat(result.getErrorCounter()).isEmpty();
 
         final Optional<AtomicInteger> mailCounter = result.getMailCounter();
-        // TODO assertThat(mailCounter).isNotEmpty().hasValue(new AtomicInteger(3));
-        assertThat(result.getMailCounter()).isEmpty();
+        assertThat(mailCounter).isNotEmpty().hasValue(new AtomicInteger(3));
     }
 
 }
