@@ -41,13 +41,12 @@ public class CsvParser {
                                     surname(record.get(Headers.SURNAME)).//
                                     build();
 
-                            LOG.debug("Parsed mailing: {}", mailing);
-
                             if (!language.isPresent() || lang.equalsIgnoreCase(language.get())) {
+                                LOG.debug("Parsed and added mailing: {}", mailing);
                                 results.add(mailing);
                             }
                         } catch (IllegalArgumentException e) {
-                            LOG.error("Unable to parse {} from CSV.", record);
+                            LOG.error("Unable to parse CSV-row '{}'.", record);
                         }
                     }
             );
