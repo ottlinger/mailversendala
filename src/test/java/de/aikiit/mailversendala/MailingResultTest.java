@@ -18,4 +18,14 @@ public class MailingResultTest {
     public void successCounterIsZeroIfWithoutInteraction() {
         assertThat(new MailingResult().getMailCounter()).isEmpty();
     }
+
+    @Test
+    public void incrementErrorCounter() {
+        final MailingResult result = new MailingResult();
+        result.addError();
+        result.addError();
+        result.addError();
+        result.addError();
+        assertThat(result.getErrorCounter().get().get()).isEqualTo(4);
+    }
 }

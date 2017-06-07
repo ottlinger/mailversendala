@@ -15,6 +15,7 @@ public class MailingResult {
         if(errorCounter == null) {
             this.errorCounter = new AtomicInteger(0);
         }
+        errorCounter.incrementAndGet();
     }
 
     public Optional<AtomicInteger> getErrorCounter() {
