@@ -21,10 +21,11 @@ public class Mailversendala {
     private static final Logger LOG =
             LogManager.getLogger(Mailversendala.class);
 
-    public static void sendOut(MailConfig configuration) throws IOException {
+    public static MailingResult sendOut(MailConfig configuration) throws IOException {
         LOG.info("**** MAILVERSENDALA: Starting .... ****");
 
         String csvPath = configuration.getCsvPath();
+        MailingResult result = new MailingResult();
 
         LOG.info("Consuming CSV: {}", csvPath);
 
@@ -62,7 +63,6 @@ public class Mailversendala {
             }
         }
         LOG.info("**** MAILVERSENDALA: Application shutdown .... ****");
-
-
+        return result;
     }
 }
