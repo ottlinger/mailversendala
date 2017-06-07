@@ -2,7 +2,6 @@ package de.aikiit.mailversendala;
 
 import de.aikiit.mailversendala.csv.CsvParserTest;
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -13,6 +12,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -32,20 +33,22 @@ public class MailversendalaTest {
 
     @Before
     public void flushCSVData() throws IOException {
-        final File csv = testFolder.newFile(CSV_NAME);
+        final File csv = new File(testFolder.getRoot(), CSV_NAME);
         Files.write(csv.toPath(), CsvParserTest.CSV_INPUT.getBytes());
     }
 
     @Test
     public void parseCSVFromARealFolder() throws IOException {
 
-        when(configuration.getCsvPath()).thenReturn(testFolder.toString() + "/"+CSV_NAME);
+        when(configuration.getCsvPath()).thenReturn(testFolder.toString() + "/" + CSV_NAME);
 
-        Mailversendala.sendOut(configuration);
-        assertThat(true).isTrue();
+        final MailingResult result = Mailversendala.sendOut(configuration);
+        assertThat(result).isNotNull();
+        assertThat(result.getErrorCounter()).isEmpty();
 
-
+        final Optional<AtomicInteger> mailCounter = result.getMailCounter();
+        // TODO assertThat(mailCounter).isNotEmpty().hasValue(new AtomicInteger(3));
+        assertThat(result.getMailCounter()).isEmpty();
     }
-
 
 }

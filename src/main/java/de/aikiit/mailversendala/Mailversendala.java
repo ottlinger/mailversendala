@@ -42,21 +42,20 @@ public class Mailversendala {
                 LOG.info("Will send out {} mails ... hold on tight :-)", total);
 
 
-                final AtomicInteger errorCounter = new AtomicInteger(0);
-                final AtomicInteger mailCounter = new AtomicInteger(0);
                 mailings.forEach(mailing -> {
                     try {
                         new SendOut(mailing).send();
-                        LOG.info("Successfully send out {}.mail", mailCounter.get());
+                        result.addSuccess();
+                        LOG.info("Successfully send out {}.mail", result.getMailCounter().orElseGet(()->new AtomicInteger(0)));
                     } catch (EmailException e) {
-                        errorCounter.incrementAndGet();
+                        result.addError();
                         LOG.error("Problem while sending out {}", mailing, e);
                     }
                 });
 
                 LOG.info("**** MAILVERSENDALA-report: {} total mails ****", total);
-                LOG.info("**** MAILVERSENDALA-report: {} successfully send out ****", mailCounter.get());
-                LOG.info("**** MAILVERSENDALA-report: {} errors ****", errorCounter.get());
+                LOG.info("**** MAILVERSENDALA-report: {} successfully send out ****", result.getMailCounter().orElseGet(()->new AtomicInteger(0)));
+                LOG.info("**** MAILVERSENDALA-report: {} errors ****", result.getErrorCounter().orElseGet(()->new AtomicInteger(0)));
 
             } else {
                 LOG.warn("Nothing to do - please configure your CSV path properly, either as environment variable or as a runtime parameter. Example: java -Dcsvpath=foo -jar fatJar.jar");
