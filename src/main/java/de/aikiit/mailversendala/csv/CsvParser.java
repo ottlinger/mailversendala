@@ -31,19 +31,23 @@ public class CsvParser {
         if (reader != null) {
             Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader);
             records.forEach(record -> {
-                        String lang = record.get(Headers.LANGUAGE);
+                        try {
+                            String lang = record.get(Headers.LANGUAGE);
 
-                        Mailing mailing = Mailing.builder().//
-                                email(record.get(Headers.EMAIL)).//
-                                firstname(record.get(Headers.FIRSTNAME)).//
-                                language(lang).//
-                                surname(record.get(Headers.SURNAME)).//
-                                build();
+                            Mailing mailing = Mailing.builder().//
+                                    email(record.get(Headers.EMAIL)).//
+                                    firstname(record.get(Headers.FIRSTNAME)).//
+                                    language(lang).//
+                                    surname(record.get(Headers.SURNAME)).//
+                                    build();
 
-                        LOG.debug("Parsed mailing: {}", mailing);
+                            LOG.debug("Parsed mailing: {}", mailing);
 
-                        if (!language.isPresent() || lang.equalsIgnoreCase(language.get())) {
-                            results.add(mailing);
+                            if (!language.isPresent() || lang.equalsIgnoreCase(language.get())) {
+                                results.add(mailing);
+                            }
+                        } catch (IllegalArgumentException e) {
+                            LOG.error("Unable to parse {} from CSV.", record);
                         }
                     }
             );

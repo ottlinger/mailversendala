@@ -34,7 +34,7 @@ public class MailversendalaTest {
     @Before
     public void flushCSVData() throws IOException {
         final File csv = new File(testFolder.getRoot(), CSV_NAME);
-        Files.write(csv.toPath(), CsvParserTest.CSV_INPUT.getBytes());
+        Files.write(csv.toPath(), (CsvParserTest.CSV_INPUT + "error,foo@bar.ru\n").getBytes());
     }
 
     @Test
