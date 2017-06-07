@@ -28,4 +28,13 @@ public class MailingResultTest {
         result.addError();
         assertThat(result.getErrorCounter().get().get()).isEqualTo(4);
     }
+
+    @Test
+    public void incrementSuccessCounter() {
+        final MailingResult result = new MailingResult();
+        result.addSuccess();
+        result.addSuccess();
+        assertThat(result.getMailCounter().get().get()).isEqualTo(2);
+    }
+
 }

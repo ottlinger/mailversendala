@@ -18,6 +18,13 @@ public class MailingResult {
         errorCounter.incrementAndGet();
     }
 
+    public void addSuccess() {
+        if(mailCounter == null) {
+            this.mailCounter = new AtomicInteger(0);
+        }
+        mailCounter.incrementAndGet();
+    }
+
     public Optional<AtomicInteger> getErrorCounter() {
         return Optional.ofNullable(errorCounter);
     }
