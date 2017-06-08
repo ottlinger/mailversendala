@@ -11,12 +11,16 @@ public class MailingResultTest {
 
     @Test
     public void errorCounterIsZeroIfWithoutInteraction() {
-        assertThat(new MailingResult().getErrorCounter()).isEmpty();
+        MailingResult result = new MailingResult();
+        assertThat(result.getErrorCounter()).isEmpty();
+        assertThat(result.getTotal()).isEqualTo(0);
     }
 
     @Test
     public void successCounterIsZeroIfWithoutInteraction() {
-        assertThat(new MailingResult().getMailCounter()).isEmpty();
+        MailingResult result = new MailingResult();
+        assertThat(result.getMailCounter()).isEmpty();
+        assertThat(result.getTotal()).isEqualTo(0);
     }
 
     @Test
@@ -27,14 +31,17 @@ public class MailingResultTest {
         result.addError();
         result.addError();
         assertThat(result.getErrorCounter().get().get()).isEqualTo(4);
+        assertThat(result.getTotal()).isEqualTo(4);
     }
 
     @Test
-    public void incrementSuccessCounter() {
+    public void incrementSuccessCounterAndTotal() {
         final MailingResult result = new MailingResult();
         result.addSuccess();
         result.addSuccess();
+        result.addError();
         assertThat(result.getMailCounter().get().get()).isEqualTo(2);
+        assertThat(result.getTotal()).isEqualTo(3);
     }
 
 }

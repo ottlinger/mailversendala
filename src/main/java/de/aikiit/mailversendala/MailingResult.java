@@ -12,14 +12,14 @@ public class MailingResult {
     private AtomicInteger mailCounter;
 
     public void addError() {
-        if(errorCounter == null) {
+        if (errorCounter == null) {
             this.errorCounter = new AtomicInteger(0);
         }
         errorCounter.incrementAndGet();
     }
 
     public void addSuccess() {
-        if(mailCounter == null) {
+        if (mailCounter == null) {
             this.mailCounter = new AtomicInteger(0);
         }
         mailCounter.incrementAndGet();
@@ -32,4 +32,9 @@ public class MailingResult {
     public Optional<AtomicInteger> getMailCounter() {
         return Optional.ofNullable(mailCounter);
     }
+
+    public int getTotal() {
+        return getErrorCounter().orElse(new AtomicInteger(0)).get() + getMailCounter().orElse(new AtomicInteger(0)).get();
+    }
+
 }
