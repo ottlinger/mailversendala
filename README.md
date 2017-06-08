@@ -37,11 +37,29 @@ Not activated for this project, but still a very cool integration: example PHP p
 
 ## How to run and use the application
 
-You need to checkout the application and build it with the help of Java and Maven3.
+You need to checkout the application and build it with the help of [Java](https://java.sun.com) and [Maven](https://maven.apache.org/).
 
 ```
-tbd
+$ git clone https://github.com/ottlinger/mailversendala.git
+Cloning into 'mailversendala'...
+...
+
+$ mvn
+....
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 8.864 s
+[INFO] Final Memory: 34M/481M
+[INFO] ------------------------------------------------------------------------
+
+ $ java -jar target/mailversendala-1.0.0-SNAPSHOT-executable.jar
+ ....
+ 1970-01-01 01:23:45,280 INFO d.a.m.Mailversendala [main] **** MAILVERSENDALA: Application shutdown .... ****
+ 
 ```
+
+In case you want to use the application productively you need to configure it, please continue reading the following paragraph. 
 
 ## How to configure the application
 
