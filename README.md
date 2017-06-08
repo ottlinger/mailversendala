@@ -35,6 +35,13 @@ Not activated for this project, but still a very cool integration: example PHP p
 
 [![Dependency versions](https://www.versioneye.com/user/projects/58978d3ea35eb6002e873a36/badge.svg)](https://www.versioneye.com/user/projects/58978d3ea35eb6002e873a36?child=summary)
 
+## How to run and use the application
+
+You need to checkout the application and build it with the help of Java and Maven3.
+
+```
+tbd
+```
 
 ## How to configure the application
 
@@ -54,6 +61,22 @@ $ export csvpath=/tmp/my.csv; java -jar target/mailversendala-0.1-executable.jar
 $ java -Dcsvpath=/tmp/my.csv -jar target/mailversendala-0.1-executable.jar
 // configuration option set as JVM parameter
 ```
+
+### Configurable program options
+
+The following parameters can be set:
+
+| Configuration option  | Description | Example/default setting |
+| --------------------- | ----------- | ----------------------- |
+| host | SMTP mail host | smtp.example.com |
+| port | SMTP host port | 465 |
+| username | SMTP plaintext username | user@example.com |
+| password | SMTP plaintext password | chooseMeWisely |
+| demomode | boolean, whether to not send mails | true |
+| csvpath | fully qualified path to your CSV data input file | /tmp/mailversendala-example.csv |
+| subject | full subject line of the example mail | Whatever you want is a subject line |
+| from | mail address that is sent from | santa@cruz.com |
+| to | mail address that an example mail is sent to **deprecated** | xmas@man.com |
 
 
 ## Copyright
