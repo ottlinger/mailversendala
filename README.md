@@ -38,8 +38,23 @@ Not activated for this project, but still a very cool integration: example PHP p
 
 ## How to configure the application
 
-In order to properly configure the application you need to set some mai-related properties.
+In order to properly configure the application you need to set some mail-related properties.
 Please use the file [javaconfiguration.properties.template](./src/main/resources/META-INF/javaconfiguration.properties.template) and save it as *javaconfiguration.properties*.
+
+### Available configuration modes
+
+If you are running the application as a fat JAR you may want to overwrite each of the configuration key either environment variable or runtime property:
+```
+$ java -jar target/mailversendala-0.1-executable.jar
+// runs with default parameters from within the JAR
+
+$ export csvpath=/tmp/my.csv; java -jar target/mailversendala-0.1-executable.jar
+// configuration set as environment variable
+
+$ java -Dcsvpath=/tmp/my.csv -jar target/mailversendala-0.1-executable.jar
+// configuration option set as JVM parameter
+```
+
 
 ## Copyright
 
