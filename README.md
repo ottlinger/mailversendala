@@ -11,6 +11,7 @@ The application can be fed with a CSV file (separator is ,). It needs to have a 
 | Your | Family | foo@baar.com | de |
 
 Language is an ISO2-language code, while email needs to be a complete mail address.
+An example file is [./src/main/resources/mailversendala-example.csv](mailversendala-example.csv).
 
 ## Project Status
 
