@@ -1,10 +1,16 @@
 # mailversendala
-Prototyp to send out mass emails
 
-## Technology used
+Application to send out mass emails based on a list of recipients in a CSV file.
 
-* JavaMail
-* CSV stuff from Apache
+## CSV format
+
+The application can be fed with a CSV file (separator is ,). It needs to have a header line and the following naming for columns:
+
+| firstname  | surname | email | language |
+| --------------------- | ----------- | ----------------------- | ---- |
+| Your | Family | foo@baar.com | de |
+
+Language is an ISO2-language code, while email needs to be a complete mail address.
 
 ## Project Status
 
@@ -56,10 +62,10 @@ $ mvn
  $ java -jar target/mailversendala-1.0.0-SNAPSHOT-executable.jar
  ....
  1970-01-01 01:23:45,280 INFO d.a.m.Mailversendala [main] **** MAILVERSENDALA: Application shutdown .... ****
- 
+
 ```
 
-In case you want to use the application productively you need to configure it, please continue reading the following paragraph. 
+In case you want to use the application productively you need to configure it, please continue reading the following paragraph.
 
 ## How to configure the application
 
