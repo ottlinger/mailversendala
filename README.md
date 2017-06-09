@@ -21,7 +21,7 @@ An example file is [mailversendala-example.csv](./src/main/resources/mailversend
 [![Known Vulnerabilities](https://snyk.io/test/github/ottlinger/mailversendala/badge.svg)](https://snyk.io/test/github/ottlinger/mailversendala)
 [![GPL v3.0](https://img.shields.io/github/license/ottlinger/mailversendala.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
-## Github integration
+## Github integrations
 ### Travis / CI
 
 In order to just play around with it I've integrated a CI run:
@@ -35,12 +35,6 @@ In order to just play around with it I've integrated a CI run:
 ### Codacy - code quality and static analysis
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c8fc0c6ef3d14192a2a8f84a670ccb92)](https://www.codacy.com/app/github_25/mailversendala)
-
-### VersionEye - dependency update management
-
-Not activated for this project, but still a very cool integration: example PHP project
-
-[![Dependency versions](https://www.versioneye.com/user/projects/58978d3ea35eb6002e873a36/badge.svg)](https://www.versioneye.com/user/projects/58978d3ea35eb6002e873a36?child=summary)
 
 ## How to run and use the application
 
