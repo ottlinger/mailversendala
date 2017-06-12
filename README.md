@@ -18,8 +18,8 @@ An example file is [mailversendala-example.csv](./src/main/resources/mailversend
 [![Stories in Backlog](https://badge.waffle.io/ottlinger/mailversendala.png?label=backlog&title=Backlog)](https://waffle.io/ottlinger/mailversendala)
 [![Stories in Ready](https://badge.waffle.io/ottlinger/mailversendala.png?label=ready&title=Ready)](https://waffle.io/ottlinger/mailversendala)
 [![Stories in Progress](https://badge.waffle.io/ottlinger/mailversendala.png?label=in%20progress&title=In%20Progress)](https://waffle.io/ottlinger/mailversendala)
-[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/ottlinger/hornherzogen.svg)](http://isitmaintained.com/project/ottlinger/hornherzogen "Average time to resolve an issue")
-[![Percentage of issues still open](http://isitmaintained.com/badge/open/ottlinger/hornherzogen.svg)](http://isitmaintained.com/project/ottlinger/hornherzogen "Percentage of issues still open")
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/ottlinger/mailversendala.svg)](http://isitmaintained.com/project/ottlinger/mailversendala "Average time to resolve an issue")
+[![Percentage of issues still open](http://isitmaintained.com/badge/open/ottlinger/mailversendala.svg)](http://isitmaintained.com/project/ottlinger/mailversendala "Percentage of issues still open")
 [![Known Vulnerabilities](https://snyk.io/test/github/ottlinger/mailversendala/badge.svg)](https://snyk.io/test/github/ottlinger/mailversendala)
 [![GPL v3.0](https://img.shields.io/github/license/ottlinger/mailversendala.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
