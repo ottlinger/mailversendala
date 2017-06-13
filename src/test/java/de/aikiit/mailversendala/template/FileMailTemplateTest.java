@@ -13,8 +13,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class FileMailTemplateTest {
 
-    public static final String TEXT = "This is a mailtemplate";
-    public static final String HTML = "<html><body>This is an <b>HTML</b> mailtemplate</body></html>";
+    private static final String TEXT = "This is a mailtemplate";
+    private static final String HTML = "<html><body>This is an <b>HTML</b> mailtemplate</body></html>";
     private FileMailTemplate template;
 
     @Before
@@ -26,12 +26,12 @@ public class FileMailTemplateTest {
 
     @Test
     public void getHtml() {
-        assertThat(template.getHtml()).isEqualTo(HTML);
+        assertThat(template.getHtml(null)).isEqualTo(HTML);
     }
 
     @Test
     public void getPlaintext() {
-        assertThat(template.getPlaintext()).isEqualTo(TEXT);
+        assertThat(template.getPlaintext(null)).isEqualTo(TEXT);
     }
 
 

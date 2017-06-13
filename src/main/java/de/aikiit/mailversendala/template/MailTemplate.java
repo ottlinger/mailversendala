@@ -9,6 +9,10 @@ public interface MailTemplate {
     String BASE_NAME_HTML = "mailtemplate.html";
     String BASE_NAME_PLAINTEXT = "mailtemplate.txt";
 
-    String getHtml();
-    String getPlaintext();
+    String DEFAULT_LANGUAGES = "de,en";
+    String BACKUP_LANGUAGE = "de";
+
+    String getHtml(String language);
+
+    String getPlaintext(String language);
 }
