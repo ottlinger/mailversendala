@@ -9,3 +9,4 @@ from=santa@cruz.com
 subject=Do adapt your configuration - will not work
 csvpath=/tmp/mailversendala-example.csv
 demomode=true
+templatepath=/tmp/mailversendala
