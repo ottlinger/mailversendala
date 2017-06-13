@@ -22,6 +22,7 @@ public class MailConfig {
     private final String from;
     private final String subject;
     private final String csvpath;
+    private final String templatePath;
     private final boolean isDemoMode;
 
     /**
@@ -40,6 +41,7 @@ public class MailConfig {
         this.subject = configuration.getOrDefault("subject", "Do adapt your configuration - will not work");
         this.csvpath = configuration.getOrDefault("csvpath", "mailversendala-example.csv");
         this.isDemoMode = Boolean.valueOf(configuration.getOrDefault("demomode", "true"));
+        this.templatePath = configuration.getOrDefault("templatepath", "template");
         LOG.debug("Configuration: DONE.");
     }
 
@@ -82,5 +84,9 @@ public class MailConfig {
      */
     public boolean sendOutMails() {
         return !isDemoMode;
+    }
+
+    public String getTemplatePath() {
+        return templatePath;
     }
 }

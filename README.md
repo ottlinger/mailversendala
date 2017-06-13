@@ -95,10 +95,10 @@ The following parameters can be set:
 | password | SMTP plaintext password | chooseMeWisely |
 | demomode | boolean, whether to not send mails | true |
 | csvpath | fully qualified path to your CSV data input file | /tmp/mailversendala-example.csv |
+| templatepath | fully qualified path to your template directory. This directory needs to contain mailtemplate.html and mailtemplate.txt | /tmp/mailversendala |
 | subject | full subject line of the example mail | Whatever you want is a subject line |
 | from | mail address that is sent from | santa@cruz.com |
 | to | mail address that an example mail is sent to **deprecated** | xmas@man.com |
-
 
 ## Copyright
 

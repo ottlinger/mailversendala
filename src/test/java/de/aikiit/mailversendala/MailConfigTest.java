@@ -15,7 +15,7 @@ public class MailConfigTest {
 
     @Test
     public void ensureConfigurationIsValid() {
-        for (String token : Arrays.asList(mailConfig.getSubject(), mailConfig.getFrom(), mailConfig.getPassword(), mailConfig.getHost(), mailConfig.getTo(), mailConfig.getUsername())) {
+        for (String token : Arrays.asList(mailConfig.getSubject(), mailConfig.getFrom(), mailConfig.getPassword(), mailConfig.getHost(), mailConfig.getTo(), mailConfig.getUsername(), mailConfig.getCsvPath(), mailConfig.getTemplatePath())) {
             assertThat(token).isNotNull();
         }
 
