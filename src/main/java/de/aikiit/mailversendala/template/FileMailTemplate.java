@@ -2,12 +2,16 @@ package de.aikiit.mailversendala.template;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
+import de.aikiit.mailversendala.MailConfig;
 import lombok.Data;
 import org.assertj.core.util.Strings;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,14 +26,15 @@ public class FileMailTemplate implements MailTemplate {
         this.plaintext.put(MailTemplate.BACKUP_LANGUAGE, CharStreams.toString(new InputStreamReader(plaintext, Charsets.UTF_8)));
     }
 
-    /*
-    use MailTemplate.LANGUAGES
-
-    public FileMailTemplate(File basePath, Map<String, String> parameters) {
-        Paths.get(new File(basePath, MailTemplate.BASE_NAME_PLAINTEXT));
-        Paths.get(new File(basePath, MailTemplate.BASE_NAME_HTML));
+    public FileMailTemplate(MailConfig config) throws IOException {
+        this.html.put(MailTemplate.BACKUP_LANGUAGE, readInLanguage(Paths.get(config.getTemplatePath(), MailTemplate.BASE_NAME_HTML)));
+        this.plaintext.put(MailTemplate.BACKUP_LANGUAGE, readInLanguage(Paths.get(config.getTemplatePath(), MailTemplate.BASE_NAME_PLAINTEXT)));
     }
-*/
+
+    private static String readInLanguage(Path file) throws IOException {
+        return new String(Files.readAllBytes(file));
+    }
+
     @Override
     public String getHtml(String language) {
         if (Strings.isNullOrEmpty(language)) {
