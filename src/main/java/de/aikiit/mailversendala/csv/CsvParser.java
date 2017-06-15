@@ -26,7 +26,7 @@ public class CsvParser {
     public List<Mailing> parse(Optional<String> language) throws IOException {
         final List<Mailing> results = Lists.newArrayList();
 
-        LOG.info("Will parse for language: " + language.orElseGet(() -> "all - which means more mails to send out."));
+        LOG.info("Will parse for language: " + language.orElse("all - which means more mails to send out."));
 
         if (reader != null) {
             Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader);
