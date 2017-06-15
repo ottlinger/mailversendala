@@ -30,7 +30,7 @@ public class FileMailTemplateTest {
     private MailConfig config;
 
     @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+    public final TemporaryFolder folder = new TemporaryFolder();
 
     @Before
     public void createTemplate() throws IOException {

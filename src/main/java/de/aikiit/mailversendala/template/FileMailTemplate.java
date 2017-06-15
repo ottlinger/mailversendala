@@ -15,8 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FileMailTemplate implements MailTemplate {
-    private Map<String, String> html = new HashMap<>();
-    private Map<String, String> plaintext = new HashMap<>();
+    private final Map<String, String> html = new HashMap<>();
+    private final Map<String, String> plaintext = new HashMap<>();
 
     public FileMailTemplate(InputStream html, InputStream plaintext) throws IOException {
         this.html.put(MailTemplate.BACKUP_LANGUAGE, CharStreams.toString(new InputStreamReader(html, Charsets.UTF_8)));

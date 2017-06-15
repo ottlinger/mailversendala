@@ -26,7 +26,7 @@ public class MailversendalaTest {
 
     private static final String CSV_NAME = "MailversendalaTest";
     @Rule
-    public TemporaryFolder testFolder = new TemporaryFolder();
+    public final TemporaryFolder testFolder = new TemporaryFolder();
 
     @Mock
     private MailConfig configuration;
@@ -47,7 +47,7 @@ public class MailversendalaTest {
         assertThat(result.getErrorCounter()).isEmpty();
 
         final Optional<AtomicInteger> mailCounter = result.getMailCounter();
-        assertThat(mailCounter).isNotEmpty();
+        assertThat(mailCounter).isPresent();
         assertThat(mailCounter.get().get()).isEqualTo(3);
     }
 
