@@ -4,7 +4,6 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 import com.google.common.io.CharStreams;
 import de.aikiit.mailversendala.MailConfig;
-import lombok.Data;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +14,6 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-@Data
 public class FileMailTemplate implements MailTemplate {
     private Map<String, String> html = new HashMap<>();
     private Map<String, String> plaintext = new HashMap<>();
