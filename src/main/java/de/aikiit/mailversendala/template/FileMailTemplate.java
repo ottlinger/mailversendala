@@ -21,7 +21,6 @@ public class FileMailTemplate implements MailTemplate {
     private Map<String, String> plaintext = new HashMap<>();
 
     public FileMailTemplate(InputStream html, InputStream plaintext, Map<String, String> parameters) throws IOException {
-        // TODO 		try (BufferedReader br = Files.newBufferedReader(Paths.get(fileName))) { in a separate class
         this.html.put(MailTemplate.BACKUP_LANGUAGE, CharStreams.toString(new InputStreamReader(html, Charsets.UTF_8)));
         this.plaintext.put(MailTemplate.BACKUP_LANGUAGE, CharStreams.toString(new InputStreamReader(plaintext, Charsets.UTF_8)));
     }
