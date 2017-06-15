@@ -1,7 +1,5 @@
 package de.aikiit.mailversendala.template;
 
-import lombok.Data;
-
 /**
  * Contains the contents of a mail.
  */
