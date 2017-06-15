@@ -30,6 +30,7 @@ public class MailingResultTest {
         result.addError();
         result.addError();
         result.addError();
+        assertThat(result.getErrorCounter()).isPresent();
         assertThat(result.getErrorCounter().get().get()).isEqualTo(4);
         assertThat(result.getTotal()).isEqualTo(4);
     }
@@ -40,6 +41,7 @@ public class MailingResultTest {
         result.addSuccess();
         result.addSuccess();
         result.addError();
+        assertThat(result.getMailCounter()).isPresent();
         assertThat(result.getMailCounter().get().get()).isEqualTo(2);
         assertThat(result.getTotal()).isEqualTo(3);
     }

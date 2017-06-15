@@ -15,5 +15,6 @@ public class App {
 
     public static void main(String[] args) throws IOException {
         Mailversendala.sendOut(new MailConfig());
+        LOG.info("Mailversendala is shutting down. Bye Bye :-)");
     }
 }
