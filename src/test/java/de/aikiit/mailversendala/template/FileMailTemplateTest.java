@@ -65,10 +65,17 @@ public class FileMailTemplateTest {
     }
 
     @Test
-    public void ensureGermanIsBackupLanguage() {
+    public void ensureGermanIsBackupLanguageForHTML() {
         assertThat(template.getHtml(null)).isEqualTo(HTML);
         assertThat(template.getHtml(MailTemplate.BACKUP_LANGUAGE)).isEqualTo(HTML);
         assertThat(template.getHtml("de")).isEqualTo(HTML);
+    }
+
+    @Test
+    public void ensureGermanIsBackupLanguageForPlaintext() {
+        assertThat(template.getPlaintext(null)).isEqualTo(TEXT);
+        assertThat(template.getPlaintext(MailTemplate.BACKUP_LANGUAGE)).isEqualTo(TEXT);
+        assertThat(template.getPlaintext("de")).isEqualTo(TEXT);
     }
 
 }
