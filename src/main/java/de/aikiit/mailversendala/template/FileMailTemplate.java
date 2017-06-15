@@ -1,10 +1,10 @@
 package de.aikiit.mailversendala.template;
 
 import com.google.common.base.Charsets;
+import com.google.common.base.Strings;
 import com.google.common.io.CharStreams;
 import de.aikiit.mailversendala.MailConfig;
 import lombok.Data;
-import org.assertj.core.util.Strings;
 
 import java.io.IOException;
 import java.io.InputStream;
