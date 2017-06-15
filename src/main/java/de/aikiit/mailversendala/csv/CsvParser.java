@@ -5,11 +5,11 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.assertj.core.util.Strings;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Created by hirsch on 24.05.17.
@@ -23,10 +23,10 @@ public class CsvParser {
         this.reader = csvInput;
     }
 
-    public List<Mailing> parse(Optional<String> language) throws IOException {
+    public List<Mailing> parse(String language) throws IOException {
         final List<Mailing> results = Lists.newArrayList();
 
-        LOG.info("Will parse for language: " + language.orElse("all - which means more mails to send out."));
+        LOG.info("Will parse for language: " + (Strings.isNullOrEmpty(language) ? "all - which means more mails to send out." : language));
 
         if (reader != null) {
             Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader);
@@ -41,7 +41,7 @@ public class CsvParser {
                                     surname(record.get(Headers.SURNAME)).//
                                     build();
 
-                            if (!language.isPresent() || lang.equalsIgnoreCase(language.get())) {
+                            if (Strings.isNullOrEmpty(language) || lang.equalsIgnoreCase(language)) {
                                 LOG.debug("Parsed and added mailing: {}", mailing);
                                 results.add(mailing);
                             }

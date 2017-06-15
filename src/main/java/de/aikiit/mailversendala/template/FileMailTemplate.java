@@ -18,7 +18,7 @@ public class FileMailTemplate implements MailTemplate {
     private Map<String, String> html = new HashMap<>();
     private Map<String, String> plaintext = new HashMap<>();
 
-    public FileMailTemplate(InputStream html, InputStream plaintext, Map<String, String> parameters) throws IOException {
+    public FileMailTemplate(InputStream html, InputStream plaintext) throws IOException {
         this.html.put(MailTemplate.BACKUP_LANGUAGE, CharStreams.toString(new InputStreamReader(html, Charsets.UTF_8)));
         this.plaintext.put(MailTemplate.BACKUP_LANGUAGE, CharStreams.toString(new InputStreamReader(plaintext, Charsets.UTF_8)));
     }

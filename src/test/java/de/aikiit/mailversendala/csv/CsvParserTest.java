@@ -27,14 +27,14 @@ public class CsvParserTest {
     @Test
     public void launchParsing() throws IOException {
         CsvParser parser = new CsvParser(null);
-        assertThat(parser.parse(Optional.empty())).isEmpty();
-        assertThat(parser.parse(Optional.of("de"))).isEmpty();
+        assertThat(parser.parse("")).isEmpty();
+        assertThat(parser.parse("de")).isEmpty();
     }
 
     @Test
     public void parseRealCSVDataIntoMailingsForAllLanguages() throws IOException {
         CsvParser parser = new CsvParser(new StringReader(CSV_INPUT));
-        assertThat(parser.parse(Optional.empty())).hasSize(3);
+        assertThat(parser.parse(null)).hasSize(3);
     }
 
     @Test
@@ -44,7 +44,7 @@ public class CsvParserTest {
                         language -> {
                             try {
                                 CsvParser parser = new CsvParser(new StringReader(CSV_INPUT));
-                                assertThat(parser.parse(Optional.of(language))).hasSize(1);
+                                assertThat(parser.parse(language)).hasSize(1);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }

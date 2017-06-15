@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -37,7 +36,7 @@ public class FileMailTemplateTest {
     public void createTemplate() throws IOException {
         InputStream html = new ByteArrayInputStream(HTML.getBytes());
         InputStream plaintext = new ByteArrayInputStream(TEXT.getBytes());
-        this.template = new FileMailTemplate(html, plaintext, Collections.emptyMap());
+        this.template = new FileMailTemplate(html, plaintext);
     }
 
     @Test
