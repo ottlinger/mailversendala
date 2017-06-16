@@ -11,5 +11,4 @@ public interface Headers {
     String FIRSTNAME = "firstname";
     String SURNAME = "surname";
     String EMAIL = "email";
-    String LANGUAGE = "language";
 }

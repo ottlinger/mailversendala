@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

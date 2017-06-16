@@ -1,7 +1,6 @@
 package de.aikiit.mailversendala.template;
 
 import com.google.common.base.Charsets;
-import com.google.common.base.Strings;
 import com.google.common.io.CharStreams;
 import de.aikiit.mailversendala.MailConfig;
 
@@ -11,8 +10,6 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 
 public class FileMailTemplate implements MailTemplate {
     private String html;
