@@ -6,11 +6,11 @@ Application to send out mass emails based on a list of recipients in a CSV file.
 
 The application can be fed with a CSV file (separator is ,). It needs to have a header line and the following naming for columns:
 
-| firstname  | surname | email | language |
-| --------------------- | ----------- | ----------------------- | ---- |
-| Your | Family | foo@baar.com | de |
+| firstname  | surname | email |
+| --------------------- | ----------- | ----------------------- |
+| Your | Family | foo@baar.com |
 
-Language is an ISO2-language code, while email needs to be a complete mail address.
+Email needs to be a complete mail address.
 An example file is [mailversendala-example.csv](./src/main/resources/mailversendala-example.csv).
 
 ## Project Status
