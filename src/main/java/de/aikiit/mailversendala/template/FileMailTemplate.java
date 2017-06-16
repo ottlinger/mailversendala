@@ -15,17 +15,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FileMailTemplate implements MailTemplate {
-    private final Map<String, String> html = new HashMap<>();
-    private final Map<String, String> plaintext = new HashMap<>();
+    private String html;
+    private String plaintext;
 
     public FileMailTemplate(InputStream html, InputStream plaintext) throws IOException {
-        this.html.put(MailTemplate.BACKUP_LANGUAGE, CharStreams.toString(new InputStreamReader(html, Charsets.UTF_8)));
-        this.plaintext.put(MailTemplate.BACKUP_LANGUAGE, CharStreams.toString(new InputStreamReader(plaintext, Charsets.UTF_8)));
+        this.html = CharStreams.toString(new InputStreamReader(html, Charsets.UTF_8));
+        this.plaintext = CharStreams.toString(new InputStreamReader(plaintext, Charsets.UTF_8));
     }
 
     public FileMailTemplate(MailConfig config) throws IOException {
-        this.html.put(MailTemplate.BACKUP_LANGUAGE, readInLanguage(Paths.get(config.getTemplatePath(), MailTemplate.BASE_NAME_HTML)));
-        this.plaintext.put(MailTemplate.BACKUP_LANGUAGE, readInLanguage(Paths.get(config.getTemplatePath(), MailTemplate.BASE_NAME_PLAINTEXT)));
+        this.html = readInLanguage(Paths.get(config.getTemplatePath(), MailTemplate.BASE_NAME_HTML));
+        this.plaintext = readInLanguage(Paths.get(config.getTemplatePath(), MailTemplate.BASE_NAME_PLAINTEXT));
     }
 
     private static String readInLanguage(Path file) throws IOException {
@@ -33,20 +33,12 @@ public class FileMailTemplate implements MailTemplate {
     }
 
     @Override
-    public String getHtml(String language) {
-        if (Strings.isNullOrEmpty(language)) {
-            return html.get(MailTemplate.BACKUP_LANGUAGE);
-        }
-
-        return html.get(language);
+    public String getHtml() {
+        return html;
     }
 
     @Override
-    public String getPlaintext(String language) {
-        if (Strings.isNullOrEmpty(language)) {
-            return plaintext.get(MailTemplate.BACKUP_LANGUAGE);
-        }
-
-        return plaintext.get(language);
+    public String getPlaintext() {
+        return plaintext;
     }
 }

@@ -41,12 +41,12 @@ public class FileMailTemplateTest {
 
     @Test
     public void getHtml() {
-        assertThat(template.getHtml(null)).isEqualTo(HTML);
+        assertThat(template.getHtml()).isEqualTo(HTML);
     }
 
     @Test
     public void getPlaintext() {
-        assertThat(template.getPlaintext(null)).isEqualTo(TEXT);
+        assertThat(template.getPlaintext()).isEqualTo(TEXT);
     }
 
     @Test
@@ -59,22 +59,7 @@ public class FileMailTemplateTest {
 
         this.template = new FileMailTemplate(config);
 
-        assertThat(template.getHtml(null)).isEqualTo(HTML);
-        assertThat(template.getPlaintext(null)).isEqualTo(TEXT);
+        assertThat(template.getHtml()).isEqualTo(HTML);
+        assertThat(template.getPlaintext()).isEqualTo(TEXT);
     }
-
-    @Test
-    public void ensureGermanIsBackupLanguageForHTML() {
-        assertThat(template.getHtml(null)).isEqualTo(HTML);
-        assertThat(template.getHtml(MailTemplate.BACKUP_LANGUAGE)).isEqualTo(HTML);
-        assertThat(template.getHtml("de")).isEqualTo(HTML);
-    }
-
-    @Test
-    public void ensureGermanIsBackupLanguageForPlaintext() {
-        assertThat(template.getPlaintext(null)).isEqualTo(TEXT);
-        assertThat(template.getPlaintext(MailTemplate.BACKUP_LANGUAGE)).isEqualTo(TEXT);
-        assertThat(template.getPlaintext("de")).isEqualTo(TEXT);
-    }
-
 }
