@@ -13,10 +13,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class CsvParserTest {
 
-    public static final String CSV_INPUT = "firstname,surname,email,language\n" +
-            "Me,Again,foo@bar.com,en\n" +
-            "Ich,wieder,foo@bar.de,de\n" +
-            "я,то́же,foo@bar.ru,ru\n";
+    public static final String CSV_INPUT = "firstname,surname,email\n" +
+            "Me,Again,foo@bar.com\n" +
+            "Ich,wieder,foo@bar.de\n" +
+            "я,то́же,foo@bar.ru\n";
 
     @Test
     public void objectCreation() {
@@ -26,29 +26,12 @@ public class CsvParserTest {
     @Test
     public void launchParsing() throws IOException {
         CsvParser parser = new CsvParser(null);
-        assertThat(parser.parse("")).isEmpty();
-        assertThat(parser.parse("de")).isEmpty();
+        assertThat(parser.parse()).isEmpty();
     }
 
     @Test
     public void parseRealCSVDataIntoMailingsForAllLanguages() throws IOException {
         CsvParser parser = new CsvParser(new StringReader(CSV_INPUT));
-        assertThat(parser.parse(null)).hasSize(3);
-    }
-
-    @Test
-    public void parseRealCSVDataIntoMailingsForASpecificLanguages() throws IOException {
-        Arrays.asList("de", "en", "ru")
-                .forEach(
-                        language -> {
-                            try {
-                                CsvParser parser = new CsvParser(new StringReader(CSV_INPUT));
-                                assertThat(parser.parse(language)).hasSize(1);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                );
+        assertThat(parser.parse()).hasSize(3);
     }
 }

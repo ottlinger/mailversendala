@@ -23,28 +23,20 @@ public class CsvParser {
         this.reader = csvInput;
     }
 
-    public List<Mailing> parse(String language) throws IOException {
+    public List<Mailing> parse() throws IOException {
         final List<Mailing> results = Lists.newArrayList();
-
-        LOG.info("Will parse for language: " + (Strings.isNullOrEmpty(language) ? "all - which means more mails to send out." : language));
-
         if (reader != null) {
             Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader);
             records.forEach(record -> {
                         try {
-                            String lang = record.get(Headers.LANGUAGE);
-
                             Mailing mailing = Mailing.builder().//
                                     email(record.get(Headers.EMAIL)).//
                                     firstname(record.get(Headers.FIRSTNAME)).//
-                                    language(lang).//
                                     surname(record.get(Headers.SURNAME)).//
                                     build();
 
-                            if (Strings.isNullOrEmpty(language) || lang.equalsIgnoreCase(language)) {
-                                LOG.debug("Parsed and added mailing: {}", mailing);
-                                results.add(mailing);
-                            }
+                            LOG.debug("Parsed and added mailing: {}", mailing);
+                            results.add(mailing);
                         } catch (IllegalArgumentException e) {
                             LOG.error("Unable to parse CSV-row '{}'.", record);
                         }

@@ -35,7 +35,7 @@ public class Mailversendala {
             File asFile = new File(configuration.getCsvPath());
             if (asFile.exists()) {
                 CsvParser parser = new CsvParser(new FileReader(asFile));
-                final List<Mailing> mailings = parser.parse(null);
+                final List<Mailing> mailings = parser.parse();
 
                 final int total = mailings.size();
                 LOG.info("Will send out {} mails ... hold on tight :-)", total);
