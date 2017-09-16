@@ -23,7 +23,7 @@
         <project.build.sourceEncoding>${encoding.utf8}</project.build.sourceEncoding>
     </properties>
     <build>
-        <defaultGoal>clean versions:display-dependency-updates install</defaultGoal>
+        <defaultGoal>clean versions:display-dependency-updates enforcer:display-info install</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
