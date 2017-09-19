@@ -100,6 +100,12 @@ The following parameters can be set:
 | from | mail address that is sent from | santa@cruz.com |
 | to | mail address that an example mail is sent to **deprecated** | xmas@man.com |
 
+### Development
+
+In order to properly integrate the project into your IDE you need to setup lombok support -
+please follow the guidelines about integration, e.g. [Eclipse integration](https://projectlombok.org/setup/eclipse).
+
+
 ## Copyright
 
 &copy; P. Ottlinger, 2017
