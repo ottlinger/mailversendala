@@ -85,7 +85,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
+                <version>3.7.0</version>
                 <configuration>
                     <encoding>${encoding.utf8}</encoding>
                     <source>1.8</source>
@@ -174,7 +174,6 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- http://logging.apache.org/log4j/2.x/manual/api.html -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
@@ -189,6 +188,11 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
             <version>${logger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity-engine-core</artifactId>
+            <version>2.0</version>
         </dependency>
     </dependencies>
   <!-- To be able to use the latest version/release candidate -->
