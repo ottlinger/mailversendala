@@ -21,7 +21,7 @@ An example file is [mailversendala-example.csv](./src/main/resources/mailversend
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/ottlinger/mailversendala.svg)](http://isitmaintained.com/project/ottlinger/mailversendala "Average time to resolve an issue")
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/ottlinger/mailversendala.svg)](http://isitmaintained.com/project/ottlinger/mailversendala "Percentage of issues still open")
 [![Known Vulnerabilities](https://snyk.io/test/github/ottlinger/mailversendala/badge.svg)](https://snyk.io/test/github/ottlinger/mailversendala)
-[![GPL v3.0](https://img.shields.io/github/license/ottlinger/mailversendala.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
+[![ASF 2.0](https://img.shields.io/github/license/ottlinger/mailversendala.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
 ## Github integrations
 ### Travis / CI
