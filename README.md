@@ -69,6 +69,8 @@ In case you want to use the application productively you need to configure it, p
 In order to properly configure the application you need to set some mail-related properties.
 Please use the file [javaconfiguration.properties.template](./src/main/resources/META-INF/javaconfiguration.properties.template) and save it as *javaconfiguration.properties*.
 
+Technically the configuration is based on [Apache Tamaya (incubating)](https://tamaya.apache.org)
+
 ### Available configuration modes
 
 If you are running the application as a fat JAR you may want to overwrite each of the configuration key either environment variable or runtime property:
