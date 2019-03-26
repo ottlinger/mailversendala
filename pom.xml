@@ -8,15 +8,17 @@
   <name>mailversendala</name>
   <url>https://github.com/ottlinger/mailversendala</url>
   <properties>
-    <logger.version>2.11.1</logger.version>
+    <logger.version>2.11.2</logger.version>
     <junit.version>4.12</junit.version>
     <assertj.version>3.11.1</assertj.version>
     <lombok.version>1.18.6</lombok.version>
+    <assertj.version>3.12.2</assertj.version>
+    <lombok.version>1.18.2</lombok.version>
     <mockito.version>2.24.0</mockito.version>
     <javadoc.version>3.0.0-M1</javadoc.version>
     <surefire.version>2.20.1</surefire.version>
     <rat.version>0.13</rat.version>
-    <guava.version>27.0.1-jre</guava.version>
+    <guava.version>27.1-jre</guava.version>
     <encoding.utf8>UTF-8</encoding.utf8>
     <shade.version>3.1.0</shade.version>
     <project.reporting.outputEncoding>${encoding.utf8}</project.reporting.outputEncoding>
@@ -88,7 +90,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.0.2</version>
+        <version>3.1.1</version>
         <configuration>
           <archive>
             <manifest>
