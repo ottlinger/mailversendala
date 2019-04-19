@@ -22,24 +22,12 @@ public class VelocityMailTemplate implements MailTemplate {
 
     @Override
     public String getHtml() {
-        Template t = velocityEngine.getTemplate("template" + File.separator + MailTemplate.BASE_NAME_HTML);
-
-        StringWriter writer = new StringWriter();
-        t.merge(handleAndGetContextChanges(), writer);
-        t.process();
-
-        return writer.toString().trim();
+        return loadAndGetContents("template" + File.separator + MailTemplate.BASE_NAME_HTML);
     }
 
     @Override
     public String getPlaintext() {
-        Template t = velocityEngine.getTemplate("template" + File.separator + MailTemplate.BASE_NAME_PLAINTEXT);
-
-        StringWriter writer = new StringWriter();
-        t.merge(handleAndGetContextChanges(), writer);
-        t.process();
-
-        return writer.toString().trim();
+        return loadAndGetContents("template" + File.separator + MailTemplate.BASE_NAME_PLAINTEXT);
     }
 
     private VelocityContext handleAndGetContextChanges() {
@@ -47,5 +35,15 @@ public class VelocityMailTemplate implements MailTemplate {
         context.put("firstName", "ME");
         context.put("lastName", "REALLY");
         return context;
+    }
+
+    private String loadAndGetContents(String templateName) {
+        Template t = velocityEngine.getTemplate(templateName);
+
+        StringWriter writer = new StringWriter();
+        t.merge(handleAndGetContextChanges(), writer);
+        t.process();
+
+        return writer.toString().trim();
     }
 }
