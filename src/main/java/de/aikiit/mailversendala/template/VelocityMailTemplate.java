@@ -1,11 +1,5 @@
 package de.aikiit.mailversendala.template;
 
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
-
-import java.io.StringWriter;
-
 public class VelocityMailTemplate implements MailTemplate {
 
     private static String TEMPLATE_SUFFIX = ".vm";
