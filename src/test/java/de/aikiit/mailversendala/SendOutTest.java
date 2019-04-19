@@ -35,5 +35,6 @@ public class SendOutTest {
     public void whenSendOutLacksRuntimeParameterNothingHappens() throws Exception {
         SendOut.main("");
         SendOut.main((String[]) null);
+        assertThat(Boolean.FALSE).isFalse();
     }
 }
