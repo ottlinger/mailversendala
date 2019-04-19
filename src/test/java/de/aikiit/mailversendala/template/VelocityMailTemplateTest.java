@@ -8,7 +8,7 @@ public class VelocityMailTemplateTest {
     @Test
     public void initVelocityEngine() {
         final VelocityMailTemplate mailTemplate = new VelocityMailTemplate();
-        assertThat(mailTemplate.getHtml()).isNull();
+        assertThat(mailTemplate.getHtml()).containsOnlyOnce("ME REALLY");
         assertThat(mailTemplate.getPlaintext()).isEqualTo("Dear ME REALLY, this mail is for you only. Best regards, Mailversendala");
     }
 }

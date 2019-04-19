@@ -22,7 +22,13 @@ public class VelocityMailTemplate implements MailTemplate {
 
     @Override
     public String getHtml() {
-        return null;
+        Template t = velocityEngine.getTemplate("template" + File.separator + MailTemplate.BASE_NAME_HTML);
+
+        StringWriter writer = new StringWriter();
+        t.merge(handleAndGetContextChanges(), writer);
+        t.process();
+
+        return writer.toString().trim();
     }
 
     @Override
