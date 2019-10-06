@@ -34,27 +34,29 @@ public class Mailversendala {
 
             File asFile = new File(configuration.getCsvPath());
             if (asFile.exists()) {
-                CsvParser parser = new CsvParser(new FileReader(asFile));
-                final List<Mailing> mailings = parser.parse();
+                try (FileReader r = new FileReader(asFile)) {
+                    CsvParser parser = new CsvParser(r);
+                    final List<Mailing> mailings = parser.parse();
 
-                final int total = mailings.size();
-                LOG.info("Will send out {} mails ... hold on tight :-)", total);
+                    final int total = mailings.size();
+                    LOG.info("Will send out {} mails ... hold on tight :-)", total);
 
 
-                mailings.forEach(mailing -> {
-                    try {
-                        new SendOut(mailing).send();
-                        result.addSuccess();
-                        LOG.info("Successfully send out {}.mail", result.getMailCounter().orElse(new AtomicInteger(0)));
-                    } catch (EmailException e) {
-                        result.addError();
-                        LOG.error("Problem while sending out {}", mailing, e);
-                    }
-                });
+                    mailings.forEach(mailing -> {
+                        try {
+                            new SendOut(mailing).send();
+                            result.addSuccess();
+                            LOG.info("Successfully send out {}.mail", result.getMailCounter().orElse(new AtomicInteger(0)));
+                        } catch (EmailException e) {
+                            result.addError();
+                            LOG.error("Problem while sending out {}", mailing, e);
+                        }
+                    });
 
-                LOG.info("**** MAILVERSENDALA-report: {} total mails ****", total);
-                LOG.info("**** MAILVERSENDALA-report: {} successfully send out ****", result.getMailCounter().orElse(new AtomicInteger(0)));
-                LOG.info("**** MAILVERSENDALA-report: {} errors ****", result.getErrorCounter().orElse(new AtomicInteger(0)));
+                    LOG.info("**** MAILVERSENDALA-report: {} total mails ****", total);
+                    LOG.info("**** MAILVERSENDALA-report: {} successfully send out ****", result.getMailCounter().orElse(new AtomicInteger(0)));
+                    LOG.info("**** MAILVERSENDALA-report: {} errors ****", result.getErrorCounter().orElse(new AtomicInteger(0)));
+                }
 
             } else {
                 LOG.warn("Nothing to do - please configure your CSV path properly, either as environment variable or as a runtime parameter. Example: java -Dcsvpath=foo -jar fatJar.jar");
