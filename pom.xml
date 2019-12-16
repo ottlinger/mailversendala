@@ -8,7 +8,7 @@
   <name>mailversendala</name>
   <url>https://github.com/ottlinger/mailversendala</url>
   <properties>
-    <logger.version>2.12.1</logger.version>
+    <logger.version>2.13.0</logger.version>
     <junit.version>4.12</junit.version>
     <assertj.version>3.14.0</assertj.version>
     <lombok.version>1.18.10</lombok.version>
