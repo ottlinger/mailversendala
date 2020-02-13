@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SendOutTest {
 
-    private static final Mailing DUMMY_RECIPIENT = Mailing.builder().email("my@address.com").build();
+    private static final Mailing DUMMY_RECIPIENT = Mailing.builder().email("my@news.com").build();
 
     @Test
     public void initializeMailSenderProperly() {
