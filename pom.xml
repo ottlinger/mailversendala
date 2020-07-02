@@ -128,6 +128,7 @@
         </executions>
         <configuration>
           <encoding>${encoding.utf8}</encoding>
+          <source>8</source>
         </configuration>
       </plugin>
       <plugin>
