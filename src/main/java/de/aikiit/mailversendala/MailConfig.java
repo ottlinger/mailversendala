@@ -1,14 +1,15 @@
 package de.aikiit.mailversendala;
 
+import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.tamaya.Configuration;
-import org.apache.tamaya.ConfigurationProvider;
 
 
 /**
  * Encapsulates the configuration of this application.
  */
+@Getter
 public class MailConfig {
 
     private static final Logger LOG =
@@ -21,7 +22,7 @@ public class MailConfig {
     private final String to;
     private final String from;
     private final String subject;
-    private final String csvpath;
+    private final String csvPath;
     private final String templatePath;
     private final boolean isDemoMode;
 
@@ -30,7 +31,7 @@ public class MailConfig {
      */
     public MailConfig() {
         LOG.debug("Reading Tamaya configuration ...");
-        final Configuration configuration = ConfigurationProvider.getConfiguration();
+        final Configuration configuration = Configuration.current();
 
         this.host = configuration.getOrDefault("host", "smtp.example.com");
         this.port = Integer.valueOf(configuration.getOrDefault("port", "465"));
@@ -39,42 +40,10 @@ public class MailConfig {
         this.to = configuration.getOrDefault("to", "xmas@man.com");
         this.from = configuration.getOrDefault("from", "santa@cruz.com");
         this.subject = configuration.getOrDefault("subject", "Do adapt your configuration - will not work");
-        this.csvpath = configuration.getOrDefault("csvpath", "mailversendala-example.csv");
+        this.csvPath = configuration.getOrDefault("csvpath", "mailversendala-example.csv");
         this.isDemoMode = Boolean.valueOf(configuration.getOrDefault("demomode", "true"));
         this.templatePath = configuration.getOrDefault("templatepath", "template");
         LOG.debug("Configuration: DONE.");
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getTo() {
-        return to;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public String getCsvPath() {
-        return csvpath;
     }
 
     /**
@@ -86,7 +55,4 @@ public class MailConfig {
         return !isDemoMode;
     }
 
-    public String getTemplatePath() {
-        return templatePath;
-    }
 }
