@@ -3,9 +3,6 @@ package de.aikiit.mailversendala;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Created by hirsch on 06.06.17.
- */
 public class MailingResult {
 
     private AtomicInteger errorCounter;
