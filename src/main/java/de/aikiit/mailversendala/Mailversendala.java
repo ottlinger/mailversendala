@@ -31,7 +31,6 @@ public class Mailversendala {
         if (!Strings.isNullOrEmpty(csvPath)) {
             LOG.info(configuration.getCsvPath());
 
-
             File asFile = new File(configuration.getCsvPath());
             if (asFile.exists()) {
                 try (FileReader r = new FileReader(asFile)) {
@@ -40,7 +39,6 @@ public class Mailversendala {
 
                     final int total = mailings.size();
                     LOG.info("Will send out {} mails ... hold on tight :-)", total);
-
 
                     mailings.forEach(mailing -> {
                         try {
