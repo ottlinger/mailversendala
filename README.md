@@ -35,8 +35,7 @@ In order to just play around with it I've integrated a CI run:
 
 ### Codacy - code quality and static analysis
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c8fc0c6ef3d14192a2a8f84a670ccb92)](https://www.codacy.com/app/github_25/mailversendala)
-
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/f27ed60267144c1a88e12f0539ff9a6a)](https://www.codacy.com/gh/ottlinger/mailversendala/dashboard)
 ## How to run and use the application
 
 You need to checkout the application and build it with the help of [Java](https://java.sun.com) and [Maven](https://maven.apache.org/).
