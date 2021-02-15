@@ -9,7 +9,7 @@
   <url>https://github.com/ottlinger/mailversendala</url>
   <properties>
     <logger.version>2.14.0</logger.version>
-    <junit.version>4.13.1</junit.version>
+    <junit.version>4.13.2</junit.version>
     <lombok.version>1.18.16</lombok.version>
     <assertj.version>3.18.1</assertj.version>
     <mockito.version>3.6.28</mockito.version>
