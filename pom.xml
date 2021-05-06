@@ -9,9 +9,9 @@
   <url>https://github.com/ottlinger/mailversendala</url>
   <properties>
     <logger.version>2.14.0</logger.version>
-    <junit.version>4.13.1</junit.version>
+    <junit.version>4.13.2</junit.version>
     <lombok.version>1.18.18</lombok.version>
-    <assertj.version>3.18.1</assertj.version>
+    <assertj.version>3.19.0</assertj.version>
     <mockito.version>3.6.28</mockito.version>
     <javadoc.version>3.2.0</javadoc.version>
     <surefire.version>2.20.1</surefire.version>
@@ -212,7 +212,7 @@
     <dependency>
       <groupId>org.apache.velocity</groupId>
       <artifactId>velocity-engine-core</artifactId>
-      <version>2.2</version>
+      <version>2.3</version>
     </dependency>
   </dependencies>
   <!-- To be able to use the latest version/release candidate -->
