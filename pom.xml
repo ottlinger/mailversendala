@@ -32,7 +32,7 @@
         <configuration>
           <timeoutConstant>8000</timeoutConstant>
           <threads>8</threads>
-          <coverageThreshold>89</coverageThreshold>
+          <coverageThreshold>79</coverageThreshold>
           <mutationThreshold>35</mutationThreshold>
           <verbose>true</verbose>
         </configuration>
