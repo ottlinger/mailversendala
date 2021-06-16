@@ -8,7 +8,7 @@ The application can be fed with a CSV file (separator is ,). It needs to have a 
 
 | firstname  | surname | email |
 | --------------------- | ----------- | ----------------------- |
-| Your | Family | foo@baar.com |
+| Your | Family | foo@bar.com |
 
 Email needs to be a complete mail address.
 An example file is [mailversendala-example.csv](./src/main/resources/mailversendala-example.csv).
