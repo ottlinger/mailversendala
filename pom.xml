@@ -12,7 +12,7 @@
     <junit.version>4.13.2</junit.version>
     <lombok.version>1.18.24</lombok.version>
     <assertj.version>3.23.1</assertj.version>
-    <mockito.version>4.9.0</mockito.version>
+    <mockito.version>4.10.0</mockito.version>
     <javadoc.version>3.4.1</javadoc.version>
     <surefire.version>2.20.1</surefire.version>
     <rat.version>0.13</rat.version>
