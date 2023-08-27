@@ -23,11 +23,9 @@ An example file is [mailversendala-example.csv](./src/main/resources/mailversend
 https://github.com/users/ottlinger/projects/9
 
 ## Github integrations
-### Travis / CI
+### CI / GHA
 
-In order to just play around with it I've integrated a CI run:
-
-[![Build Status](https://travis-ci.org/ottlinger/mailversendala.svg?branch=master)](https://travis-ci.org/ottlinger/mailversendala)
+[![Github Action master branch status](https://github.com/ottlinger/mailversendala/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/ottlinger/mailversendala/actions)
 
 ### Code coverage
 
@@ -104,7 +102,6 @@ The following parameters can be set:
 
 In order to properly integrate the project into your IDE you need to setup lombok support -
 please follow the guidelines about integration, e.g. [Eclipse integration](https://projectlombok.org/setup/eclipse).
-
 
 ## Copyright
 
