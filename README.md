@@ -11,7 +11,7 @@ The application can be fed with a CSV file (separator is ,). It needs to have a 
 | Your | Family | foo@bar.com |
 
 Email needs to be a complete mail address.
-An example file is [mailversendala-example.csv](./src/main/resources/mailversendala-example.csv).
+An example file is [mailversendala-example.csv](./src/test/resources/mailversendala-example.csv).
 
 ## Project Status
 
