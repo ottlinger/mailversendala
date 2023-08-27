@@ -71,13 +71,13 @@ Technically the configuration is based on [Apache Tamaya (incubating)](https://t
 
 If you are running the application as a fat JAR you may want to overwrite each of the configuration key either environment variable or runtime property:
 ```
-$ java -jar target/mailversendala-0.1-executable.jar
+$ java -jar target/mailversendala-1.0.0-SNAPSHOT-executable.jar
 // runs with default parameters from within the JAR
 
-$ export csvpath=/tmp/my.csv; java -jar target/mailversendala-0.1-executable.jar
+$ export csvpath=/tmp/my.csv; java -jar target/mailversendala-1.0.0-SNAPSHOT-executable.jar
 // configuration set as environment variable
 
-$ java -Dcsvpath=/tmp/my.csv -jar target/mailversendala-0.1-executable.jar
+$ java -Dcsvpath=/tmp/my.csv -jar target/mailversendala-1.0.0-SNAPSHOT-executable.jar
 // configuration option set as JVM parameter
 ```
 
