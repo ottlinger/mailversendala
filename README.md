@@ -13,6 +13,10 @@ The application can be fed with a CSV file (separator is ,). It needs to have a 
 Email needs to be a complete mail address.
 An example file is [mailversendala-example.csv](./src/test/resources/mailversendala-example.csv).
 
+## Project webpage
+
+A Maven-generated site report is also available [here](https://ottlinger.github.io/mailversendala/).
+
 ## Project Status
 
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/ottlinger/mailversendala.svg)](http://isitmaintained.com/project/ottlinger/mailversendala "Average time to resolve an issue")
