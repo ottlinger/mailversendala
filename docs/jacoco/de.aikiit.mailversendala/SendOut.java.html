@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SendOut.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mailversendala</a> &gt; <a href="index.source.html" class="el_package">de.aikiit.mailversendala</a> &gt; <span class="el_source">SendOut.java</span></div><h1>SendOut.java</h1><pre class="source lang-java linenums">package de.aikiit.mailversendala;
+
+import com.google.common.base.Charsets;
+import com.google.common.base.Strings;
+import de.aikiit.mailversendala.csv.Mailing;
+import org.apache.commons.mail.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Date;
+import java.util.Locale;
+
+/**
+ * Created by hirsch on 15.05.17.
+ */
+public class SendOut {
+<span class="fc" id="L19">    private static final Logger LOG =</span>
+<span class="fc" id="L20">            LogManager.getLogger(SendOut.class);</span>
+
+    // is transformed into User-Agent-Header
+    private static final String SENT_BY = &quot;X-Mailer&quot;;
+    private static final String SENT_BY_ME = &quot;Mailversendala - https://github.com/ottlinger/mailversendala&quot;;
+
+    private final Email email;
+    private final HtmlEmail htmlEmail;
+    private final MailConfig mailConfig;
+    private final Mailing recipient;
+
+<span class="fc" id="L31">    public SendOut(Mailing recipient) {</span>
+
+<span class="fc" id="L33">        this.recipient = recipient;</span>
+
+<span class="fc" id="L35">        this.mailConfig = new MailConfig();</span>
+
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if (mailConfig.sendOutMails()) {</span>
+<span class="nc" id="L38">            LOG.warn(&quot;Running in DEMO mode, thus no mails will be sent out.&quot;);</span>
+        }
+
+<span class="fc" id="L41">        LOG.info(&quot;Initialized authentication.&quot;);</span>
+<span class="fc" id="L42">        DefaultAuthenticator authenticator = new DefaultAuthenticator(mailConfig.getUsername(), mailConfig.getPassword());</span>
+
+<span class="fc" id="L44">        int port = mailConfig.getPort();</span>
+
+<span class="fc" id="L46">        this.email = new SimpleEmail();</span>
+<span class="fc" id="L47">        email.setHostName(mailConfig.getHost());</span>
+<span class="fc" id="L48">        email.setSmtpPort(port);</span>
+<span class="fc" id="L49">        email.setAuthenticator(authenticator);</span>
+<span class="fc" id="L50">        email.setSSLCheckServerIdentity(true);</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if (465 == port) {</span>
+<span class="fc" id="L52">            LOG.info(&quot;Using SSL.&quot;);</span>
+<span class="fc" id="L53">            email.setSSLOnConnect(true);</span>
+        } else {
+<span class="nc" id="L55">            LOG.info(&quot;Using TLS.&quot;);</span>
+<span class="nc" id="L56">            email.setStartTLSRequired(true);</span>
+        }
+<span class="fc" id="L58">        email.setBounceAddress(mailConfig.getFrom());</span>
+<span class="fc" id="L59">        email.addHeader(SENT_BY, SENT_BY_ME);</span>
+<span class="fc" id="L60">        LOG.info(&quot;Simple email initialized.&quot;);</span>
+
+<span class="fc" id="L62">        this.htmlEmail = new HtmlEmail();</span>
+<span class="fc" id="L63">        htmlEmail.setHostName(mailConfig.getHost());</span>
+<span class="fc" id="L64">        htmlEmail.setSmtpPort(port);</span>
+<span class="fc" id="L65">        htmlEmail.setSSLCheckServerIdentity(true);</span>
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        if (465 == port) {</span>
+<span class="fc" id="L67">            LOG.info(&quot;Using SSL.&quot;);</span>
+<span class="fc" id="L68">            htmlEmail.setSSLOnConnect(true);</span>
+        } else {
+<span class="nc" id="L70">            LOG.info(&quot;Using TLS.&quot;);</span>
+<span class="nc" id="L71">            htmlEmail.setStartTLSRequired(true);</span>
+        }
+<span class="fc" id="L73">        htmlEmail.setBounceAddress(mailConfig.getFrom());</span>
+<span class="fc" id="L74">        htmlEmail.setAuthenticator(authenticator);</span>
+<span class="fc" id="L75">        htmlEmail.addHeader(SENT_BY, SENT_BY_ME);</span>
+<span class="fc" id="L76">        LOG.info(&quot;HTML and text email initialized.&quot;);</span>
+<span class="fc" id="L77">    }</span>
+
+    public static void main(String... args) throws Exception {
+<span class="pc bpc" id="L80" title="2 of 6 branches missed.">        if (args == null || args.length &lt; 1 || Strings.isNullOrEmpty(args[0])) {</span>
+<span class="fc" id="L81">            LOG.error(&quot;Please call this method with a mail address to send to.&quot;);</span>
+        } else {
+<span class="nc" id="L83">            String email = args[0];</span>
+<span class="nc" id="L84">            LOG.warn(&quot;Init: Using mail address from runtime parameter: {}&quot;, email);</span>
+
+<span class="nc" id="L86">            Mailing mailing = Mailing.builder().email(email).firstname(&quot;Your name&quot;).surname(&quot;Is my name&quot;).language(Locale.GERMAN.getLanguage()).build();</span>
+<span class="nc" id="L87">            SendOut sendOut = new SendOut(mailing);</span>
+<span class="nc" id="L88">            LOG.info(&quot;Init: DONE&quot;);</span>
+<span class="nc" id="L89">            sendOut.send();</span>
+<span class="nc" id="L90">            LOG.info(&quot;Send simple text-based message: DONE&quot;);</span>
+<span class="nc" id="L91">            sendOut.sendComplex();</span>
+<span class="nc" id="L92">            LOG.info(&quot;Send complex HTML and text-based message: DONE&quot;);</span>
+        }
+<span class="fc" id="L94">    }</span>
+
+    public void send() throws EmailException {
+<span class="fc" id="L97">        email.setFrom(mailConfig.getFrom());</span>
+<span class="fc" id="L98">        email.addTo(this.recipient.getEmail());</span>
+
+<span class="fc" id="L100">        email.setCharset(Charsets.UTF_8.name());</span>
+
+<span class="fc" id="L102">        email.setSubject(mailConfig.getSubject() + &quot; &quot; + new Date());</span>
+<span class="fc" id="L103">        email.setMsg(&quot;This is a test mail from Mailversendala... :-)&quot;);</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        if (mailConfig.sendOutMails()) {</span>
+<span class="nc" id="L105">            email.send();</span>
+        }
+<span class="fc" id="L107">    }</span>
+
+    public void sendComplex() throws EmailException, MalformedURLException {
+<span class="fc" id="L110">        htmlEmail.addTo(this.recipient.getEmail(), this.recipient.getFirstname() + &quot; &quot; + this.recipient.getSurname());</span>
+<span class="fc" id="L111">        htmlEmail.setFrom(mailConfig.getFrom(), &quot;Me&quot;);</span>
+<span class="fc" id="L112">        htmlEmail.setSubject(&quot;HTML&quot; + mailConfig.getSubject() + &quot; &quot; + new Date());</span>
+
+        // embed the image and get the content id
+<span class="fc" id="L115">        URL url = new URL(&quot;http://www.apache.org/images/asf_logo_wide.gif&quot;);</span>
+<span class="fc" id="L116">        String cid = htmlEmail.embed(url, &quot;Apache logo&quot;);</span>
+
+        // set the html message
+<span class="fc" id="L119">        htmlEmail.setHtmlMsg(&quot;&lt;html&gt;The apache logo - &lt;img src=\&quot;cid:&quot; + cid + &quot;\&quot;&gt;&lt;/html&gt;&quot;);</span>
+
+        // set the alternative message
+<span class="fc" id="L122">        htmlEmail.setTextMsg(&quot;Your email client does not support HTML messages - thus no Apache logo&quot;);</span>
+
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">        if (mailConfig.sendOutMails()) {</span>
+<span class="nc" id="L125">            htmlEmail.send();</span>
+        }
+<span class="fc" id="L127">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

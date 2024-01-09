@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"de.aikiit.mailversendala"},{"l":"de.aikiit.mailversendala.csv"},{"l":"de.aikiit.mailversendala.template"}];updateSearchResults();
