@@ -51,7 +51,7 @@
             <threads>8</threads>
             <coverageThreshold>79</coverageThreshold>
             <mutationThreshold>35</mutationThreshold>
-            <verbose>true</verbose>
+            <verbose>false</verbose>
           </configuration>
           <executions>
             <execution>
