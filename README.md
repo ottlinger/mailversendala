@@ -37,7 +37,7 @@ https://github.com/users/ottlinger/projects/9
 
 ### Codacy - code quality and static analysis
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/f27ed60267144c1a88e12f0539ff9a6a)](https://www.codacy.com/gh/ottlinger/mailversendala/dashboard)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/f27ed60267144c1a88e12f0539ff9a6a)](https://app.codacy.com/gh/ottlinger/mailversendala/dashboard)
 ## How to run and use the application
 
 You need to checkout the application and build it with the help of [Java](https://java.sun.com) and [Maven](https://maven.apache.org/).
