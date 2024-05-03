@@ -270,9 +270,9 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jxr-plugin</artifactId>
-        <version>2.4</version>
+        <version>3.3.2</version>
         <configuration>
-          <code>jxr:aggregate</code>
+          <linkJavadoc>true</linkJavadoc>
         </configuration>
       </plugin>
       <plugin>
