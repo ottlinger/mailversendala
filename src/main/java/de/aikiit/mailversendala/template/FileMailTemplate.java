@@ -7,6 +7,7 @@ import de.aikiit.mailversendala.MailConfig;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,7 +27,7 @@ public class FileMailTemplate implements MailTemplate {
     }
 
     private static String readInLanguage(Path file) throws IOException {
-        return new String(Files.readAllBytes(file));
+        return new String(Files.readString(file, StandardCharsets.UTF_8));
     }
 
     @Override
