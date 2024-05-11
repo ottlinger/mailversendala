@@ -10,7 +10,7 @@ import org.assertj.core.util.Strings;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.StandardCharsets;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
