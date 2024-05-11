@@ -21,6 +21,7 @@
     <shade.version>3.5.3</shade.version>
     <project.reporting.outputEncoding>${encoding.utf8}</project.reporting.outputEncoding>
     <project.build.sourceEncoding>${encoding.utf8}</project.build.sourceEncoding>
+    <maven.compiler.release>11</maven.compiler.release>
   </properties>
   <build>
     <defaultGoal>clean versions:display-dependency-updates versions:display-plugin-updates install org.pitest:pitest-maven:mutationCoverage</defaultGoal>
@@ -143,8 +144,6 @@
           <version>3.13.0</version>
           <configuration>
             <encoding>${encoding.utf8}</encoding>
-            <source>1.8</source>
-            <target>1.8</target>
           </configuration>
         </plugin>
         <!--  generate source and javadoc.jar -->
