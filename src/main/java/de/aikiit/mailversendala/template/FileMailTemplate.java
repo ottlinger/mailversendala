@@ -27,7 +27,7 @@ public class FileMailTemplate implements MailTemplate {
     }
 
     private static String readInLanguage(Path file) throws IOException {
-        return new String(Files.readString(file, StandardCharsets.UTF_8));
+        return Files.readString(file, StandardCharsets.UTF_8);
     }
 
     @Override
