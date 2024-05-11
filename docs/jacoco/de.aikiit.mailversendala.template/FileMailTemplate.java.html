@@ -7,6 +7,7 @@ import de.aikiit.mailversendala.MailConfig;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,28 +16,28 @@ public class FileMailTemplate implements MailTemplate {
     private String html;
     private String plaintext;
 
-<span class="fc" id="L18">    public FileMailTemplate(InputStream html, InputStream plaintext) throws IOException {</span>
-<span class="fc" id="L19">        this.html = CharStreams.toString(new InputStreamReader(html, Charsets.UTF_8));</span>
-<span class="fc" id="L20">        this.plaintext = CharStreams.toString(new InputStreamReader(plaintext, Charsets.UTF_8));</span>
-<span class="fc" id="L21">    }</span>
+<span class="fc" id="L19">    public FileMailTemplate(InputStream html, InputStream plaintext) throws IOException {</span>
+<span class="fc" id="L20">        this.html = CharStreams.toString(new InputStreamReader(html, Charsets.UTF_8));</span>
+<span class="fc" id="L21">        this.plaintext = CharStreams.toString(new InputStreamReader(plaintext, Charsets.UTF_8));</span>
+<span class="fc" id="L22">    }</span>
 
-<span class="fc" id="L23">    public FileMailTemplate(MailConfig config) throws IOException {</span>
-<span class="fc" id="L24">        this.html = readInLanguage(Paths.get(config.getTemplatePath(), MailTemplate.BASE_NAME_HTML));</span>
-<span class="fc" id="L25">        this.plaintext = readInLanguage(Paths.get(config.getTemplatePath(), MailTemplate.BASE_NAME_PLAINTEXT));</span>
-<span class="fc" id="L26">    }</span>
+<span class="fc" id="L24">    public FileMailTemplate(MailConfig config) throws IOException {</span>
+<span class="fc" id="L25">        this.html = readInLanguage(Paths.get(config.getTemplatePath(), MailTemplate.BASE_NAME_HTML));</span>
+<span class="fc" id="L26">        this.plaintext = readInLanguage(Paths.get(config.getTemplatePath(), MailTemplate.BASE_NAME_PLAINTEXT));</span>
+<span class="fc" id="L27">    }</span>
 
     private static String readInLanguage(Path file) throws IOException {
-<span class="fc" id="L29">        return new String(Files.readAllBytes(file));</span>
+<span class="fc" id="L30">        return Files.readString(file, StandardCharsets.UTF_8);</span>
     }
 
     @Override
     public String getHtml() {
-<span class="fc" id="L34">        return html;</span>
+<span class="fc" id="L35">        return html;</span>
     }
 
     @Override
     public String getPlaintext() {
-<span class="fc" id="L39">        return plaintext;</span>
+<span class="fc" id="L40">        return plaintext;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -73,9 +73,9 @@
 <th>Missing Classes</th></tr>
 <tr class="b">
 <td>12</td>
-<td>11</td>
+<td>7</td>
 <td>0</td>
-<td>1</td></tr></table></section><section>
+<td>2</td></tr></table></section><section>
 <h2><a name="Files"></a>Files</h2>
 <table border="0" class="bodyTable">
 <tr class="a">
@@ -83,16 +83,16 @@
 <th>Bugs</th></tr>
 <tr class="b">
 <td><a href="#de.aikiit.mailversendala.MailConfig">de.aikiit.mailversendala.MailConfig</a></td>
-<td>2</td></tr>
+<td>1</td></tr>
 <tr class="a">
 <td><a href="#de.aikiit.mailversendala.Mailversendala">de.aikiit.mailversendala.Mailversendala</a></td>
-<td>2</td></tr>
+<td>1</td></tr>
 <tr class="b">
 <td><a href="#de.aikiit.mailversendala.SendOut">de.aikiit.mailversendala.SendOut</a></td>
-<td>2</td></tr>
+<td>1</td></tr>
 <tr class="a">
 <td><a href="#de.aikiit.mailversendala.template.FileMailTemplate">de.aikiit.mailversendala.template.FileMailTemplate</a></td>
-<td>5</td></tr></table></section><a name="de.aikiit.mailversendala.MailConfig"></a><section>
+<td>4</td></tr></table></section><a name="de.aikiit.mailversendala.MailConfig"></a><section>
 <h3><a name="de.aikiit.mailversendala.MailConfig"></a>de.aikiit.mailversendala.MailConfig</h3>
 <table border="0" class="bodyTable">
 <tr class="a">
@@ -106,13 +106,7 @@
 <td>BAD_PRACTICE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#CT_CONSTRUCTOR_THROW">CT_CONSTRUCTOR_THROW</a></td>
 <td><a href="./xref/de/aikiit/mailversendala/MailConfig.html#L37">37</a></td>
-<td>Medium</td></tr>
-<tr class="a">
-<td>Boxing/unboxing to parse a primitive new de.aikiit.mailversendala.MailConfig()</td>
-<td>PERFORMANCE</td>
-<td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#DM_BOXED_PRIMITIVE_FOR_PARSING">DM_BOXED_PRIMITIVE_FOR_PARSING</a></td>
-<td><a href="./xref/de/aikiit/mailversendala/MailConfig.html#L37">37</a></td>
-<td>High</td></tr></table></section><a name="de.aikiit.mailversendala.Mailversendala"></a><section>
+<td>Medium</td></tr></table></section><a name="de.aikiit.mailversendala.Mailversendala"></a><section>
 <h3><a name="de.aikiit.mailversendala.Mailversendala"></a>de.aikiit.mailversendala.Mailversendala</h3>
 <table border="0" class="bodyTable">
 <tr class="a">
@@ -122,16 +116,10 @@
 <th>Line</th>
 <th>Priority</th></tr>
 <tr class="b">
-<td>Found reliance on default encoding in de.aikiit.mailversendala.Mailversendala.sendOut(MailConfig): new java.io.FileReader(File)</td>
-<td>I18N</td>
-<td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#DM_DEFAULT_ENCODING">DM_DEFAULT_ENCODING</a></td>
-<td><a href="./xref/de/aikiit/mailversendala/Mailversendala.html#L36">36</a></td>
-<td>High</td></tr>
-<tr class="a">
 <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td>
 <td>SECURITY</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
-<td><a href="./xref/de/aikiit/mailversendala/Mailversendala.html#L34">34</a></td>
+<td><a href="./xref/de/aikiit/mailversendala/Mailversendala.html#L35">35</a></td>
 <td>Medium</td></tr></table></section><a name="de.aikiit.mailversendala.SendOut"></a><section>
 <h3><a name="de.aikiit.mailversendala.SendOut"></a>de.aikiit.mailversendala.SendOut</h3>
 <table border="0" class="bodyTable">
@@ -146,12 +134,6 @@
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
 <td><a href="./xref/de/aikiit/mailversendala/SendOut.html#L33">33</a></td>
-<td>Medium</td></tr>
-<tr class="a">
-<td>java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder; is potentially injected into an XML string in method de.aikiit.mailversendala.SendOut.sendComplex().</td>
-<td>SECURITY</td>
-<td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#POTENTIAL_XML_INJECTION">POTENTIAL_XML_INJECTION</a></td>
-<td><a href="./xref/de/aikiit/mailversendala/SendOut.html#L119">119</a></td>
 <td>Medium</td></tr></table></section><a name="de.aikiit.mailversendala.template.FileMailTemplate"></a><section>
 <h3><a name="de.aikiit.mailversendala.template.FileMailTemplate"></a>de.aikiit.mailversendala.template.FileMailTemplate</h3>
 <table border="0" class="bodyTable">
@@ -165,31 +147,25 @@
 <td>Exception thrown in class de.aikiit.mailversendala.template.FileMailTemplate at new de.aikiit.mailversendala.template.FileMailTemplate(MailConfig) will leave the constructor. The object under construction remains partially initialized and may be vulnerable to Finalizer attacks.</td>
 <td>BAD_PRACTICE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#CT_CONSTRUCTOR_THROW">CT_CONSTRUCTOR_THROW</a></td>
-<td><a href="./xref/de/aikiit/mailversendala/template/FileMailTemplate.html#L24">24</a></td>
+<td><a href="./xref/de/aikiit/mailversendala/template/FileMailTemplate.html#L25">25</a></td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>Exception thrown in class de.aikiit.mailversendala.template.FileMailTemplate at new de.aikiit.mailversendala.template.FileMailTemplate(InputStream, InputStream) will leave the constructor. The object under construction remains partially initialized and may be vulnerable to Finalizer attacks.</td>
 <td>BAD_PRACTICE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#CT_CONSTRUCTOR_THROW">CT_CONSTRUCTOR_THROW</a></td>
-<td><a href="./xref/de/aikiit/mailversendala/template/FileMailTemplate.html#L19">19</a></td>
-<td>Medium</td></tr>
-<tr class="b">
-<td>Found reliance on default encoding in de.aikiit.mailversendala.template.FileMailTemplate.readInLanguage(Path): new String(byte[])</td>
-<td>I18N</td>
-<td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#DM_DEFAULT_ENCODING">DM_DEFAULT_ENCODING</a></td>
-<td><a href="./xref/de/aikiit/mailversendala/template/FileMailTemplate.html#L29">29</a></td>
-<td>High</td></tr>
-<tr class="a">
-<td>This API (java/nio/file/Paths.get(Ljava/lang/String;[Ljava/lang/String;)Ljava/nio/file/Path;) reads a file whose location might be specified by user input</td>
-<td>SECURITY</td>
-<td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
-<td><a href="./xref/de/aikiit/mailversendala/template/FileMailTemplate.html#L24">24</a></td>
+<td><a href="./xref/de/aikiit/mailversendala/template/FileMailTemplate.html#L20">20</a></td>
 <td>Medium</td></tr>
 <tr class="b">
 <td>This API (java/nio/file/Paths.get(Ljava/lang/String;[Ljava/lang/String;)Ljava/nio/file/Path;) reads a file whose location might be specified by user input</td>
 <td>SECURITY</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
 <td><a href="./xref/de/aikiit/mailversendala/template/FileMailTemplate.html#L25">25</a></td>
+<td>Medium</td></tr>
+<tr class="a">
+<td>This API (java/nio/file/Paths.get(Ljava/lang/String;[Ljava/lang/String;)Ljava/nio/file/Path;) reads a file whose location might be specified by user input</td>
+<td>SECURITY</td>
+<td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
+<td><a href="./xref/de/aikiit/mailversendala/template/FileMailTemplate.html#L26">26</a></td>
 <td>Medium</td></tr></table></section>
       </div>
     </div>
