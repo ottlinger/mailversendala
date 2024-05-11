@@ -34,7 +34,7 @@ public class MailConfig {
         final Configuration configuration = Configuration.current();
 
         this.host = configuration.getOrDefault("host", "smtp.example.com");
-        this.port = Integer.valueOf(configuration.getOrDefault("port", "465"));
+        this.port = Integer.parseInt(configuration.getOrDefault("port", "465"));
         this.username = configuration.getOrDefault("username", "user@example.com");
         this.password = configuration.getOrDefault("password", "chooseMeWisely");
         this.to = configuration.getOrDefault("to", "xmas@man.com");
