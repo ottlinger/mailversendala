@@ -10,6 +10,7 @@ import org.assertj.core.util.Strings;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -33,7 +34,7 @@ public class Mailversendala {
 
             File asFile = new File(configuration.getCsvPath());
             if (asFile.exists()) {
-                try (FileReader r = new FileReader(asFile)) {
+                try (FileReader r = new FileReader(asFile, StandardCharsets.UTF_8)) {
                     CsvParser parser = new CsvParser(r);
                     final List<Mailing> mailings = parser.parse();
 
