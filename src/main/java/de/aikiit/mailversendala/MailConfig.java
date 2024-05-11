@@ -41,7 +41,7 @@ public class MailConfig {
         this.from = configuration.getOrDefault("from", "santa@cruz.com");
         this.subject = configuration.getOrDefault("subject", "Do adapt your configuration - will not work");
         this.csvPath = configuration.getOrDefault("csvpath", "mailversendala-example.csv");
-        this.isDemoMode = Boolean.valueOf(configuration.getOrDefault("demomode", "true"));
+        this.isDemoMode = Boolean.parseBoolean(configuration.getOrDefault("demomode", "true"));
         this.templatePath = configuration.getOrDefault("templatepath", "template");
         LOG.debug("Configuration: DONE.");
     }
