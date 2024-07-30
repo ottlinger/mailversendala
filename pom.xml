@@ -13,7 +13,7 @@
     <lombok.version>1.18.32</lombok.version>
     <assertj.version>3.26.3</assertj.version>
     <mockito.version>5.12.0</mockito.version>
-    <javadoc.version>3.7.0</javadoc.version>
+    <javadoc.version>3.8.0</javadoc.version>
     <surefire.version>3.3.1</surefire.version>
     <rat.version>0.13</rat.version>
     <guava.version>33.2.1-jre</guava.version>
