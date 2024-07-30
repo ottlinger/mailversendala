@@ -11,10 +11,10 @@
     <logger.version>2.23.1</logger.version>
     <junit.version>4.13.2</junit.version>
     <lombok.version>1.18.32</lombok.version>
-    <assertj.version>3.26.0</assertj.version>
+    <assertj.version>3.26.3</assertj.version>
     <mockito.version>5.12.0</mockito.version>
     <javadoc.version>3.8.0</javadoc.version>
-    <surefire.version>3.2.5</surefire.version>
+    <surefire.version>3.3.1</surefire.version>
     <rat.version>0.13</rat.version>
     <guava.version>33.2.1-jre</guava.version>
     <encoding.utf8>UTF-8</encoding.utf8>
@@ -44,7 +44,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.5.0</version>
+          <version>3.6.2</version>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
