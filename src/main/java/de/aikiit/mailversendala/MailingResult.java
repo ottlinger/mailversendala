@@ -5,8 +5,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Class encapsulates internal counters to gauge
+ * <ul>
  * <li>how many errors and</li>
  * <li>how many mails were successfully sent out</li>
+ * </ul>
  * during an application run.
  */
 public class MailingResult {
