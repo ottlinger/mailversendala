@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by hirsch on 15.05.17.
+ * This class performs the actual mail sending and encapsulates all the technicalities to create and send out an email.
  */
 public class SendOut {
     private static final Logger LOG =
@@ -28,10 +28,12 @@ public class SendOut {
     private final MailConfig mailConfig;
     private final Mailing recipient;
 
+    /**
+     * Create mail based on the given mailing recipient.
+     * @param recipient mailing contents and parameters.
+     */
     public SendOut(Mailing recipient) {
-
         this.recipient = recipient;
-
         this.mailConfig = new MailConfig();
 
         if (mailConfig.sendOutMails()) {
@@ -76,6 +78,11 @@ public class SendOut {
         LOG.info("HTML and text email initialized.");
     }
 
+    /**
+     * Test method to verify the actual mail creation and send out.
+     * @param args allows sending an email to a given mail address. One parameter is required.
+     * @throws Exception in case of errors.
+     */
     public static void main(String... args) throws Exception {
         if (args == null || args.length < 1 || Strings.isNullOrEmpty(args[0])) {
             LOG.error("Please call this method with a mail address to send to.");
@@ -93,6 +100,10 @@ public class SendOut {
         }
     }
 
+    /**
+     * Send out an email that contains only text contents.
+     * @throws EmailException in case of errors.
+     */
     public void send() throws EmailException {
         email.setFrom(mailConfig.getFrom());
         email.addTo(this.recipient.getEmail());
@@ -106,24 +117,29 @@ public class SendOut {
         }
     }
 
+    /**
+     * Send out an email with plain text and HTML contents.
+     *
+     * @throws EmailException in case of mail-related errors.
+     * @throws MalformedURLException in case of problem while generating the HTML-part of.
+     */
     public void sendComplex() throws EmailException, MalformedURLException {
         htmlEmail.addTo(this.recipient.getEmail(), this.recipient.getFirstname() + " " + this.recipient.getSurname());
         htmlEmail.setFrom(mailConfig.getFrom(), "Me");
         htmlEmail.setSubject("HTML" + mailConfig.getSubject() + " " + new Date());
 
         // embed the image and get the content id
-        URL url = new URL("http://www.apache.org/images/asf_logo_wide.gif");
-        String cid = htmlEmail.embed(url, "Apache logo");
+        URL url = new URL("https://www.apache.org/images/asf_logo_wide.gif");
+        String cid = htmlEmail.embed(url, "ASF logo");
 
         // set the html message
-        htmlEmail.setHtmlMsg("<html>The apache logo - <img src=\"cid:" + cid + "\"></html>");
+        htmlEmail.setHtmlMsg("<html>The ASF logo - <img src=\"cid:" + cid + "\"></html>");
 
         // set the alternative message
-        htmlEmail.setTextMsg("Your email client does not support HTML messages - thus no Apache logo");
+        htmlEmail.setTextMsg("Your email client does not support HTML messages - thus no ASF logo visible.");
 
         if (mailConfig.sendOutMails()) {
             htmlEmail.send();
         }
     }
-
 }
