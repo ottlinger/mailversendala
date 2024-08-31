@@ -11,17 +11,26 @@ import java.io.Reader;
 import java.util.List;
 
 /**
- * Created by hirsch on 24.05.17.
+ * Main class to parse given arguments for mailversendala configuration.
  */
 public class CsvParser {
     private static final Logger LOG =
             LogManager.getLogger(CsvParser.class);
     private final Reader reader;
 
+    /**
+     * Parse given CSV values internally.
+     * @param csvInput read configuration data as CSV.
+     */
     public CsvParser(Reader csvInput) {
         this.reader = csvInput;
     }
 
+    /**
+     * Do the actual parsing of a given CSV configuration.
+     * @return a list of mailings to send out.
+     * @throws IOException in case of errors.
+     */
     public List<Mailing> parse() throws IOException {
         final List<Mailing> results = Lists.newArrayList();
         if (reader != null) {
