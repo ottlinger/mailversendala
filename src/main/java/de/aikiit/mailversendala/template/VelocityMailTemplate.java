@@ -28,12 +28,12 @@ public class VelocityMailTemplate implements MailTemplate {
 
     @Override
     public String getHtml() {
-        return loadAndGetContents("template" + File.separator + MailTemplate.BASE_NAME_HTML);
+        return loadAndGetContents("template" + File.separator + BASE_NAME_HTML);
     }
 
     @Override
     public String getPlaintext() {
-        return loadAndGetContents("template" + File.separator + MailTemplate.BASE_NAME_PLAINTEXT);
+        return loadAndGetContents("template" + File.separator + BASE_NAME_PLAINTEXT);
     }
 
     private VelocityContext handleAndGetContextChanges() {

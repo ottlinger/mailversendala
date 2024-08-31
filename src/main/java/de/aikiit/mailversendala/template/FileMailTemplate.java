@@ -36,8 +36,8 @@ public class FileMailTemplate implements MailTemplate {
      * @throws IOException in case of errors.
      */
     public FileMailTemplate(MailConfig config) throws IOException {
-        this.html = readInLanguage(Paths.get(config.getTemplatePath(), MailTemplate.BASE_NAME_HTML));
-        this.plaintext = readInLanguage(Paths.get(config.getTemplatePath(), MailTemplate.BASE_NAME_PLAINTEXT));
+        this.html = readInLanguage(Paths.get(config.getTemplatePath(), BASE_NAME_HTML));
+        this.plaintext = readInLanguage(Paths.get(config.getTemplatePath(), BASE_NAME_PLAINTEXT));
     }
 
     private static String readInLanguage(Path file) throws IOException {
