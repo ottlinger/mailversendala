@@ -3,35 +3,58 @@
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-<span class="fc" id="L6">public class MailingResult {</span>
+/**
+ * Class encapsulates internal counters to gauge
+ * &lt;ul&gt;
+ * &lt;li&gt;how many errors and&lt;/li&gt;
+ * &lt;li&gt;how many mails were successfully sent out&lt;/li&gt;
+ * &lt;/ul&gt;
+ * during an application run.
+ */
+<span class="fc" id="L14">public class MailingResult {</span>
 
     private AtomicInteger errorCounter;
     private AtomicInteger mailCounter;
 
+    /**
+     * Increment internal error counter by 1.
+     */
     public void addError() {
-<span class="fc bfc" id="L12" title="All 2 branches covered.">        if (errorCounter == null) {</span>
-<span class="fc" id="L13">            this.errorCounter = new AtomicInteger(0);</span>
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        if (errorCounter == null) {</span>
+<span class="fc" id="L24">            this.errorCounter = new AtomicInteger(0);</span>
         }
-<span class="fc" id="L15">        errorCounter.incrementAndGet();</span>
-<span class="fc" id="L16">    }</span>
+<span class="fc" id="L26">        errorCounter.incrementAndGet();</span>
+<span class="fc" id="L27">    }</span>
 
+    /**
+     * Increment internal success counter by 1.
+     */
     public void addSuccess() {
-<span class="fc bfc" id="L19" title="All 2 branches covered.">        if (mailCounter == null) {</span>
-<span class="fc" id="L20">            this.mailCounter = new AtomicInteger(0);</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        if (mailCounter == null) {</span>
+<span class="fc" id="L34">            this.mailCounter = new AtomicInteger(0);</span>
         }
-<span class="fc" id="L22">        mailCounter.incrementAndGet();</span>
-<span class="fc" id="L23">    }</span>
+<span class="fc" id="L36">        mailCounter.incrementAndGet();</span>
+<span class="fc" id="L37">    }</span>
 
+    /**
+     * @return current error counter if existing.
+     */
     public Optional&lt;AtomicInteger&gt; getErrorCounter() {
-<span class="fc" id="L26">        return Optional.ofNullable(errorCounter);</span>
+<span class="fc" id="L43">        return Optional.ofNullable(errorCounter);</span>
     }
 
+    /**
+     * @return current success counter if existing.
+     */
     public Optional&lt;AtomicInteger&gt; getMailCounter() {
-<span class="fc" id="L30">        return Optional.ofNullable(mailCounter);</span>
+<span class="fc" id="L50">        return Optional.ofNullable(mailCounter);</span>
     }
 
+    /**
+     * @return sum of {@link #mailCounter} and {@link #errorCounter}.
+     */
     public int getTotal() {
-<span class="fc" id="L34">        return getErrorCounter().orElse(new AtomicInteger(0)).get() + getMailCounter().orElse(new AtomicInteger(0)).get();</span>
+<span class="fc" id="L57">        return getErrorCounter().orElse(new AtomicInteger(0)).get() + getMailCounter().orElse(new AtomicInteger(0)).get();</span>
     }
 
 }

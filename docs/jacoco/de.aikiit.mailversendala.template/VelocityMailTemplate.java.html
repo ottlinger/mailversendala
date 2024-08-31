@@ -9,42 +9,48 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import java.io.File;
 import java.io.StringWriter;
 
+/**
+ * Mailing template that is based on Apache Velocity templates.
+ */
 public class VelocityMailTemplate implements MailTemplate {
 
-<span class="fc" id="L14">    private VelocityEngine velocityEngine = new VelocityEngine();</span>
+<span class="fc" id="L17">    private final VelocityEngine velocityEngine = new VelocityEngine();</span>
 
-<span class="fc" id="L16">    public VelocityMailTemplate() {</span>
-<span class="fc" id="L17">        velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, &quot;class&quot;);</span>
-<span class="fc" id="L18">        velocityEngine.setProperty(&quot;class.resource.loader.class&quot;,</span>
-<span class="fc" id="L19">                ClasspathResourceLoader.class.getName());</span>
-<span class="fc" id="L20">        velocityEngine.init();</span>
-<span class="fc" id="L21">    }</span>
+    /**
+     * Instantiate underlying template engine.
+     */
+<span class="fc" id="L22">    public VelocityMailTemplate() {</span>
+<span class="fc" id="L23">        velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, &quot;class&quot;);</span>
+<span class="fc" id="L24">        velocityEngine.setProperty(&quot;class.resource.loader.class&quot;,</span>
+<span class="fc" id="L25">                ClasspathResourceLoader.class.getName());</span>
+<span class="fc" id="L26">        velocityEngine.init();</span>
+<span class="fc" id="L27">    }</span>
 
     @Override
     public String getHtml() {
-<span class="fc" id="L25">        return loadAndGetContents(&quot;template&quot; + File.separator + MailTemplate.BASE_NAME_HTML);</span>
+<span class="fc" id="L31">        return loadAndGetContents(&quot;template&quot; + File.separator + BASE_NAME_HTML);</span>
     }
 
     @Override
     public String getPlaintext() {
-<span class="fc" id="L30">        return loadAndGetContents(&quot;template&quot; + File.separator + MailTemplate.BASE_NAME_PLAINTEXT);</span>
+<span class="fc" id="L36">        return loadAndGetContents(&quot;template&quot; + File.separator + BASE_NAME_PLAINTEXT);</span>
     }
 
     private VelocityContext handleAndGetContextChanges() {
-<span class="fc" id="L34">        VelocityContext context = new VelocityContext();</span>
-<span class="fc" id="L35">        context.put(&quot;firstName&quot;, &quot;ME&quot;);</span>
-<span class="fc" id="L36">        context.put(&quot;lastName&quot;, &quot;REALLY&quot;);</span>
-<span class="fc" id="L37">        return context;</span>
+<span class="fc" id="L40">        VelocityContext context = new VelocityContext();</span>
+<span class="fc" id="L41">        context.put(&quot;firstName&quot;, &quot;ME&quot;);</span>
+<span class="fc" id="L42">        context.put(&quot;lastName&quot;, &quot;REALLY&quot;);</span>
+<span class="fc" id="L43">        return context;</span>
     }
 
     private String loadAndGetContents(String templateName) {
-<span class="fc" id="L41">        Template t = velocityEngine.getTemplate(templateName);</span>
+<span class="fc" id="L47">        Template t = velocityEngine.getTemplate(templateName);</span>
 
-<span class="fc" id="L43">        StringWriter writer = new StringWriter();</span>
-<span class="fc" id="L44">        t.merge(handleAndGetContextChanges(), writer);</span>
-<span class="fc" id="L45">        t.process();</span>
+<span class="fc" id="L49">        StringWriter writer = new StringWriter();</span>
+<span class="fc" id="L50">        t.merge(handleAndGetContextChanges(), writer);</span>
+<span class="fc" id="L51">        t.process();</span>
 
-<span class="fc" id="L47">        return writer.toString().trim();</span>
+<span class="fc" id="L53">        return writer.toString().trim();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

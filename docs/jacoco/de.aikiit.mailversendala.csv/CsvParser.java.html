@@ -11,38 +11,47 @@ import java.io.Reader;
 import java.util.List;
 
 /**
- * Created by hirsch on 24.05.17.
+ * Main class to parse given arguments for mailversendala configuration.
  */
 public class CsvParser {
 <span class="fc" id="L17">    private static final Logger LOG =</span>
 <span class="fc" id="L18">            LogManager.getLogger(CsvParser.class);</span>
     private final Reader reader;
 
-<span class="fc" id="L21">    public CsvParser(Reader csvInput) {</span>
-<span class="fc" id="L22">        this.reader = csvInput;</span>
-<span class="fc" id="L23">    }</span>
+    /**
+     * Parse given CSV values internally.
+     * @param csvInput read configuration data as CSV.
+     */
+<span class="fc" id="L25">    public CsvParser(Reader csvInput) {</span>
+<span class="fc" id="L26">        this.reader = csvInput;</span>
+<span class="fc" id="L27">    }</span>
 
+    /**
+     * Do the actual parsing of a given CSV configuration.
+     * @return a list of mailings to send out.
+     * @throws IOException in case of errors.
+     */
     public List&lt;Mailing&gt; parse() throws IOException {
-<span class="fc" id="L26">        final List&lt;Mailing&gt; results = Lists.newArrayList();</span>
-<span class="fc bfc" id="L27" title="All 2 branches covered.">        if (reader != null) {</span>
-<span class="fc" id="L28">            Iterable&lt;CSVRecord&gt; records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader);</span>
-<span class="fc" id="L29">            records.forEach(record -&gt; {</span>
+<span class="fc" id="L35">        final List&lt;Mailing&gt; results = Lists.newArrayList();</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (reader != null) {</span>
+<span class="fc" id="L37">            Iterable&lt;CSVRecord&gt; records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader);</span>
+<span class="fc" id="L38">            records.forEach(record -&gt; {</span>
                         try {
-<span class="fc" id="L31">                            Mailing mailing = Mailing.builder().//</span>
-<span class="fc" id="L32">                                    email(record.get(Headers.EMAIL)).//</span>
-<span class="fc" id="L33">                                    firstname(record.get(Headers.FIRSTNAME)).//</span>
-<span class="fc" id="L34">                                    surname(record.get(Headers.SURNAME)).//</span>
-<span class="fc" id="L35">                                    build();</span>
+<span class="fc" id="L40">                            Mailing mailing = Mailing.builder().//</span>
+<span class="fc" id="L41">                                    email(record.get(Headers.EMAIL)).//</span>
+<span class="fc" id="L42">                                    firstname(record.get(Headers.FIRSTNAME)).//</span>
+<span class="fc" id="L43">                                    surname(record.get(Headers.SURNAME)).//</span>
+<span class="fc" id="L44">                                    build();</span>
 
-<span class="fc" id="L37">                            LOG.debug(&quot;Parsed and added mailing: {}&quot;, mailing);</span>
-<span class="fc" id="L38">                            results.add(mailing);</span>
-<span class="fc" id="L39">                        } catch (IllegalArgumentException e) {</span>
-<span class="fc" id="L40">                            LOG.error(&quot;Unable to parse CSV-row '{}'.&quot;, record);</span>
-<span class="fc" id="L41">                        }</span>
-<span class="fc" id="L42">                    }</span>
+<span class="fc" id="L46">                            LOG.debug(&quot;Parsed and added mailing: {}&quot;, mailing);</span>
+<span class="fc" id="L47">                            results.add(mailing);</span>
+<span class="fc" id="L48">                        } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L49">                            LOG.error(&quot;Unable to parse CSV-row '{}'.&quot;, record);</span>
+<span class="fc" id="L50">                        }</span>
+<span class="fc" id="L51">                    }</span>
             );
         }
-<span class="fc" id="L45">        return results;</span>
+<span class="fc" id="L54">        return results;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

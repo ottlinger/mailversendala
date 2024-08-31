@@ -12,32 +12,46 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Template class that is based on a file, whose contents is replaced in a structured manner.
+ */
 public class FileMailTemplate implements MailTemplate {
-    private String html;
-    private String plaintext;
+    private final String html;
+    private final String plaintext;
 
-<span class="fc" id="L19">    public FileMailTemplate(InputStream html, InputStream plaintext) throws IOException {</span>
-<span class="fc" id="L20">        this.html = CharStreams.toString(new InputStreamReader(html, Charsets.UTF_8));</span>
-<span class="fc" id="L21">        this.plaintext = CharStreams.toString(new InputStreamReader(plaintext, Charsets.UTF_8));</span>
-<span class="fc" id="L22">    }</span>
+    /**
+     * Read given input streams and populate internal mailing contents.
+     * @param html HTML-format contents.
+     * @param plaintext plain text-contents.
+     * @throws IOException in case of errors.
+     */
+<span class="fc" id="L28">    public FileMailTemplate(InputStream html, InputStream plaintext) throws IOException {</span>
+<span class="fc" id="L29">        this.html = CharStreams.toString(new InputStreamReader(html, Charsets.UTF_8));</span>
+<span class="fc" id="L30">        this.plaintext = CharStreams.toString(new InputStreamReader(plaintext, Charsets.UTF_8));</span>
+<span class="fc" id="L31">    }</span>
 
-<span class="fc" id="L24">    public FileMailTemplate(MailConfig config) throws IOException {</span>
-<span class="fc" id="L25">        this.html = readInLanguage(Paths.get(config.getTemplatePath(), MailTemplate.BASE_NAME_HTML));</span>
-<span class="fc" id="L26">        this.plaintext = readInLanguage(Paths.get(config.getTemplatePath(), MailTemplate.BASE_NAME_PLAINTEXT));</span>
-<span class="fc" id="L27">    }</span>
+    /**
+     * Apply given configuration and generate internal mailing contents.
+     * @param config configuration parameters of the application.
+     * @throws IOException in case of errors.
+     */
+<span class="fc" id="L38">    public FileMailTemplate(MailConfig config) throws IOException {</span>
+<span class="fc" id="L39">        this.html = readInLanguage(Paths.get(config.getTemplatePath(), BASE_NAME_HTML));</span>
+<span class="fc" id="L40">        this.plaintext = readInLanguage(Paths.get(config.getTemplatePath(), BASE_NAME_PLAINTEXT));</span>
+<span class="fc" id="L41">    }</span>
 
     private static String readInLanguage(Path file) throws IOException {
-<span class="fc" id="L30">        return Files.readString(file, StandardCharsets.UTF_8);</span>
+<span class="fc" id="L44">        return Files.readString(file, StandardCharsets.UTF_8);</span>
     }
 
     @Override
     public String getHtml() {
-<span class="fc" id="L35">        return html;</span>
+<span class="fc" id="L49">        return html;</span>
     }
 
     @Override
     public String getPlaintext() {
-<span class="fc" id="L40">        return plaintext;</span>
+<span class="fc" id="L54">        return plaintext;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

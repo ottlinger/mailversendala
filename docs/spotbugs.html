@@ -119,7 +119,7 @@
 <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td>
 <td>SECURITY</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
-<td><a href="./xref/de/aikiit/mailversendala/Mailversendala.html#L35">35</a></td>
+<td><a href="./xref/de/aikiit/mailversendala/Mailversendala.html#L41">41</a></td>
 <td>Medium</td></tr></table></section><a name="de.aikiit.mailversendala.SendOut"></a><section>
 <h3><a name="de.aikiit.mailversendala.SendOut"></a>de.aikiit.mailversendala.SendOut</h3>
 <table border="0" class="bodyTable">
@@ -133,7 +133,7 @@
 <td>new de.aikiit.mailversendala.SendOut(Mailing) may expose internal representation by storing an externally mutable object into SendOut.recipient</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td><a href="./xref/de/aikiit/mailversendala/SendOut.html#L33">33</a></td>
+<td><a href="./xref/de/aikiit/mailversendala/SendOut.html#L36">36</a></td>
 <td>Medium</td></tr></table></section><a name="de.aikiit.mailversendala.template.FileMailTemplate"></a><section>
 <h3><a name="de.aikiit.mailversendala.template.FileMailTemplate"></a>de.aikiit.mailversendala.template.FileMailTemplate</h3>
 <table border="0" class="bodyTable">
@@ -147,25 +147,25 @@
 <td>Exception thrown in class de.aikiit.mailversendala.template.FileMailTemplate at new de.aikiit.mailversendala.template.FileMailTemplate(MailConfig) will leave the constructor. The object under construction remains partially initialized and may be vulnerable to Finalizer attacks.</td>
 <td>BAD_PRACTICE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#CT_CONSTRUCTOR_THROW">CT_CONSTRUCTOR_THROW</a></td>
-<td><a href="./xref/de/aikiit/mailversendala/template/FileMailTemplate.html#L25">25</a></td>
+<td><a href="./xref/de/aikiit/mailversendala/template/FileMailTemplate.html#L39">39</a></td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>Exception thrown in class de.aikiit.mailversendala.template.FileMailTemplate at new de.aikiit.mailversendala.template.FileMailTemplate(InputStream, InputStream) will leave the constructor. The object under construction remains partially initialized and may be vulnerable to Finalizer attacks.</td>
 <td>BAD_PRACTICE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#CT_CONSTRUCTOR_THROW">CT_CONSTRUCTOR_THROW</a></td>
-<td><a href="./xref/de/aikiit/mailversendala/template/FileMailTemplate.html#L20">20</a></td>
+<td><a href="./xref/de/aikiit/mailversendala/template/FileMailTemplate.html#L29">29</a></td>
 <td>Medium</td></tr>
 <tr class="b">
 <td>This API (java/nio/file/Paths.get(Ljava/lang/String;[Ljava/lang/String;)Ljava/nio/file/Path;) reads a file whose location might be specified by user input</td>
 <td>SECURITY</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
-<td><a href="./xref/de/aikiit/mailversendala/template/FileMailTemplate.html#L25">25</a></td>
+<td><a href="./xref/de/aikiit/mailversendala/template/FileMailTemplate.html#L39">39</a></td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>This API (java/nio/file/Paths.get(Ljava/lang/String;[Ljava/lang/String;)Ljava/nio/file/Path;) reads a file whose location might be specified by user input</td>
 <td>SECURITY</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
-<td><a href="./xref/de/aikiit/mailversendala/template/FileMailTemplate.html#L26">26</a></td>
+<td><a href="./xref/de/aikiit/mailversendala/template/FileMailTemplate.html#L40">40</a></td>
 <td>Medium</td></tr></table></section>
       </div>
     </div>
