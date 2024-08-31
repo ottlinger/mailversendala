@@ -12,15 +12,29 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Template class that is based on a file, whose contents is replaced in a structured manner.
+ */
 public class FileMailTemplate implements MailTemplate {
     private final String html;
     private final String plaintext;
 
+    /**
+     * Read given input streams and populate internal mailing contents.
+     * @param html HTML-format contents.
+     * @param plaintext plain text-contents.
+     * @throws IOException in case of errors.
+     */
     public FileMailTemplate(InputStream html, InputStream plaintext) throws IOException {
         this.html = CharStreams.toString(new InputStreamReader(html, Charsets.UTF_8));
         this.plaintext = CharStreams.toString(new InputStreamReader(plaintext, Charsets.UTF_8));
     }
 
+    /**
+     * Apply given configuration and generate internal mailing contents.
+     * @param config configuration parameters of the application.
+     * @throws IOException in case of errors.
+     */
     public FileMailTemplate(MailConfig config) throws IOException {
         this.html = readInLanguage(Paths.get(config.getTemplatePath(), MailTemplate.BASE_NAME_HTML));
         this.plaintext = readInLanguage(Paths.get(config.getTemplatePath(), MailTemplate.BASE_NAME_PLAINTEXT));
