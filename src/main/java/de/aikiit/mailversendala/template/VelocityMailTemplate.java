@@ -9,10 +9,16 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import java.io.File;
 import java.io.StringWriter;
 
+/**
+ * Mailing template that is based on Apache Velocity templates.
+ */
 public class VelocityMailTemplate implements MailTemplate {
 
-    private VelocityEngine velocityEngine = new VelocityEngine();
+    private final VelocityEngine velocityEngine = new VelocityEngine();
 
+    /**
+     * Instantiate underlying template engine.
+     */
     public VelocityMailTemplate() {
         velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "class");
         velocityEngine.setProperty("class.resource.loader.class",

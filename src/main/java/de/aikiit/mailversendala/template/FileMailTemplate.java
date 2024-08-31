@@ -13,8 +13,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class FileMailTemplate implements MailTemplate {
-    private String html;
-    private String plaintext;
+    private final String html;
+    private final String plaintext;
 
     public FileMailTemplate(InputStream html, InputStream plaintext) throws IOException {
         this.html = CharStreams.toString(new InputStreamReader(html, Charsets.UTF_8));
