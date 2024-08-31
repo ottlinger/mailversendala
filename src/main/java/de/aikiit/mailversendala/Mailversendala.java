@@ -21,6 +21,12 @@ public class Mailversendala {
     private static final Logger LOG =
             LogManager.getLogger(Mailversendala.class);
 
+    /**
+     * Send out mails with the given configuration and return result object afterwards.
+     * @param configuration application configuration.
+     * @return result object of the current application run.
+     * @throws IOException in case of errors.
+     */
     public static MailingResult sendOut(MailConfig configuration) throws IOException {
         LOG.info("**** MAILVERSENDALA: Starting .... ****");
 
