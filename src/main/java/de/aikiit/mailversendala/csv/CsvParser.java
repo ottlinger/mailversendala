@@ -25,7 +25,7 @@ public class CsvParser {
     public List<Mailing> parse() throws IOException {
         final List<Mailing> results = Lists.newArrayList();
         if (reader != null) {
-            Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader);
+            Iterable<CSVRecord> records = CSVFormat.DEFAULT.builder().setSkipHeaderRecord(true).build().parse(reader);
             records.forEach(record -> {
                         try {
                             Mailing mailing = Mailing.builder().//
