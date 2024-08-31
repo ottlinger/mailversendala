@@ -8,7 +8,16 @@ import de.aikiit.mailversendala.MailConfig;
  * @see MailConfig
  */
 public interface Headers {
+    /**
+     * Firstname in the mailing.
+     */
     String FIRSTNAME = "firstname";
+    /**
+     * Surname in the mailing.
+     */
     String SURNAME = "surname";
+    /**
+     * Email used to send the mailing to.
+     */
     String EMAIL = "email";
 }
