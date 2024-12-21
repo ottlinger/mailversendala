@@ -47,7 +47,7 @@ public class MailConfig {
     }
 
     /**
-     * If in demo mode <strong>NO</strong> mails should be send out!
+     * If in demo mode <strong>NO</strong> mails should be sent out!
      *
      * @return {@code true} if in demo mode, thus no mails will be sent by default.
      */

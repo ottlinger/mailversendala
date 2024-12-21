@@ -26,10 +26,10 @@ A Maven-generated site report is also available [here](https://ottlinger.github.
 
 https://github.com/users/ottlinger/projects/9
 
-## Github integrations
+## GitHub integrations
 ### CI / GHA
 
-[![Github Action master branch status](https://github.com/ottlinger/mailversendala/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/ottlinger/mailversendala/actions)
+[![GitHub Action master branch status](https://github.com/ottlinger/mailversendala/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/ottlinger/mailversendala/actions)
 
 ### Code coverage
 
@@ -67,7 +67,7 @@ In case you want to use the application productively you need to configure it, p
 ## How to configure the application
 
 In order to properly configure the application you need to set some mail-related properties.
-Please use the file [javaconfiguration.properties.template](./src/main/resources/META-INF/javaconfiguration.properties.template) and save it as *javaconfiguration.properties*.
+Please use the file [javaconfiguration.properties.template](./src/test/resources/META-INF/javaconfiguration.properties.template) and save it as *javaconfiguration.properties*.
 
 Technically the configuration is based on [Apache Tamaya (incubating)](https://tamaya.apache.org)
 

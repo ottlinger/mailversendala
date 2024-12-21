@@ -1,6 +1,6 @@
 Thank you for downloading a favicon from Free Favicon! This favicon was created from an image at http://openclipart.org/ and converted to a favicon and other sizes for you to use in your projects. For more details about this image visit this page: http://openclipart.org/detail/118729/monkey-toy-by-pitr
 
-For more infomation about how you can use this image from OpenClipArt see this page: http://openclipart.org/may-clipart-be-used-comparison
+For more information about how you can use this image from OpenClipArt see this page: http://openclipart.org/may-clipart-be-used-comparison
 
 Here are the contents of this compressed package:
 
