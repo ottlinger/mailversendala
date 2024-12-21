@@ -37,24 +37,27 @@ import java.util.concurrent.atomic.AtomicInteger;
 <span class="fc" id="L37">    }</span>
 
     /**
+     * Returns error counter.
      * @return current error counter if existing.
      */
     public Optional&lt;AtomicInteger&gt; getErrorCounter() {
-<span class="fc" id="L43">        return Optional.ofNullable(errorCounter);</span>
+<span class="fc" id="L44">        return Optional.ofNullable(errorCounter);</span>
     }
 
     /**
+     * Returns success counter.
      * @return current success counter if existing.
      */
     public Optional&lt;AtomicInteger&gt; getMailCounter() {
-<span class="fc" id="L50">        return Optional.ofNullable(mailCounter);</span>
+<span class="fc" id="L52">        return Optional.ofNullable(mailCounter);</span>
     }
 
     /**
+     * Returns total counter.
      * @return sum of {@link #mailCounter} and {@link #errorCounter}.
      */
     public int getTotal() {
-<span class="fc" id="L57">        return getErrorCounter().orElse(new AtomicInteger(0)).get() + getMailCounter().orElse(new AtomicInteger(0)).get();</span>
+<span class="fc" id="L60">        return getErrorCounter().orElse(new AtomicInteger(0)).get() + getMailCounter().orElse(new AtomicInteger(0)).get();</span>
     }
 
 }
