@@ -14,12 +14,14 @@ public interface MailTemplate {
     String BASE_NAME_PLAINTEXT = "mailtemplate.txt";
 
     /**
+     * Returns HTML contents.
      * @return mailing content in format HTML.
      */
     String getHtml();
 
     /**
-     * @return mailing content in plain text format.
+     * Returns plaintext contents.
+     * @return mailing content in plaintext format.
      */
     String getPlaintext();
 }
