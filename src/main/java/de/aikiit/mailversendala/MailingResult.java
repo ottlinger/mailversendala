@@ -37,6 +37,7 @@ public class MailingResult {
     }
 
     /**
+     * Returns error counter.
      * @return current error counter if existing.
      */
     public Optional<AtomicInteger> getErrorCounter() {
@@ -44,6 +45,7 @@ public class MailingResult {
     }
 
     /**
+     * Returns success counter.
      * @return current success counter if existing.
      */
     public Optional<AtomicInteger> getMailCounter() {
@@ -51,6 +53,7 @@ public class MailingResult {
     }
 
     /**
+     * Returns total counter.
      * @return sum of {@link #mailCounter} and {@link #errorCounter}.
      */
     public int getTotal() {
