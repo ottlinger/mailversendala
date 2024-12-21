@@ -57,9 +57,16 @@ $ ./mvnw
 [INFO] ------------------------------------------------------------------------
 
  $ java -jar target/mailversendala-1.0.0-SNAPSHOT-executable.jar
- ....
- 1970-01-01 01:23:45,280 INFO d.a.m.Mailversendala [main] **** MAILVERSENDALA: Application shutdown .... ****
-
+2024-12-22 00:48:00,714 DEBUG d.a.m.MailConfig [main] Reading Tamaya configuration ...
+Dez. 22, 2024 12:48:00 AM org.apache.tamaya.spi.ServiceContextManager loadDefaultServiceProvider
+INFORMATION: Using Service Context of type: org.apache.tamaya.spisupport.DefaultServiceContext
+2024-12-22 00:48:00,755 DEBUG d.a.m.MailConfig [main] Configuration: DONE.
+2024-12-22 00:48:00,755 INFO d.a.m.Mailversendala [main] **** MAILVERSENDALA: Starting .... ****
+2024-12-22 00:48:00,757 INFO d.a.m.Mailversendala [main] Consuming CSV: mailversendala-example.csv
+2024-12-22 00:48:00,758 INFO d.a.m.Mailversendala [main] mailversendala-example.csv
+2024-12-22 00:48:00,758 WARN d.a.m.Mailversendala [main] Nothing to do - please configure your CSV path properly, either as environment variable or as a runtime parameter. Example: java -Dcsvpath=foo -jar fatJar.jar
+2024-12-22 00:48:00,758 INFO d.a.m.Mailversendala [main] **** MAILVERSENDALA: Application shutdown .... ****
+2024-12-22 00:48:00,758 INFO d.a.m.App [main] Mailversendala is shutting down. Bye Bye :-)
 ```
 
 In case you want to use the application productively you need to configure it, please continue reading the following paragraph.
