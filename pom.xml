@@ -8,6 +8,14 @@
   <name>mailversendala</name>
   <description>A tool to send out mails with parameters and dynamic elements in it.</description>
   <url>https://github.com/ottlinger/mailversendala</url>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>An OSI approved open source license.</comments>
+    </license>
+  </licenses>
   <properties>
     <logger.version>2.24.3</logger.version>
     <junit.version>4.13.2</junit.version>
