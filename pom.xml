@@ -6,6 +6,7 @@
   <packaging>jar</packaging>
   <version>1.0.0-SNAPSHOT</version>
   <name>mailversendala</name>
+  <description>A tool to send out mails with parameters and dynamic elements in it.</description>
   <url>https://github.com/ottlinger/mailversendala</url>
   <properties>
     <logger.version>2.24.3</logger.version>
@@ -298,6 +299,11 @@
     </plugins>
   </reporting>
   <dependencies>
+    <dependency>
+      <groupId>org.apache.maven.skins</groupId>
+      <artifactId>maven-fluido-skin</artifactId>
+      <version>2.0.1</version>
+    </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
