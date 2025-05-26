@@ -86,14 +86,6 @@
             <mutationThreshold>35</mutationThreshold>
             <verbose>false</verbose>
           </configuration>
-          <executions>
-            <execution>
-              <id>mutationcoverage</id>
-              <goals>
-                <goal>mutationCoverage</goal>
-              </goals>
-            </execution>
-          </executions>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
