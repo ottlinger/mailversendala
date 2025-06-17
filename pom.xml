@@ -17,7 +17,7 @@
     </license>
   </licenses>
   <properties>
-    <logger.version>2.24.3</logger.version>
+    <logger.version>2.25.0</logger.version>
     <junit.version>4.13.2</junit.version>
     <lombok.version>1.18.38</lombok.version>
     <assertj.version>3.27.3</assertj.version>
