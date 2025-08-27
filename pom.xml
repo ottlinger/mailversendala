@@ -22,7 +22,7 @@
     <lombok.version>1.18.38</lombok.version>
     <assertj.version>3.27.4</assertj.version>
     <mockito.version>5.19.0</mockito.version>
-    <javadoc.version>3.11.2</javadoc.version>
+    <javadoc.version>3.11.3</javadoc.version>
     <surefire.version>3.5.3</surefire.version>
     <rat.version>0.13</rat.version>
     <guava.version>33.4.8-jre</guava.version>
