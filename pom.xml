@@ -17,17 +17,17 @@
     </license>
   </licenses>
   <properties>
-    <logger.version>2.25.1</logger.version>
+    <logger.version>3.0.0-beta3</logger.version>
     <junit.version>4.13.2</junit.version>
-    <lombok.version>1.18.40</lombok.version>
+    <lombok.version>1.18.42</lombok.version>
     <assertj.version>3.27.4</assertj.version>
-    <mockito.version>5.19.0</mockito.version>
+    <mockito.version>5.20.0</mockito.version>
     <javadoc.version>3.11.3</javadoc.version>
     <surefire.version>3.5.4</surefire.version>
     <rat.version>0.13</rat.version>
     <guava.version>33.4.8-jre</guava.version>
     <encoding.utf8>UTF-8</encoding.utf8>
-    <shade.version>3.6.0</shade.version>
+    <shade.version>3.6.1</shade.version>
     <project.reporting.outputEncoding>${encoding.utf8}</project.reporting.outputEncoding>
     <project.build.sourceEncoding>${encoding.utf8}</project.build.sourceEncoding>
     <maven.compiler.release>11</maven.compiler.release>
@@ -43,7 +43,7 @@
         <plugin>
           <groupId>com.github.spotbugs</groupId>
           <artifactId>spotbugs-maven-plugin</artifactId>
-          <version>4.9.4.0</version>
+          <version>4.9.6.0</version>
           <configuration>
             <!--excludeFilterFile>spotbugs-security-exclude.xml</excludeFilterFile-->
             <plugins>
@@ -78,7 +78,7 @@
         <plugin>
           <groupId>org.pitest</groupId>
           <artifactId>pitest-maven</artifactId>
-          <version>1.20.2</version>
+          <version>1.20.3</version>
           <configuration>
             <timeoutConstant>8000</timeoutConstant>
             <threads>8</threads>
@@ -146,9 +146,16 @@
         </plugin>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.14.0</version>
+          <version>3.14.1</version>
           <configuration>
             <encoding>${encoding.utf8}</encoding>
+              <annotationProcessorPaths>
+                  <path>
+                      <groupId>org.projectlombok</groupId>
+                      <artifactId>lombok</artifactId>
+                      <version>${lombok.version}</version>
+                  </path>
+              </annotationProcessorPaths>
           </configuration>
         </plugin>
         <!--  generate source and javadoc.jar -->
@@ -309,6 +316,17 @@
       </plugin>
     </plugins>
   </reporting>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-bom</artifactId>
+        <version>${logger.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.skins</groupId>
@@ -365,12 +383,10 @@
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-slf4j-impl</artifactId>
-      <version>${logger.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
-      <version>${logger.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.velocity</groupId>
