@@ -20,7 +20,7 @@
     <logger.version>3.0.0-beta3</logger.version>
     <junit.version>4.13.2</junit.version>
     <lombok.version>1.18.42</lombok.version>
-    <assertj.version>3.27.4</assertj.version>
+    <assertj.version>3.27.6</assertj.version>
     <mockito.version>5.20.0</mockito.version>
     <javadoc.version>3.12.0</javadoc.version>
     <surefire.version>3.5.4</surefire.version>
