@@ -18,19 +18,17 @@
   </licenses>
   <properties>
     <logger.version>3.0.0-beta3</logger.version>
-    <junit.version>4.13.2</junit.version>
     <lombok.version>1.18.42</lombok.version>
     <assertj.version>3.27.6</assertj.version>
     <mockito.version>5.20.0</mockito.version>
     <javadoc.version>3.12.0</javadoc.version>
     <surefire.version>3.5.4</surefire.version>
-    <rat.version>0.13</rat.version>
     <guava.version>33.5.0-jre</guava.version>
     <encoding.utf8>UTF-8</encoding.utf8>
     <shade.version>3.6.1</shade.version>
     <project.reporting.outputEncoding>${encoding.utf8}</project.reporting.outputEncoding>
     <project.build.sourceEncoding>${encoding.utf8}</project.build.sourceEncoding>
-    <maven.compiler.release>11</maven.compiler.release>
+    <maven.compiler.release>17</maven.compiler.release>
   </properties>
   <build>
     <defaultGoal>clean versions:display-dependency-updates versions:display-plugin-updates install org.pitest:pitest-maven:mutationCoverage</defaultGoal>
@@ -149,13 +147,13 @@
           <version>3.14.1</version>
           <configuration>
             <encoding>${encoding.utf8}</encoding>
-              <annotationProcessorPaths>
-                  <path>
-                      <groupId>org.projectlombok</groupId>
-                      <artifactId>lombok</artifactId>
-                      <version>${lombok.version}</version>
-                  </path>
-              </annotationProcessorPaths>
+            <annotationProcessorPaths>
+              <path>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+              </path>
+            </annotationProcessorPaths>
           </configuration>
         </plugin>
         <!--  generate source and javadoc.jar -->
@@ -174,7 +172,6 @@
           </executions>
           <configuration>
             <encoding>${encoding.utf8}</encoding>
-            <source>8</source>
           </configuration>
         </plugin>
         <plugin>
@@ -307,7 +304,7 @@
         <configuration>
           <linkXRef>true</linkXRef>
           <minimumTokens>100</minimumTokens>
-          <targetJdk>1.8</targetJdk>
+          <targetJdk>${maven.compiler.release}</targetJdk>
           <excludes>
             <exclude>**/generated/**/*.java</exclude>
             <exclude>**/target/clover/**/*.java</exclude>
@@ -324,6 +321,20 @@
         <version>${logger.version}</version>
         <scope>import</scope>
         <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>6.0.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-bom</artifactId>
+        <version>${assertj.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -356,7 +367,6 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>${assertj.version}</version>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -367,12 +377,6 @@
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
       <version>${mockito.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
