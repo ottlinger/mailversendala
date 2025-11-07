@@ -45,7 +45,7 @@ public class Mailversendala {
                     final List<Mailing> mailings = parser.parse();
 
                     final int total = mailings.size();
-                    LOG.info("Will send out {} mails ... hold on tight :-)", total);
+                    LOG.info("Will send  out {} mails ... hold on tight :-)", total);
 
                     mailings.forEach(mailing -> {
                         try {

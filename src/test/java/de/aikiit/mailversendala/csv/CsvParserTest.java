@@ -1,9 +1,8 @@
 package de.aikiit.mailversendala.csv;
 
-import org.junit.Test;
-
 import java.io.IOException;
 import java.io.StringReader;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

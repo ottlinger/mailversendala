@@ -2,41 +2,41 @@ package de.aikiit.mailversendala.template;
 
 import com.google.common.base.Charsets;
 import de.aikiit.mailversendala.MailConfig;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class FileMailTemplateTest {
 
     private static final String TEXT = "This is a mailtemplate";
     private static final String HTML = "<html><body>This is an <b>HTML</b> mailtemplate</body></html>";
-    private FileMailTemplate template;
+    private static FileMailTemplate template;
 
     @Mock
     private MailConfig config;
 
-    @Rule
-    public final TemporaryFolder folder = new TemporaryFolder();
+    @TempDir
+    public Path folder;
 
-    @Before
-    public void createTemplate() throws IOException {
+    @BeforeAll
+    static void createTemplate() throws IOException {
         InputStream html = new ByteArrayInputStream(HTML.getBytes());
         InputStream plaintext = new ByteArrayInputStream(TEXT.getBytes());
-        this.template = new FileMailTemplate(html, plaintext);
+        template = new FileMailTemplate(html, plaintext);
     }
 
     @Test
@@ -51,13 +51,13 @@ public class FileMailTemplateTest {
 
     @Test
     public void dataExtractionFromConfigFilePath() throws IOException {
-        String configBasePath = folder.getRoot().getAbsolutePath();
+        String configBasePath = folder.toString();
         when(config.getTemplatePath()).thenReturn(configBasePath);
 
-        Files.write(Paths.get(configBasePath, MailTemplate.BASE_NAME_PLAINTEXT), TEXT.getBytes(Charsets.UTF_8));
-        Files.write(Paths.get(configBasePath, MailTemplate.BASE_NAME_HTML), HTML.getBytes(Charsets.UTF_8));
+        Files.writeString(Paths.get(configBasePath, MailTemplate.BASE_NAME_PLAINTEXT), TEXT, Charsets.UTF_8);
+        Files.writeString(Paths.get(configBasePath, MailTemplate.BASE_NAME_HTML), HTML, Charsets.UTF_8);
 
-        this.template = new FileMailTemplate(config);
+        template = new FileMailTemplate(config);
 
         assertThat(template.getHtml()).isEqualTo(HTML);
         assertThat(template.getPlaintext()).isEqualTo(TEXT);
