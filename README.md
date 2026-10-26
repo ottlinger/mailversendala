@@ -80,7 +80,7 @@ Technically the configuration is based on [Apache Tamaya (incubating)](https://t
 
 ### Available configuration modes
 
-If you are running the application as a fat JAR you may want to overwrite each of the configuration key either environment variable or runtime property:
+If you are running the application as a fat JAR you may want to overwrite each of the configuration keys either by environment variable or runtime property:
 ```
 $ java -jar target/mailversendala-1.0.0-SNAPSHOT-executable.jar
 // runs with default parameters from within the JAR
