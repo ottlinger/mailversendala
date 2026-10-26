@@ -11,10 +11,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class CsvParserTest {
 
-    public static final String CSV_INPUT = "firstname,surname,email\n" +
-            "Me,Again,foo@bar.com\n" +
-            "Ich,wieder,foo@bar.de\n" +
-            "я,то́же,foo@bar.ru\n";
+    public static final String CSV_INPUT = """
+            firstname,surname,email
+            Me,Again,foo@bar.com
+            Ich,wieder,foo@bar.de
+            я,то́же,foo@bar.ru
+            """;
 
     @Test
     public void objectCreation() {
