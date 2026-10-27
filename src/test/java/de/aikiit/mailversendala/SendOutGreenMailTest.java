@@ -18,13 +18,16 @@ package de.aikiit.mailversendala;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
 import de.aikiit.mailversendala.csv.Mailing;
+import de.aikiit.mailversendala.template.VelocityMailTemplate;
 import org.apache.commons.mail.Email;
+import org.apache.commons.mail.EmailConstants;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.SimpleEmail;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import javax.mail.AuthenticationFailedException;
 import javax.mail.Message;
@@ -34,6 +37,9 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -101,8 +107,8 @@ class SendOutGreenMailTest {
         MimeMessage message = receivedMessage();
         assertAddressesAndHeaders(message);
         assertThat(message.getSubject()).startsWith(SUBJECT + " ");
-        assertThat(message.isMimeType("text/plain")).isTrue();
-        assertThat(message.getContentType()).containsIgnoringCase("charset=UTF-8");
+        assertThat(message.isMimeType(EmailConstants.TEXT_PLAIN)).isTrue();
+        assertThat(message.getContentType()).containsIgnoringCase("charset=" + StandardCharsets.UTF_8.name());
         assertThat(message.getContent().toString())
                 .contains("This is a test mail from Mailversendala... :-)");
     }
@@ -120,8 +126,8 @@ class SendOutGreenMailTest {
 
         List<Part> parts = new ArrayList<>();
         collectParts(message, parts);
-        Part text = onlyPartOfType(parts, "text/plain");
-        Part html = onlyPartOfType(parts, "text/html");
+        Part text = onlyPartOfType(parts, EmailConstants.TEXT_PLAIN);
+        Part html = onlyPartOfType(parts, EmailConstants.TEXT_HTML);
         Part image = onlyPartOfType(parts, "image/png");
         assertThat(text.getContent().toString())
                 .contains("Your email client does not support HTML messages - thus no ASF logo visible.");
@@ -176,10 +182,78 @@ class SendOutGreenMailTest {
         }
     }
 
+    @Test
+    void deliversExternalVelocityTemplatesAsUtf8Alternatives(@TempDir Path directory) throws Exception {
+        VelocityMailTemplate templates = externalTemplates(directory);
+        when(config.getSubject()).thenReturn("Einladung für Jörg");
+        Mailing recipient = Mailing.builder().email(RECIPIENT)
+                .firstname("Jörg <Admin>").surname("Smith & Jones").build();
+
+        newSendOut(recipient).send(templates.render(recipient));
+
+        MimeMessage message = receivedMessage();
+        assertAddressesAndHeaders(message);
+        assertThat(message.getSubject()).isEqualTo("Einladung für Jörg");
+        List<Part> parts = new ArrayList<>();
+        collectParts(message, parts);
+        assertThat(parts).hasSize(2);
+        Part html = onlyPartOfType(parts, EmailConstants.TEXT_HTML);
+        Part text = onlyPartOfType(parts, EmailConstants.TEXT_PLAIN);
+        assertThat(html.getContentType()).containsIgnoringCase("charset=" + StandardCharsets.UTF_8.name());
+        assertThat(text.getContentType()).containsIgnoringCase("charset=" + StandardCharsets.UTF_8.name());
+        assertThat(html.getContent().toString())
+                .contains("<p>Hello J&ouml;rg &lt;Admin&gt; Smith &amp; Jones</p>");
+        assertThat(text.getContent().toString()).contains("Hello Jörg <Admin> Smith & Jones");
+    }
+
+    @Test
+    void deliversSeparatelyPersonalizedMessagesFromCompiledTemplates(@TempDir Path directory) throws Exception {
+        VelocityMailTemplate templates = externalTemplates(directory);
+        Mailing second = Mailing.builder().email(RECIPIENT).firstname("Grace").surname("Hopper").build();
+
+        newSendOut().send(templates.render(MAILING));
+        newSendOut(second).send(templates.render(second));
+
+        assertThat(greenMail.waitForIncomingEmail(5000, 2)).isTrue();
+        MimeMessage[] messages = greenMail.getReceivedMessages();
+        assertThat(messages).hasSize(2);
+        List<Part> firstParts = new ArrayList<>();
+        List<Part> secondParts = new ArrayList<>();
+        collectParts(messages[0], firstParts);
+        collectParts(messages[1], secondParts);
+        assertThat(onlyPartOfType(firstParts, EmailConstants.TEXT_PLAIN).getContent().toString())
+                .contains("Ada Lovelace").doesNotContain("Grace Hopper");
+        assertThat(onlyPartOfType(secondParts, EmailConstants.TEXT_HTML).getContent().toString())
+                .contains("Grace Hopper").doesNotContain("Ada Lovelace");
+    }
+
+    @Test
+    void demoModeDoesNotDeliverRenderedTemplates(@TempDir Path directory) throws Exception {
+        when(config.sendOutMails()).thenReturn(false);
+        VelocityMailTemplate templates = externalTemplates(directory);
+
+        newSendOut().send(templates.render(MAILING));
+
+        assertThat(greenMail.getReceivedMessages()).isEmpty();
+    }
+
+    private VelocityMailTemplate externalTemplates(Path directory) throws Exception {
+        Files.writeString(directory.resolve("welcome.html"), "<p>Hello ${firstName} ${lastName}</p>");
+        Files.writeString(directory.resolve("welcome.txt"), "Hello ${firstName} ${lastName}");
+        when(config.getTemplatePath()).thenReturn(directory.toString());
+        when(config.getHtmlTemplate()).thenReturn("welcome.html");
+        when(config.getPlaintextTemplate()).thenReturn("welcome.txt");
+        return new VelocityMailTemplate(config);
+    }
+
     private SendOut newSendOut() throws EmailException {
+        return newSendOut(MAILING);
+    }
+
+    private SendOut newSendOut(Mailing recipient) throws EmailException {
         SimpleEmail text = new SimpleEmail();
         HtmlEmail html = new HtmlEmail();
-        SendOut sendOut = new SendOut(MAILING, config, text, html);
+        SendOut sendOut = new SendOut(recipient, config, text, html);
         configureTestSession(text);
         configureTestSession(html);
         return sendOut;
@@ -193,14 +267,14 @@ class SendOutGreenMailTest {
         // Trust only this test server's self-signed certificate, in this session only.
         // Production TLS settings and server identity verification are unchanged.
         properties.setProperty("mail.smtp.ssl.trust", "localhost");
-        properties.setProperty("mail.smtp.connectiontimeout", "5000");
-        properties.setProperty("mail.smtp.timeout", "5000");
+        properties.setProperty(EmailConstants.MAIL_SMTP_CONNECTIONTIMEOUT, "5000");
+        properties.setProperty(EmailConstants.MAIL_SMTP_TIMEOUT, "5000");
         properties.setProperty("mail.smtp.writetimeout", "5000");
         if (!email.isSSLOnConnect()) {
-            assertThat(properties.getProperty("mail.smtp.starttls.enable")).isEqualTo("true");
-            assertThat(properties.getProperty("mail.smtp.starttls.required")).isEqualTo("true");
+            assertThat(properties.getProperty(EmailConstants.MAIL_TRANSPORT_STARTTLS_ENABLE)).isEqualTo("true");
+            assertThat(properties.getProperty(EmailConstants.MAIL_TRANSPORT_STARTTLS_REQUIRED)).isEqualTo("true");
         }
-        assertThat(properties.getProperty("mail.smtp.ssl.checkserveridentity")).isEqualTo("true");
+        assertThat(properties.getProperty(EmailConstants.MAIL_SMTP_SSL_CHECKSERVERIDENTITY)).isEqualTo("true");
     }
 
     private MimeMessage receivedMessage() {

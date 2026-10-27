@@ -30,5 +30,4 @@ public class Mailing {
     private String firstname;
     private String surname;
     private String email;
-    private String language;
 }

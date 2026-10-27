@@ -71,9 +71,11 @@ public class FileMailTemplateTest {
     public void dataExtractionFromConfigFilePath() throws IOException {
         String configBasePath = folder.toString();
         when(config.getTemplatePath()).thenReturn(configBasePath);
+        when(config.getHtmlTemplate()).thenReturn("custom.html");
+        when(config.getPlaintextTemplate()).thenReturn("custom.txt");
 
-        Files.writeString(Paths.get(configBasePath, MailTemplate.BASE_NAME_PLAINTEXT), TEXT, Charsets.UTF_8);
-        Files.writeString(Paths.get(configBasePath, MailTemplate.BASE_NAME_HTML), HTML, Charsets.UTF_8);
+        Files.writeString(Paths.get(configBasePath, "custom.txt"), TEXT, Charsets.UTF_8);
+        Files.writeString(Paths.get(configBasePath, "custom.html"), HTML, Charsets.UTF_8);
 
         template = new FileMailTemplate(config);
 

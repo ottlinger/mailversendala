@@ -18,6 +18,7 @@ package de.aikiit.mailversendala;
  */
 
 
+import de.aikiit.mailversendala.template.MailTemplate;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,6 +43,8 @@ public class MailConfig {
     private final String subject;
     private final String csvPath;
     private final String templatePath;
+    private final String htmlTemplate;
+    private final String plaintextTemplate;
     private final boolean isDemoMode;
 
     /**
@@ -61,6 +64,8 @@ public class MailConfig {
         this.csvPath = configuration.getOrDefault("csvpath", "mailversendala-example.csv");
         this.isDemoMode = Boolean.parseBoolean(configuration.getOrDefault("demomode", "true"));
         this.templatePath = configuration.getOrDefault("templatepath", "template");
+        this.htmlTemplate = configuration.getOrDefault("htmltemplate", MailTemplate.BASE_NAME_HTML);
+        this.plaintextTemplate = configuration.getOrDefault("plaintexttemplate", MailTemplate.BASE_NAME_PLAINTEXT);
         LOG.debug("Configuration: DONE.");
     }
 

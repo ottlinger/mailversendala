@@ -20,8 +20,6 @@ package de.aikiit.mailversendala.csv;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Locale;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -31,11 +29,10 @@ public class MailingTest {
     private static final String EMAIL = "foo@bar.uk";
     private static final String NAME = "FooBarUK";
     private static final String FIRSTNAME = "Deforest";
-    private static final String LANGUAGE = Locale.ENGLISH.getLanguage();
 
     @Test
     public void objectCreationWithBuilder() {
-        Mailing mailing = Mailing.builder().email(EMAIL).surname(NAME).language(LANGUAGE).firstname(FIRSTNAME).build();
+        Mailing mailing = Mailing.builder().email(EMAIL).surname(NAME).firstname(FIRSTNAME).build();
 
         assertThat(mailing).isNotNull();
         assertThat(mailing.toString()).isNotNull();
@@ -43,12 +40,11 @@ public class MailingTest {
         assertThat(mailing.getEmail()).isEqualTo(EMAIL);
         assertThat(mailing.getSurname()).isEqualTo(NAME);
         assertThat(mailing.getFirstname()).isEqualTo(FIRSTNAME);
-        assertThat(mailing.getLanguage()).isEqualTo("en");
     }
 
     @Test
     public void objectCreationWithoutBuilder() {
-        Mailing mailing = new Mailing(FIRSTNAME, NAME, EMAIL, LANGUAGE);
+        Mailing mailing = new Mailing(FIRSTNAME, NAME, EMAIL);
 
         assertThat(mailing).isNotNull();
         assertThat(mailing.toString()).isNotNull();
@@ -56,7 +52,6 @@ public class MailingTest {
         assertThat(mailing.getEmail()).isEqualTo(EMAIL);
         assertThat(mailing.getSurname()).isEqualTo(NAME);
         assertThat(mailing.getFirstname()).isEqualTo(FIRSTNAME);
-        assertThat(mailing.getLanguage()).isEqualTo(LANGUAGE);
     }
 
 }

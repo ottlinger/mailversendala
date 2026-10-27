@@ -21,4 +21,7 @@ from=santa@cruz.com
 subject=Do adapt your configuration - will not work
 csvpath=/tmp/mailversendala-example.csv
 demomode=true
+# External UTF-8 Velocity templates, resolved relative to templatepath.
 templatepath=/tmp/mailversendala
+htmltemplate=mailtemplate.html
+plaintexttemplate=mailtemplate.txt

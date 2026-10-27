@@ -20,6 +20,9 @@ package de.aikiit.mailversendala;
 
 import de.aikiit.mailversendala.csv.CsvParser;
 import de.aikiit.mailversendala.csv.Mailing;
+import de.aikiit.mailversendala.template.MailTemplate;
+import de.aikiit.mailversendala.template.VelocityMailTemplate;
+import org.apache.velocity.exception.VelocityException;
 import org.apache.commons.mail.EmailException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -62,15 +65,18 @@ public class Mailversendala {
                     CsvParser parser = new CsvParser(r);
                     final List<Mailing> mailings = parser.parse();
 
+                    // Load and compile both external templates before sending any messages.
+                    final VelocityMailTemplate templates = new VelocityMailTemplate(configuration);
                     final int total = mailings.size();
                     LOG.info("Will send  out {} mails ... hold on tight :-)", total);
 
                     mailings.forEach(mailing -> {
                         try {
-                            new SendOut(mailing).send();
+                            MailTemplate rendered = templates.render(mailing);
+                            new SendOut(mailing, configuration).send(rendered);
                             result.addSuccess();
                             LOG.info("Successfully send out {}.mail", result.getMailCounter().orElse(new AtomicInteger(0)));
-                        } catch (EmailException e) {
+                        } catch (EmailException | VelocityException e) {
                             result.addError();
                             LOG.error("Problem while sending out {}", mailing, e);
                         }

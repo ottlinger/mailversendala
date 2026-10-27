@@ -102,10 +102,61 @@ The following parameters can be set:
 | password | SMTP plaintext password | chooseMeWisely |
 | demomode | boolean, whether to not send mails | true |
 | csvpath | fully qualified path to your CSV data input file | /tmp/mailversendala-example.csv |
-| templatepath | fully qualified path to your template directory. This directory needs to contain mailtemplate.html and mailtemplate.txt | /tmp/mailversendala |
+| templatepath | Path to the external UTF-8 Velocity template directory | /tmp/mailversendala |
+| htmltemplate | HTML template filename, relative to templatepath | mailtemplate.html |
+| plaintexttemplate | Plain-text template filename, relative to templatepath | mailtemplate.txt |
 | subject | full subject line of the example mail | Whatever you want is a subject line |
 | from | mail address that is sent from | santa@cruz.com |
 | to | mail address that an example mail is sent to **deprecated** | xmas@man.com |
+
+### HTML and plain-text mail templates
+
+Each CSV recipient receives **one email with both HTML and plain-text alternatives**.
+The mail client chooses which version to display. Both bodies are rendered with Apache
+Velocity; the configured `subject` is used unchanged and both alternatives use UTF-8.
+
+Create two UTF-8 files outside the JAR, for example:
+
+**`/tmp/mailversendala/welcome.html`**
+```html
+<html><body>
+<p>Hello ${firstName} ${lastName},</p>
+<p>Your invitation is ready.</p>
+</body></html>
+```
+
+**`/tmp/mailversendala/welcome.txt`**
+```text
+Hello ${firstName} ${lastName},
+
+Your invitation is ready.
+```
+
+Configure the directory and filenames in `javaconfiguration.properties`, or override
+these settings using JVM properties **before** `-jar`:
+
+```sh
+java -Dtemplatepath=/tmp/mailversendala \
+     -Dhtmltemplate=welcome.html \
+     -Dplaintexttemplate=welcome.txt \
+     -Dcsvpath=/tmp/recipients.csv \
+     -jar target/mailversendala-1.0.0-SNAPSHOT-executable.jar
+```
+
+SMTP credentials and `from` must also be configured. Demo mode is enabled by default;
+set `demomode=false` only when ready to deliver the messages.
+
+Available recipient variables are `${firstName}`, `${lastName}`, and `${email}`.
+`${firstname}` and `${surname}` are aliases matching the CSV column names. Missing recipient values become empty strings. References in HTML are
+HTML-escaped automatically; plain-text values are not HTML-escaped. Use these
+variables in HTML text or double-quoted attributes, not as JavaScript or unvalidated URLs.
+
+Both templates are loaded and compiled once per run. Missing or syntactically invalid
+templates abort the run before delivery; rendering or SMTP errors are counted per
+recipient. Unknown variables are rendering errors rather than being sent as literal
+placeholders. Templates can use Velocity directives such as `#if` and `#foreach`;
+only use trusted template files. No example logo or other remote resource is downloaded
+by the template-based sending flow.
 
 ### Development
 

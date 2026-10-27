@@ -21,6 +21,8 @@ package de.aikiit.mailversendala;
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 import de.aikiit.mailversendala.csv.Mailing;
+import de.aikiit.mailversendala.template.MailTemplate;
+import de.aikiit.mailversendala.template.VelocityMailTemplate;
 import org.apache.commons.mail.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,7 +30,6 @@ import org.apache.logging.log4j.Logger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  * This class performs the actual mail sending and encapsulates all the technicalities to create and send out an email.
@@ -51,7 +52,16 @@ public class SendOut {
      * @param recipient mailing contents and parameters.
      */
     public SendOut(Mailing recipient) {
-        this(recipient, new MailConfig(), new SimpleEmail(), new HtmlEmail());
+        this(recipient, new MailConfig());
+    }
+
+    /**
+     * Create a sender using the same configuration as the mailing run.
+     * @param recipient mailing recipient.
+     * @param mailConfig SMTP and message configuration.
+     */
+    public SendOut(Mailing recipient, MailConfig mailConfig) {
+        this(recipient, mailConfig, new SimpleEmail(), new HtmlEmail());
     }
 
     /**
@@ -117,13 +127,29 @@ public class SendOut {
             String email = args[0];
             LOG.warn("Init: Using mail address from runtime parameter: {}", email);
 
-            Mailing mailing = Mailing.builder().email(email).firstname("Your name").surname("Is my name").language(Locale.GERMAN.getLanguage()).build();
-            SendOut sendOut = new SendOut(mailing);
-            LOG.info("Init: DONE");
-            sendOut.send();
-            LOG.info("Send simple text-based message: DONE");
-            sendOut.sendComplex();
-            LOG.info("Send complex HTML and text-based message: DONE");
+            Mailing mailing = Mailing.builder().email(email).firstname("Your name").surname("Is my name").build();
+            MailConfig configuration = new MailConfig();
+            VelocityMailTemplate templates = new VelocityMailTemplate(configuration);
+            SendOut sendOut = new SendOut(mailing, configuration);
+            sendOut.send(templates.render(mailing));
+            LOG.info("Send HTML and plain-text message: DONE");
+        }
+    }
+
+    /**
+     * Send a rendered message with HTML and plain-text alternatives in UTF-8.
+     * @param template rendered message bodies.
+     * @throws EmailException if message construction or delivery fails.
+     */
+    public void send(MailTemplate template) throws EmailException {
+        htmlEmail.setCharset(Charsets.UTF_8.name());
+        htmlEmail.setFrom(mailConfig.getFrom());
+        htmlEmail.addTo(recipient.getEmail());
+        htmlEmail.setSubject(mailConfig.getSubject());
+        htmlEmail.setHtmlMsg(template.getHtml());
+        htmlEmail.setTextMsg(template.getPlaintext());
+        if (mailConfig.sendOutMails()) {
+            htmlEmail.send();
         }
     }
 

@@ -1,5 +1,3 @@
-package de.aikiit.mailversendala.template;
-
 /*
  * Copyright (c) P. Ottlinger
  *
@@ -9,65 +7,98 @@ package de.aikiit.mailversendala.template;
  *
  *   https://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+package de.aikiit.mailversendala.template;
 
-
+import de.aikiit.mailversendala.MailConfig;
+import de.aikiit.mailversendala.csv.Mailing;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.app.event.EventCartridge;
+import org.apache.velocity.app.event.implement.EscapeHtmlReference;
+import org.apache.velocity.exception.VelocityException;
 import org.apache.velocity.runtime.RuntimeConstants;
-import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
-import java.io.File;
+import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 /**
- * Mailing template that is based on Apache Velocity templates.
+ * Compiles external UTF-8 templates once per run and renders isolated recipient contexts.
+ * HTML references are escaped; plain-text references are left unchanged.
  */
-public class VelocityMailTemplate implements MailTemplate {
+public class VelocityMailTemplate {
 
-    private final VelocityEngine velocityEngine = new VelocityEngine();
+    private final Template html;
+    private final Template plaintext;
 
     /**
-     * Instantiate underlying template engine.
+     * Load both templates from the configured external directory before sending begins.
+     * @param configuration directory and template filenames.
+     * @throws IOException if a template is missing, unreadable or syntactically invalid.
      */
-    public VelocityMailTemplate() {
-        velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "class");
-        velocityEngine.setProperty("class.resource.loader.class",
-                ClasspathResourceLoader.class.getName());
-        velocityEngine.init();
+    public VelocityMailTemplate(MailConfig configuration) throws IOException {
+        VelocityEngine engine = new VelocityEngine();
+        engine.setProperty(RuntimeConstants.RESOURCE_LOADERS, "file");
+        engine.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, configuration.getTemplatePath());
+        engine.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_CACHE, true);
+        engine.setProperty(RuntimeConstants.RUNTIME_REFERENCES_STRICT, true);
+        try {
+            engine.init();
+            html = engine.getTemplate(configuration.getHtmlTemplate(), StandardCharsets.UTF_8.name());
+            plaintext = engine.getTemplate(configuration.getPlaintextTemplate(), StandardCharsets.UTF_8.name());
+        } catch (VelocityException e) {
+            throw new IOException("Cannot load mail templates from " + configuration.getTemplatePath(), e);
+        }
     }
 
-    @Override
-    public String getHtml() {
-        return loadAndGetContents("template" + File.separator + BASE_NAME_HTML);
+    /**
+     * Render both alternatives for one recipient, without retaining recipient state.
+     * @param recipient CSV recipient data.
+     * @return rendered HTML and plain-text bodies.
+     */
+    public MailTemplate render(Mailing recipient) {
+        VelocityContext htmlContext = context(recipient);
+        EventCartridge events = new EventCartridge();
+        events.addEventHandler(new EscapeHtmlReference());
+        events.attachToContext(htmlContext);
+        return new RenderedMail(merge(html, htmlContext), merge(plaintext, context(recipient)));
     }
 
-    @Override
-    public String getPlaintext() {
-        return loadAndGetContents("template" + File.separator + BASE_NAME_PLAINTEXT);
-    }
-
-    private VelocityContext handleAndGetContextChanges() {
+    private VelocityContext context(Mailing recipient) {
         VelocityContext context = new VelocityContext();
-        context.put("firstName", "ME");
-        context.put("lastName", "REALLY");
+        String firstName = Objects.requireNonNullElse(recipient.getFirstname(), "");
+        String lastName = Objects.requireNonNullElse(recipient.getSurname(), "");
+        context.put("firstName", firstName);
+        context.put("lastName", lastName);
+        context.put("firstname", firstName);
+        context.put("surname", lastName);
+        context.put("email", Objects.requireNonNullElse(recipient.getEmail(), ""));
         return context;
     }
 
-    private String loadAndGetContents(String templateName) {
-        Template t = velocityEngine.getTemplate(templateName);
-
+    private String merge(Template template, VelocityContext context) {
         StringWriter writer = new StringWriter();
-        t.merge(handleAndGetContextChanges(), writer);
-        t.process();
+        template.merge(context, writer);
+        return writer.toString();
+    }
 
-        return writer.toString().trim();
+    private record RenderedMail(String html, String plaintext) implements MailTemplate {
+        @Override
+        public String getHtml() {
+            return html;
+        }
+
+        @Override
+        public String getPlaintext() {
+            return plaintext;
+        }
     }
 }

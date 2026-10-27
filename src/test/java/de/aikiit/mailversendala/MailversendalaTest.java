@@ -34,7 +34,10 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 /**
  * Created by hirsch on 04.06.17.
@@ -59,6 +62,15 @@ public class MailversendalaTest {
     @Test
     public void parseCSVFromARealFolder() throws IOException {
         when(configuration.getCsvPath()).thenReturn(testFolder.toString() + File.separator + CSV_NAME);
+        when(configuration.getTemplatePath()).thenReturn("src/test/resources/template");
+        when(configuration.getHtmlTemplate()).thenReturn("mailtemplate.html");
+        when(configuration.getPlaintextTemplate()).thenReturn("mailtemplate.txt");
+        when(configuration.getHost()).thenReturn("localhost");
+        when(configuration.getPort()).thenReturn(465);
+        when(configuration.getUsername()).thenReturn("user");
+        when(configuration.getPassword()).thenReturn("password");
+        when(configuration.getFrom()).thenReturn("sender@example.test");
+        when(configuration.getSubject()).thenReturn("Template mailing");
 
         final MailingResult result = Mailversendala.sendOut(configuration);
         assertThat(result).isNotNull();
@@ -67,6 +79,34 @@ public class MailversendalaTest {
         final Optional<AtomicInteger> mailCounter = result.getMailCounter();
         assertThat(mailCounter).isPresent();
         assertThat(mailCounter.get().get()).isEqualTo(3);
+    }
+
+    @Test
+    void missingTemplatesAbortBeforeAnySmtpClientIsCreated() {
+        when(configuration.getCsvPath()).thenReturn(testFolder.resolve(CSV_NAME).toString());
+        when(configuration.getTemplatePath()).thenReturn(testFolder.toString());
+        when(configuration.getHtmlTemplate()).thenReturn("missing.html");
+
+        assertThatThrownBy(() -> Mailversendala.sendOut(configuration))
+                .isInstanceOf(IOException.class).hasMessageContaining("Cannot load mail templates");
+        verify(configuration, never()).getHost();
+    }
+
+    @Test
+    void countsRenderingErrorsWithoutAttemptingDelivery() throws IOException {
+        Files.writeString(testFolder.resolve("invalid-reference.html"), "<p>${unknownField}</p>");
+        Files.writeString(testFolder.resolve("valid.txt"), "Hello ${firstName}");
+        when(configuration.getCsvPath()).thenReturn(testFolder.resolve(CSV_NAME).toString());
+        when(configuration.getTemplatePath()).thenReturn(testFolder.toString());
+        when(configuration.getHtmlTemplate()).thenReturn("invalid-reference.html");
+        when(configuration.getPlaintextTemplate()).thenReturn("valid.txt");
+
+        MailingResult result = Mailversendala.sendOut(configuration);
+
+        assertThat(result.getTotal()).isEqualTo(3);
+        assertThat(result.getErrorCounter().orElseThrow().get()).isEqualTo(3);
+        assertThat(result.getMailCounter()).isEmpty();
+        verify(configuration, never()).getHost();
     }
 
 }

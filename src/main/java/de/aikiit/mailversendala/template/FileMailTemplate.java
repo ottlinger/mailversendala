@@ -54,11 +54,11 @@ public class FileMailTemplate implements MailTemplate {
      * @throws IOException in case of errors.
      */
     public FileMailTemplate(MailConfig config) throws IOException {
-        this.html = readInLanguage(Paths.get(config.getTemplatePath(), BASE_NAME_HTML));
-        this.plaintext = readInLanguage(Paths.get(config.getTemplatePath(), BASE_NAME_PLAINTEXT));
+        this.html = readTemplate(Paths.get(config.getTemplatePath(), config.getHtmlTemplate()));
+        this.plaintext = readTemplate(Paths.get(config.getTemplatePath(), config.getPlaintextTemplate()));
     }
 
-    private static String readInLanguage(Path file) throws IOException {
+    private static String readTemplate(Path file) throws IOException {
         return Files.readString(file, StandardCharsets.UTF_8);
     }
 

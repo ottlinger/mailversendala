@@ -48,7 +48,7 @@ public class CsvParserTest {
     }
 
     @Test
-    public void parseRealCSVDataIntoMailingsForAllLanguages() throws IOException {
+    public void parseRealCSVDataIntoMailingsWithUnicodeNames() throws IOException {
         CsvParser parser = new CsvParser(new StringReader(CSV_INPUT));
         assertThat(parser.parse()).hasSize(3);
     }

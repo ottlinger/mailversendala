@@ -38,5 +38,7 @@ public class MailConfigTest {
         }
 
         assertThat(mailConfig.getPort()).isGreaterThan(0);
+        assertThat(mailConfig.getHtmlTemplate()).isEqualTo("mailtemplate.html");
+        assertThat(mailConfig.getPlaintextTemplate()).isEqualTo("mailtemplate.txt");
     }
 }
