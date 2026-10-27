@@ -68,7 +68,7 @@ public class Mailversendala {
                     // Load and compile both external templates before sending any messages.
                     final VelocityMailTemplate templates = new VelocityMailTemplate(configuration);
                     final int total = mailings.size();
-                    LOG.info("Will send  out {} mails ... hold on tight :-)", total);
+                    LOG.info("Will send out {} mails ... hold on tight :-)", total);
 
                     mailings.forEach(mailing -> {
                         try {
