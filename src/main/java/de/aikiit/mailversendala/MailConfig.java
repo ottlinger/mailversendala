@@ -45,6 +45,7 @@ public class MailConfig {
     private final String templatePath;
     private final String htmlTemplate;
     private final String plaintextTemplate;
+    private final String attachments;
     private final boolean isDemoMode;
 
     /**
@@ -66,6 +67,7 @@ public class MailConfig {
         this.templatePath = configuration.getOrDefault("templatepath", "template");
         this.htmlTemplate = configuration.getOrDefault("htmltemplate", MailTemplate.BASE_NAME_HTML);
         this.plaintextTemplate = configuration.getOrDefault("plaintexttemplate", MailTemplate.BASE_NAME_PLAINTEXT);
+        this.attachments = configuration.getOrDefault("attachments", "");
         LOG.debug("Configuration: DONE.");
     }
 

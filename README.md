@@ -105,6 +105,7 @@ The following parameters can be set:
 | templatepath | Path to the external UTF-8 Velocity template directory | /tmp/mailversendala |
 | htmltemplate | HTML template filename, relative to templatepath | mailtemplate.html |
 | plaintexttemplate | Plain-text template filename, relative to templatepath | mailtemplate.txt |
+| attachments | Optional comma-separated attachment paths, relative to templatepath | attachments/information.pdf |
 | subject | full subject line of the example mail | Whatever you want is a subject line |
 | from | mail address that is sent from | santa@cruz.com |
 | to | mail address that an example mail is sent to **deprecated** | xmas@man.com |
@@ -155,8 +156,80 @@ Both templates are loaded and compiled once per run. Missing or syntactically in
 templates abort the run before delivery; rendering or SMTP errors are counted per
 recipient. Unknown variables are rendering errors rather than being sent as literal
 placeholders. Templates can use Velocity directives such as `#if` and `#foreach`;
-only use trusted template files. No example logo or other remote resource is downloaded
-by the template-based sending flow.
+only use trusted template files. The template-based sending flow never downloads remote
+images or attachments.
+
+### Inline images and file attachments
+
+Images referenced by HTML `<img src="...">` elements are automatically embedded in the
+email using MIME Content-IDs. The image is sent with the message rather than downloaded
+from a website. PDF documents, images, and other files can also be added as ordinary,
+downloadable attachments. HTML and plain-text alternatives are preserved in both cases.
+
+For example:
+
+```text
+/path/to/templates/
+├── welcome.html
+├── welcome.txt
+├── images/
+│   └── logo.png
+└── attachments/
+    └── information.pdf
+```
+
+In `welcome.html`:
+```html
+<p>Hello ${firstName} ${lastName},</p>
+<img src="images/logo.png" alt="Our logo">
+<p>Please see the attached information document.</p>
+```
+
+Configure the ordinary attachment separately:
+```properties
+templatepath=/path/to/templates
+htmltemplate=welcome.html
+plaintexttemplate=welcome.txt
+attachments=attachments/information.pdf
+```
+
+The equivalent JVM override is `-Dattachments=attachments/information.pdf` before
+`-jar`. To attach several files, separate their paths with commas, for example
+`attachments=attachments/information.pdf,images/logo.png`. Leave the setting empty
+for no ordinary attachments. Repeated paths to the same file are attached only once.
+Merely linking a PDF with `<a href="...">` does not attach it. Attachment configuration
+is shared by all recipients and is not interpreted as a Velocity template.
+
+All image and attachment paths are relative to **`templatepath`**, even when the HTML
+template itself is in a subdirectory. UTF-8 filenames and percent-encoded paths are
+supported; use `/` as the separator. Filenames containing commas cannot be listed in
+`attachments`. MIME types are inferred from filenames, so use appropriate extensions.
+Inline resources must have an image MIME type.
+
+Absolute paths, paths escaping the template directory (including symlinks), remote
+URLs, `file:`/`data:`/pre-existing `cid:` image sources, and query strings/fragments
+are rejected. `srcset` is not supported; use `img src`. CSS background images and other
+HTML resource references are not automatically embedded. Ordinary web hyperlinks
+remain unchanged and are not fetched by the application.
+
+Before the first SMTP delivery, the application renders the recipients and validates
+all referenced images and configured attachments. Missing or forbidden resources abort
+the entire run, including when referenced only by a later recipient. Resource bytes
+are snapshotted in memory once per unique file, so a file changed or deleted afterward
+does not change already validated content. Allow enough memory for the files and the
+rendered messages in a large mailing. Demo mode performs these checks without sending.
+
+For a complete working example, copy the existing template directory, including its
+`img/` and `attachments/` subdirectories:
+```sh
+mkdir -p /tmp/mailversendala
+cp -R src/test/resources/template/. /tmp/mailversendala/
+```
+
+Use `htmltemplate=mailtemplate.html`, `plaintexttemplate=mailtemplate.txt`, and
+`attachments=attachments/information.pdf`. The example HTML embeds a local logo;
+the example PDF is a harmless information document. Image attribution is preserved
+in `src/test/resources/template/img/readme.txt`.
 
 ### Development
 

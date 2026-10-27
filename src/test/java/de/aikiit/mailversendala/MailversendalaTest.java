@@ -93,6 +93,25 @@ public class MailversendalaTest {
     }
 
     @Test
+    void missingImageForLaterRecipientAbortsBeforeFirstDelivery() throws IOException {
+        Path csv = testFolder.resolve("image-recipients.csv");
+        Files.writeString(csv, "firstname,surname,email\nvalid,One,first@example.test\nmissing,Two,second@example.test\n");
+        Files.writeString(testFolder.resolve("images.html"), "<p>Hello ${firstname}</p><img src='${firstname}.png'>");
+        Files.writeString(testFolder.resolve("images.txt"), "Hello ${firstname}");
+        try (var input = getClass().getResourceAsStream("/template/img/monkey-toy-16-118729.png")) {
+            Files.copy(input, testFolder.resolve("valid.png"));
+        }
+        when(configuration.getCsvPath()).thenReturn(csv.toString());
+        when(configuration.getTemplatePath()).thenReturn(testFolder.toString());
+        when(configuration.getHtmlTemplate()).thenReturn("images.html");
+        when(configuration.getPlaintextTemplate()).thenReturn("images.txt");
+
+        assertThatThrownBy(() -> Mailversendala.sendOut(configuration))
+                .isInstanceOf(IOException.class).hasMessageContaining("missing.png");
+        verify(configuration, never()).getHost();
+    }
+
+    @Test
     void countsRenderingErrorsWithoutAttemptingDelivery() throws IOException {
         Files.writeString(testFolder.resolve("invalid-reference.html"), "<p>${unknownField}</p>");
         Files.writeString(testFolder.resolve("valid.txt"), "Hello ${firstName}");

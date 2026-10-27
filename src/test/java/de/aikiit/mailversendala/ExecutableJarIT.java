@@ -38,7 +38,15 @@ class ExecutableJarIT {
         assertThat(jar).isRegularFile();
         Path csv = directory.resolve("recipients.csv");
         Files.writeString(csv, "firstname,surname,email\nAda,Lovelace,recipient@example.test\n");
-        Files.writeString(directory.resolve("welcome.html"), "<p>Hello ${firstName} ${lastName}</p>");
+        Files.writeString(directory.resolve("welcome.html"),
+                "<p>Hello ${firstName} ${lastName}</p><img src='images/logo.png'>");
+        Files.createDirectory(directory.resolve("images"));
+        Files.createDirectory(directory.resolve("attachments"));
+        try (var image = getClass().getResourceAsStream("/template/img/monkey-toy-16-118729.png");
+             var pdf = getClass().getResourceAsStream("/template/attachments/information.pdf")) {
+            Files.copy(image, directory.resolve("images/logo.png"));
+            Files.copy(pdf, directory.resolve("attachments/information.pdf"));
+        }
         Files.writeString(directory.resolve("welcome.txt"), "Hello ${firstName} ${lastName}");
         Path outputFile = directory.resolve("application.log");
 
@@ -50,6 +58,7 @@ class ExecutableJarIT {
                 "-Dfrom=sender@example.test", "-Dsubject=Packaged application test",
                 "-Dtemplatepath=" + directory,
                 "-Dhtmltemplate=welcome.html", "-Dplaintexttemplate=welcome.txt",
+                "-Dattachments=attachments/information.pdf",
                 "-Dcsvpath=" + csv,
                 "-jar", jar.toString())
                 .directory(directory.toFile())

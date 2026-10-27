@@ -1,1 +1,7 @@
-Dear ${firstName} ${lastName}, this mail is for you only. Best regards, Mailversendala
+Dear ${firstName} ${lastName},
+
+this mail is for you only.
+Additional information can be supplied as a PDF attachment.
+
+Best regards,
+Mailversendala

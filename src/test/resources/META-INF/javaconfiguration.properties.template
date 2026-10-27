@@ -25,3 +25,6 @@ demomode=true
 templatepath=/tmp/mailversendala
 htmltemplate=mailtemplate.html
 plaintexttemplate=mailtemplate.txt
+# Optional comma-separated attachment paths, relative to templatepath.
+# Copy the complete example template directory including img/ and attachments/.
+attachments=attachments/information.pdf

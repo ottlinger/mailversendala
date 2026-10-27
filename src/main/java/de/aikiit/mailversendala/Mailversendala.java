@@ -20,18 +20,20 @@ package de.aikiit.mailversendala;
 
 import de.aikiit.mailversendala.csv.CsvParser;
 import de.aikiit.mailversendala.csv.Mailing;
+import de.aikiit.mailversendala.template.MailResources;
 import de.aikiit.mailversendala.template.MailTemplate;
 import de.aikiit.mailversendala.template.VelocityMailTemplate;
-import org.apache.velocity.exception.VelocityException;
 import org.apache.commons.mail.EmailException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.velocity.exception.VelocityException;
 import org.assertj.core.util.Strings;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -70,17 +72,29 @@ public class Mailversendala {
                     final int total = mailings.size();
                     LOG.info("Will send out {} mails ... hold on tight :-)", total);
 
-                    mailings.forEach(mailing -> {
+                    MailResources resources = new MailResources(configuration);
+                    List<PreparedMail> prepared = new ArrayList<>();
+                    for (Mailing mailing : mailings) {
                         try {
                             MailTemplate rendered = templates.render(mailing);
-                            new SendOut(mailing, configuration).send(rendered);
+                            resources.validate(rendered);
+                            prepared.add(new PreparedMail(mailing, rendered));
+                        } catch (VelocityException e) {
+                            result.addError();
+                            LOG.error("Problem while rendering {}", mailing, e);
+                        }
+                    }
+                    // Validate every recipient's resource references before the first SMTP delivery.
+                    for (PreparedMail mail : prepared) {
+                        try {
+                            new SendOut(mail.recipient(), configuration).send(mail.template(), resources);
                             result.addSuccess();
                             LOG.info("Successfully send out {}.mail", result.getMailCounter().orElse(new AtomicInteger(0)));
-                        } catch (EmailException | VelocityException e) {
+                        } catch (EmailException e) {
                             result.addError();
-                            LOG.error("Problem while sending out {}", mailing, e);
+                            LOG.error("Problem while sending out {}", mail.recipient(), e);
                         }
-                    });
+                    }
 
                     LOG.info("**** MAILVERSENDALA-report: {} total mails ****", total);
                     LOG.info("**** MAILVERSENDALA-report: {} successfully send out ****", result.getMailCounter().orElse(new AtomicInteger(0)));
@@ -94,4 +108,6 @@ public class Mailversendala {
         LOG.info("**** MAILVERSENDALA: Application shutdown .... ****");
         return result;
     }
+
+    private record PreparedMail(Mailing recipient, MailTemplate template) { }
 }

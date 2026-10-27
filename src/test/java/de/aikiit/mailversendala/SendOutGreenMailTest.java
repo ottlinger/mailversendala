@@ -19,6 +19,9 @@ import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
 import de.aikiit.mailversendala.csv.Mailing;
 import de.aikiit.mailversendala.template.VelocityMailTemplate;
+import de.aikiit.mailversendala.template.MailResources;
+import de.aikiit.mailversendala.template.FileMailTemplate;
+import org.jsoup.Jsoup;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailConstants;
 import org.apache.commons.mail.EmailException;
@@ -62,6 +65,10 @@ import static org.mockito.Mockito.when;
  * </pre>
  */
 class SendOutGreenMailTest {
+
+    private static final String APPLICATION_PDF = "application/pdf";
+    private static final String MULTIPART_MIXED = "multipart/mixed";
+    private static final String IMAGE_PNG = "image/png";
 
     private static final String RECIPIENT = "recipient@example.test";
     private static final String FROM = "sender@example.test";
@@ -128,7 +135,7 @@ class SendOutGreenMailTest {
         collectParts(message, parts);
         Part text = onlyPartOfType(parts, EmailConstants.TEXT_PLAIN);
         Part html = onlyPartOfType(parts, EmailConstants.TEXT_HTML);
-        Part image = onlyPartOfType(parts, "image/png");
+        Part image = onlyPartOfType(parts, IMAGE_PNG);
         assertThat(text.getContent().toString())
                 .contains("Your email client does not support HTML messages - thus no ASF logo visible.");
         String contentId = image.getHeader("Content-ID")[0];
@@ -235,6 +242,102 @@ class SendOutGreenMailTest {
         newSendOut().send(templates.render(MAILING));
 
         assertThat(greenMail.getReceivedMessages()).isEmpty();
+    }
+
+    @Test
+    void embedsLocalImagesAndDeliversPdfAndImageAttachments(@TempDir Path directory) throws Exception {
+        copyAssets(directory);
+        externalTemplates(directory);
+        Files.writeString(directory.resolve("with-images.html"),
+                "<p>Hello ${firstName}</p><IMG SRC=images/logo.png><img src='./images/logo.png'>");
+        when(config.getHtmlTemplate()).thenReturn("with-images.html");
+        when(config.getAttachments()).thenReturn("attachments/information.pdf, images/logo.png, attachments/information.pdf");
+        VelocityMailTemplate templates = new VelocityMailTemplate(config);
+
+        newSendOut().send(templates.render(MAILING));
+
+        MimeMessage message = receivedMessage();
+        assertAddressesAndHeaders(message);
+        assertThat(message.isMimeType(MULTIPART_MIXED)).isTrue();
+        List<Part> parts = new ArrayList<>();
+        collectParts(message, parts);
+        assertThat(parts).hasSize(5);
+        Part pdf = onlyPartOfType(parts, APPLICATION_PDF);
+        assertThat(pdf.getDisposition()).isEqualToIgnoringCase(Part.ATTACHMENT);
+        assertThat(pdf.getFileName()).isEqualTo("information.pdf");
+        assertPartBytes(pdf, Files.readAllBytes(directory.resolve("attachments/information.pdf")));
+        Part inline = null;
+        Part attachedImage = null;
+        for (Part part : parts) {
+            if (part.isMimeType(IMAGE_PNG)) {
+                if (Part.INLINE.equalsIgnoreCase(part.getDisposition())) {
+                    inline = part;
+                } else {
+                    attachedImage = part;
+                }
+            }
+        }
+        assertThat(inline).isNotNull();
+        assertThat(attachedImage).isNotNull();
+        assertThat(attachedImage.getDisposition()).isEqualToIgnoringCase(Part.ATTACHMENT);
+        assertThat(attachedImage.getFileName()).isEqualTo("logo.png");
+        byte[] imageBytes = Files.readAllBytes(directory.resolve("images/logo.png"));
+        assertPartBytes(inline, imageBytes);
+        assertPartBytes(attachedImage, imageBytes);
+        String header = inline.getHeader("Content-ID")[0];
+        String cid = "cid:" + header.substring(1, header.length() - 1);
+        assertThat(Jsoup.parse(onlyPartOfType(parts, EmailConstants.TEXT_HTML).getContent().toString()).select("img"))
+                .extracting(image -> image.attr("src")).containsExactly(cid, cid);
+        assertThat(onlyPartOfType(parts, EmailConstants.TEXT_PLAIN).getContent().toString()).contains("Hello Ada Lovelace");
+    }
+
+    @Test
+    void sendsValidatedSnapshotsEvenIfOriginalFilesAreDeleted(@TempDir Path directory) throws Exception {
+        copyAssets(directory);
+        when(config.getTemplatePath()).thenReturn(directory.toString());
+        when(config.getAttachments()).thenReturn("attachments/information.pdf");
+        FileMailTemplate template = new FileMailTemplate("<img src='images/logo.png'>", "Hello Ada");
+        MailResources resources = new MailResources(config);
+        resources.validate(template);
+        byte[] pdfBytes = Files.readAllBytes(directory.resolve("attachments/information.pdf"));
+        Files.delete(directory.resolve("images/logo.png"));
+        Files.delete(directory.resolve("attachments/information.pdf"));
+
+        newSendOut().send(template, resources);
+
+        List<Part> parts = new ArrayList<>();
+        collectParts(receivedMessage(), parts);
+        assertPartBytes(onlyPartOfType(parts, APPLICATION_PDF), pdfBytes);
+        assertThat(onlyPartOfType(parts, IMAGE_PNG).getDisposition()).isEqualToIgnoringCase(Part.INLINE);
+    }
+
+    @Test
+    void demoModeValidatesResourcesWithoutSending(@TempDir Path directory) throws Exception {
+        copyAssets(directory);
+        when(config.getTemplatePath()).thenReturn(directory.toString());
+        when(config.getAttachments()).thenReturn("attachments/information.pdf");
+        when(config.sendOutMails()).thenReturn(false);
+
+        newSendOut().send(new FileMailTemplate("<img src='images/logo.png'>", "Hello Ada"));
+
+        assertThat(greenMail.getReceivedMessages()).isEmpty();
+    }
+
+    private void copyAssets(Path directory) throws Exception {
+        Files.createDirectories(directory.resolve("images"));
+        Files.createDirectories(directory.resolve("attachments"));
+        try (InputStream input = IMAGE.openStream()) {
+            Files.copy(input, directory.resolve("images/logo.png"));
+        }
+        try (InputStream input = getClass().getResourceAsStream("/template/attachments/information.pdf")) {
+            Files.copy(input, directory.resolve("attachments/information.pdf"));
+        }
+    }
+
+    private void assertPartBytes(Part part, byte[] expected) throws Exception {
+        try (InputStream input = part.getInputStream()) {
+            assertThat(input.readAllBytes()).isEqualTo(expected);
+        }
     }
 
     private VelocityMailTemplate externalTemplates(Path directory) throws Exception {

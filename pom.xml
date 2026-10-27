@@ -467,6 +467,11 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
+    <dependency>
+      <groupId>org.jsoup</groupId>
+      <artifactId>jsoup</artifactId>
+      <version>1.23.2</version>
+    </dependency>
     <!-- GreenMail 1.6.x matches the javax.mail API used by Commons Email 1.x. -->
     <dependency>
       <groupId>com.icegreen</groupId>

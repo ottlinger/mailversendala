@@ -21,12 +21,14 @@ package de.aikiit.mailversendala;
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 import de.aikiit.mailversendala.csv.Mailing;
+import de.aikiit.mailversendala.template.MailResources;
 import de.aikiit.mailversendala.template.MailTemplate;
 import de.aikiit.mailversendala.template.VelocityMailTemplate;
 import org.apache.commons.mail.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
@@ -142,12 +144,20 @@ public class SendOut {
      * @throws EmailException if message construction or delivery fails.
      */
     public void send(MailTemplate template) throws EmailException {
+        try {
+            send(template, new MailResources(mailConfig));
+        } catch (IOException e) {
+            throw new EmailException("Cannot load mail resources", e);
+        }
+    }
+
+    /** Send using the resources validated and snapshotted for the entire run. */
+    void send(MailTemplate template, MailResources resources) throws EmailException {
         htmlEmail.setCharset(Charsets.UTF_8.name());
         htmlEmail.setFrom(mailConfig.getFrom());
         htmlEmail.addTo(recipient.getEmail());
         htmlEmail.setSubject(mailConfig.getSubject());
-        htmlEmail.setHtmlMsg(template.getHtml());
-        htmlEmail.setTextMsg(template.getPlaintext());
+        resources.applyTo(htmlEmail, template);
         if (mailConfig.sendOutMails()) {
             htmlEmail.send();
         }
