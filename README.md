@@ -24,8 +24,6 @@ A Maven-generated site report is also available [here](https://ottlinger.github.
 [![Known Vulnerabilities](https://snyk.io/test/github/ottlinger/mailversendala/badge.svg)](https://snyk.io/test/github/ottlinger/mailversendala)
 [![ASF 2.0](https://img.shields.io/github/license/ottlinger/mailversendala.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
-https://github.com/users/ottlinger/projects/9
-
 ## GitHub integrations
 ### CI / GHA
 
