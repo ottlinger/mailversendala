@@ -45,29 +45,31 @@ public class MailConfig {
     private final String templatePath;
     private final String htmlTemplate;
     private final String plaintextTemplate;
+    private final String attachments;
     private final boolean isDemoMode;
 
     /**
      * Read from Tamaya configuration or fallback to dummy default values.
      */
-<span class="fc" id="L53">    public MailConfig() {</span>
-<span class="fc" id="L54">        LOG.debug(&quot;Reading Tamaya configuration ...&quot;);</span>
-<span class="fc" id="L55">        final Configuration configuration = Configuration.current();</span>
+<span class="fc" id="L54">    public MailConfig() {</span>
+<span class="fc" id="L55">        LOG.debug(&quot;Reading Tamaya configuration ...&quot;);</span>
+<span class="fc" id="L56">        final Configuration configuration = Configuration.current();</span>
 
-<span class="fc" id="L57">        this.host = configuration.getOrDefault(&quot;host&quot;, &quot;smtp.example.com&quot;);</span>
-<span class="fc" id="L58">        this.port = Integer.parseInt(configuration.getOrDefault(&quot;port&quot;, &quot;465&quot;));</span>
-<span class="fc" id="L59">        this.username = configuration.getOrDefault(&quot;username&quot;, &quot;user@example.com&quot;);</span>
-<span class="fc" id="L60">        this.password = configuration.getOrDefault(&quot;password&quot;, &quot;chooseMeWisely&quot;);</span>
-<span class="fc" id="L61">        this.to = configuration.getOrDefault(&quot;to&quot;, &quot;xmas@man.com&quot;);</span>
-<span class="fc" id="L62">        this.from = configuration.getOrDefault(&quot;from&quot;, &quot;santa@cruz.com&quot;);</span>
-<span class="fc" id="L63">        this.subject = configuration.getOrDefault(&quot;subject&quot;, &quot;Do adapt your configuration - will not work&quot;);</span>
-<span class="fc" id="L64">        this.csvPath = configuration.getOrDefault(&quot;csvpath&quot;, &quot;mailversendala-example.csv&quot;);</span>
-<span class="fc" id="L65">        this.isDemoMode = Boolean.parseBoolean(configuration.getOrDefault(&quot;demomode&quot;, &quot;true&quot;));</span>
-<span class="fc" id="L66">        this.templatePath = configuration.getOrDefault(&quot;templatepath&quot;, &quot;template&quot;);</span>
-<span class="fc" id="L67">        this.htmlTemplate = configuration.getOrDefault(&quot;htmltemplate&quot;, MailTemplate.BASE_NAME_HTML);</span>
-<span class="fc" id="L68">        this.plaintextTemplate = configuration.getOrDefault(&quot;plaintexttemplate&quot;, MailTemplate.BASE_NAME_PLAINTEXT);</span>
-<span class="fc" id="L69">        LOG.debug(&quot;Configuration: DONE.&quot;);</span>
-<span class="fc" id="L70">    }</span>
+<span class="fc" id="L58">        this.host = configuration.getOrDefault(&quot;host&quot;, &quot;smtp.example.com&quot;);</span>
+<span class="fc" id="L59">        this.port = Integer.parseInt(configuration.getOrDefault(&quot;port&quot;, &quot;465&quot;));</span>
+<span class="fc" id="L60">        this.username = configuration.getOrDefault(&quot;username&quot;, &quot;user@example.com&quot;);</span>
+<span class="fc" id="L61">        this.password = configuration.getOrDefault(&quot;password&quot;, &quot;chooseMeWisely&quot;);</span>
+<span class="fc" id="L62">        this.to = configuration.getOrDefault(&quot;to&quot;, &quot;xmas@man.com&quot;);</span>
+<span class="fc" id="L63">        this.from = configuration.getOrDefault(&quot;from&quot;, &quot;santa@cruz.com&quot;);</span>
+<span class="fc" id="L64">        this.subject = configuration.getOrDefault(&quot;subject&quot;, &quot;Do adapt your configuration - will not work&quot;);</span>
+<span class="fc" id="L65">        this.csvPath = configuration.getOrDefault(&quot;csvpath&quot;, &quot;mailversendala-example.csv&quot;);</span>
+<span class="fc" id="L66">        this.isDemoMode = Boolean.parseBoolean(configuration.getOrDefault(&quot;demomode&quot;, &quot;true&quot;));</span>
+<span class="fc" id="L67">        this.templatePath = configuration.getOrDefault(&quot;templatepath&quot;, &quot;template&quot;);</span>
+<span class="fc" id="L68">        this.htmlTemplate = configuration.getOrDefault(&quot;htmltemplate&quot;, MailTemplate.BASE_NAME_HTML);</span>
+<span class="fc" id="L69">        this.plaintextTemplate = configuration.getOrDefault(&quot;plaintexttemplate&quot;, MailTemplate.BASE_NAME_PLAINTEXT);</span>
+<span class="fc" id="L70">        this.attachments = configuration.getOrDefault(&quot;attachments&quot;, &quot;&quot;);</span>
+<span class="fc" id="L71">        LOG.debug(&quot;Configuration: DONE.&quot;);</span>
+<span class="fc" id="L72">    }</span>
 
     /**
      * If in demo mode &lt;strong&gt;NO&lt;/strong&gt; mails should be sent out!
@@ -75,7 +77,7 @@ public class MailConfig {
      * @return {@code true} if in demo mode, thus no mails will be sent by default.
      */
     public boolean sendOutMails() {
-<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        return !isDemoMode;</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        return !isDemoMode;</span>
     }
 
 }

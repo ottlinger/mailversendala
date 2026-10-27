@@ -46,39 +46,48 @@
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>          assertThat(jar).isRegularFile();
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>          Path csv = directory.resolve(<span class="jxr_string">"recipients.csv"</span>);
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>          Files.writeString(csv, <span class="jxr_string">"firstname,surname,email\nAda,Lovelace,recipient@example.test\n"</span>);
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>          Files.writeString(directory.resolve(<span class="jxr_string">"welcome.html"</span>), <span class="jxr_string">"&lt;p&gt;Hello ${firstName} ${lastName}&lt;/p&gt;"</span>);
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>          Files.writeString(directory.resolve(<span class="jxr_string">"welcome.txt"</span>), <span class="jxr_string">"Hello ${firstName} ${lastName}"</span>);
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>          Path outputFile = directory.resolve(<span class="jxr_string">"application.log"</span>);
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>          Process process = <strong class="jxr_keyword">new</strong> ProcessBuilder(
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>                  Path.of(System.getProperty(<span class="jxr_string">"java.home"</span>), <span class="jxr_string">"bin"</span>, <span class="jxr_string">"java"</span>).toString(),
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>                  <span class="jxr_string">"-Ddemomode=true"</span>,
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>                  <span class="jxr_string">"-Dhost=localhost"</span>, <span class="jxr_string">"-Dport=465"</span>,
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>                  <span class="jxr_string">"-Dusername=test-user"</span>, <span class="jxr_string">"-Dpassword=test-password"</span>,
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>                  <span class="jxr_string">"-Dfrom=sender@example.test"</span>, <span class="jxr_string">"-Dsubject=Packaged application test"</span>,
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>                  <span class="jxr_string">"-Dtemplatepath="</span> + directory,
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>                  <span class="jxr_string">"-Dhtmltemplate=welcome.html"</span>, <span class="jxr_string">"-Dplaintexttemplate=welcome.txt"</span>,
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>                  <span class="jxr_string">"-Dcsvpath="</span> + csv,
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>                  <span class="jxr_string">"-jar"</span>, jar.toString())
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>                  .directory(directory.toFile())
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>                  .redirectErrorStream(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>                  .redirectOutput(outputFile.toFile())
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>                  .start();
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>          <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>              assertThat(process.waitFor(30, TimeUnit.SECONDS))
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>                      .as(<span class="jxr_string">"Packaged application must terminate within 30 seconds; output: %s"</span>, outputFile)
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>                      .isTrue();
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>              String output = Files.readString(outputFile);
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>              assertThat(process.exitValue()).withFailMessage(<span class="jxr_string">"Application failed:\n%s"</span>, output).isZero();
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>              assertThat(output)
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>                      .contains(<span class="jxr_string">"INFO"</span>, <span class="jxr_string">"Mailversendala"</span>, <span class="jxr_string">"Running in DEMO mode"</span>,
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>                              <span class="jxr_string">"1 successfully send out"</span>, <span class="jxr_string">"0 errors"</span>, <span class="jxr_string">"Mailversendala is shutting down"</span>)
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>                      .doesNotContain(<span class="jxr_string">"ERROR"</span>, <span class="jxr_string">"StatusLogger"</span>, <span class="jxr_string">"Exception"</span>, <span class="jxr_string">"Reading Tamaya configuration"</span>);
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>          } <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>              process.destroyForcibly();
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>          }
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>      }
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  }
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>          Files.writeString(directory.resolve(<span class="jxr_string">"welcome.html"</span>),
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>                  <span class="jxr_string">"&lt;p&gt;Hello ${firstName} ${lastName}&lt;/p&gt;&lt;img src='images/logo.png'&gt;"</span>);
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>          Files.createDirectory(directory.resolve(<span class="jxr_string">"images"</span>));
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>          Files.createDirectory(directory.resolve(<span class="jxr_string">"attachments"</span>));
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>          <strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> image = getClass().getResourceAsStream(<span class="jxr_string">"/template/img/monkey-toy-16-118729.png"</span>);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>               <strong class="jxr_keyword">var</strong> pdf = getClass().getResourceAsStream(<span class="jxr_string">"/template/attachments/information.pdf"</span>)) {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>              Files.copy(image, directory.resolve(<span class="jxr_string">"images/logo.png"</span>));
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>              Files.copy(pdf, directory.resolve(<span class="jxr_string">"attachments/information.pdf"</span>));
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>          }
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>          Files.writeString(directory.resolve(<span class="jxr_string">"welcome.txt"</span>), <span class="jxr_string">"Hello ${firstName} ${lastName}"</span>);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>          Path outputFile = directory.resolve(<span class="jxr_string">"application.log"</span>);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>          Process process = <strong class="jxr_keyword">new</strong> ProcessBuilder(
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>                  Path.of(System.getProperty(<span class="jxr_string">"java.home"</span>), <span class="jxr_string">"bin"</span>, <span class="jxr_string">"java"</span>).toString(),
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>                  <span class="jxr_string">"-Ddemomode=true"</span>,
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>                  <span class="jxr_string">"-Dhost=localhost"</span>, <span class="jxr_string">"-Dport=465"</span>,
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>                  <span class="jxr_string">"-Dusername=test-user"</span>, <span class="jxr_string">"-Dpassword=test-password"</span>,
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>                  <span class="jxr_string">"-Dfrom=sender@example.test"</span>, <span class="jxr_string">"-Dsubject=Packaged application test"</span>,
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>                  <span class="jxr_string">"-Dtemplatepath="</span> + directory,
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>                  <span class="jxr_string">"-Dhtmltemplate=welcome.html"</span>, <span class="jxr_string">"-Dplaintexttemplate=welcome.txt"</span>,
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>                  <span class="jxr_string">"-Dattachments=attachments/information.pdf"</span>,
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>                  <span class="jxr_string">"-Dcsvpath="</span> + csv,
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>                  <span class="jxr_string">"-jar"</span>, jar.toString())
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>                  .directory(directory.toFile())
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>                  .redirectErrorStream(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>                  .redirectOutput(outputFile.toFile())
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>                  .start();
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>          <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>              assertThat(process.waitFor(30, TimeUnit.SECONDS))
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>                      .as(<span class="jxr_string">"Packaged application must terminate within 30 seconds; output: %s"</span>, outputFile)
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>                      .isTrue();
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>              String output = Files.readString(outputFile);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>              assertThat(process.exitValue()).withFailMessage(<span class="jxr_string">"Application failed:\n%s"</span>, output).isZero();
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>              assertThat(output)
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>                      .contains(<span class="jxr_string">"INFO"</span>, <span class="jxr_string">"Mailversendala"</span>, <span class="jxr_string">"Running in DEMO mode"</span>,
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>                              <span class="jxr_string">"1 successfully send out"</span>, <span class="jxr_string">"0 errors"</span>, <span class="jxr_string">"Mailversendala is shutting down"</span>)
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>                      .doesNotContain(<span class="jxr_string">"ERROR"</span>, <span class="jxr_string">"StatusLogger"</span>, <span class="jxr_string">"Exception"</span>, <span class="jxr_string">"Reading Tamaya configuration"</span>);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>          } <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>              process.destroyForcibly();
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>          }
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      }
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2026</div>

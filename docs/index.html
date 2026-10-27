@@ -183,14 +183,18 @@ $ java -Dcsvpath=/tmp/my.csv -jar target/mailversendala-1.0.0-SNAPSHOT-executabl
 <td>Plain-text template filename, relative to templatepath</td>
 <td>mailtemplate.txt</td></tr>
 <tr class="a">
+<td>attachments</td>
+<td>Optional comma-separated attachment paths, relative to templatepath</td>
+<td>attachments/information.pdf</td></tr>
+<tr class="b">
 <td>subject</td>
 <td>full subject line of the example mail</td>
 <td>Whatever you want is a subject line</td></tr>
-<tr class="b">
+<tr class="a">
 <td>from</td>
 <td>mail address that is sent from</td>
 <td><a href="mailto:santa@cruz.com" class="externalLink">santa@cruz.com</a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>to</td>
 <td>mail address that an example mail is sent to <strong>deprecated</strong></td>
 <td><a href="mailto:xmas@man.com" class="externalLink">xmas@man.com</a></td></tr></tbody>
@@ -222,7 +226,42 @@ Your invitation is ready.
 </code></pre>
 <p>SMTP credentials and <code>from</code> must also be configured. Demo mode is enabled by default; set <code>demomode=false</code> only when ready to deliver the messages.</p>
 <p>Available recipient variables are <code>${firstName}</code>, <code>${lastName}</code>, and <code>${email}</code>. <code>${firstname}</code> and <code>${surname}</code> are aliases matching the CSV column names. Missing recipient values become empty strings. References in HTML are HTML-escaped automatically; plain-text values are not HTML-escaped. Use these variables in HTML text or double-quoted attributes, not as JavaScript or unvalidated URLs.</p>
-<p>Both templates are loaded and compiled once per run. Missing or syntactically invalid templates abort the run before delivery; rendering or SMTP errors are counted per recipient. Unknown variables are rendering errors rather than being sent as literal placeholders. Templates can use Velocity directives such as <code>#if</code> and <code>#foreach</code>; only use trusted template files. No example logo or other remote resource is downloaded by the template-based sending flow.</p></section><section><a id="Development"></a>
+<p>Both templates are loaded and compiled once per run. Missing or syntactically invalid templates abort the run before delivery; rendering or SMTP errors are counted per recipient. Unknown variables are rendering errors rather than being sent as literal placeholders. Templates can use Velocity directives such as <code>#if</code> and <code>#foreach</code>; only use trusted template files. The template-based sending flow never downloads remote images or attachments.</p></section><section><a id="Inline_images_and_file_attachments"></a>
+<h3>Inline images and file attachments</h3>
+<p>Images referenced by HTML <code>&lt;img src=&quot;...&quot;&gt;</code> elements are automatically embedded in the email using MIME Content-IDs. The image is sent with the message rather than downloaded from a website. PDF documents, images, and other files can also be added as ordinary, downloadable attachments. HTML and plain-text alternatives are preserved in both cases.</p>
+<p>For example:</p>
+
+<pre class="prettyprint"><code class="language-text">/path/to/templates/
+&#x251c;&#x2500;&#x2500; welcome.html
+&#x251c;&#x2500;&#x2500; welcome.txt
+&#x251c;&#x2500;&#x2500; images/
+&#x2502;   &#x2514;&#x2500;&#x2500; logo.png
+&#x2514;&#x2500;&#x2500; attachments/
+    &#x2514;&#x2500;&#x2500; information.pdf
+</code></pre>
+<p>In <code>welcome.html</code>:</p>
+
+<pre class="prettyprint"><code class="language-html">&lt;p&gt;Hello ${firstName} ${lastName},&lt;/p&gt;
+&lt;img src=&quot;images/logo.png&quot; alt=&quot;Our logo&quot;&gt;
+&lt;p&gt;Please see the attached information document.&lt;/p&gt;
+</code></pre>
+<p>Configure the ordinary attachment separately:</p>
+
+<pre class="prettyprint"><code class="language-properties">templatepath=/path/to/templates
+htmltemplate=welcome.html
+plaintexttemplate=welcome.txt
+attachments=attachments/information.pdf
+</code></pre>
+<p>The equivalent JVM override is <code>-Dattachments=attachments/information.pdf</code> before <code>-jar</code>. To attach several files, separate their paths with commas, for example <code>attachments=attachments/information.pdf,images/logo.png</code>. Leave the setting empty for no ordinary attachments. Repeated paths to the same file are attached only once. Merely linking a PDF with <code>&lt;a href=&quot;...&quot;&gt;</code> does not attach it. Attachment configuration is shared by all recipients and is not interpreted as a Velocity template.</p>
+<p>All image and attachment paths are relative to <strong><code>templatepath</code></strong>, even when the HTML template itself is in a subdirectory. UTF-8 filenames and percent-encoded paths are supported; use <code>/</code> as the separator. Filenames containing commas cannot be listed in <code>attachments</code>. MIME types are inferred from filenames, so use appropriate extensions. Inline resources must have an image MIME type.</p>
+<p>Absolute paths, paths escaping the template directory (including symlinks), remote URLs, <code>file:</code>/<code>data:</code>/pre-existing <code>cid:</code> image sources, and query strings/fragments are rejected. <code>srcset</code> is not supported; use <code>img src</code>. CSS background images and other HTML resource references are not automatically embedded. Ordinary web hyperlinks remain unchanged and are not fetched by the application.</p>
+<p>Before the first SMTP delivery, the application renders the recipients and validates all referenced images and configured attachments. Missing or forbidden resources abort the entire run, including when referenced only by a later recipient. Resource bytes are snapshotted in memory once per unique file, so a file changed or deleted afterward does not change already validated content. Allow enough memory for the files and the rendered messages in a large mailing. Demo mode performs these checks without sending.</p>
+<p>For a complete working example, copy the existing template directory, including its <code>img/</code> and <code>attachments/</code> subdirectories:</p>
+
+<pre class="prettyprint"><code class="language-sh">mkdir -p /tmp/mailversendala
+cp -R src/test/resources/template/. /tmp/mailversendala/
+</code></pre>
+<p>Use <code>htmltemplate=mailtemplate.html</code>, <code>plaintexttemplate=mailtemplate.txt</code>, and <code>attachments=attachments/information.pdf</code>. The example HTML embeds a local logo; the example PDF is a harmless information document. Image attribution is preserved in <code>src/test/resources/template/img/readme.txt</code>.</p></section><section><a id="Development"></a>
 <h3>Development</h3>
 <p>In order to properly integrate the project into your IDE you need to setup lombok support - please follow the guidelines about integration, e.g. <a href="https://projectlombok.org/setup/eclipse" class="externalLink">Eclipse integration</a>.</p></section></section><section><a id="Copyright"></a>
 <h2>Copyright</h2>
