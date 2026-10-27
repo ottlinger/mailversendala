@@ -70,6 +70,36 @@
           <version>3.22.0</version>
         </plugin>
         <plugin>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>3.2.0</version>
+          <executions>
+            <execution>
+              <id>readme-as-site-index</id>
+              <phase>pre-site</phase>
+              <goals>
+                <goal>run</goal>
+              </goals>
+              <configuration>
+                <target>
+                  <mkdir dir="${project.build.directory}/generated-site/markdown"/>
+                  <!-- Keep README.md as the single source for the landing page. -->
+                  <copy file="${project.basedir}/README.md"
+                        tofile="${project.build.directory}/generated-site/markdown/index.md"
+                        encoding="${project.build.sourceEncoding}"
+                        outputencoding="${project.build.sourceEncoding}"
+                        overwrite="true">
+                    <filterchain>
+                      <!-- Repository files are not deployed with the Maven site. -->
+                      <replacestring from="(./src/"
+                                     to="(${project.url}/blob/master/src/"/>
+                    </filterchain>
+                  </copy>
+                </target>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
           <groupId>com.github.spotbugs</groupId>
           <artifactId>spotbugs-maven-plugin</artifactId>
           <version>4.10.5.0</version>
@@ -254,6 +284,9 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+      </plugin>
       <plugin>
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
