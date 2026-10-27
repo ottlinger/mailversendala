@@ -40,7 +40,7 @@
           <nav class="well sidebar-nav">
   <ul class="nav nav-list">
    <li class="nav-header">mailversendala</li>
-    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html">Introduction</a></li>
    <li class="nav-header">Project Documentation</li>
     <li><a href="project-info.html"><span class="icon-chevron-right"></span>Project Information</a></li>
     <li><a href="project-reports.html"><span class="icon-chevron-down"></span>Project Reports</a>
@@ -81,8 +81,8 @@
 <th>Errors</th>
 <th>Missing Classes</th></tr>
 <tr class="b">
-<td>15</td>
-<td>7</td>
+<td>16</td>
+<td>5</td>
 <td>0</td>
 <td>0</td></tr></table></section><section>
 <h1>Files</h1>
@@ -97,11 +97,11 @@
 <td><a href="#de.aikiit.mailversendala.Mailversendala">de.aikiit.mailversendala.Mailversendala</a></td>
 <td>1</td></tr>
 <tr class="b">
-<td><a href="#de.aikiit.mailversendala.SendOut">de.aikiit.mailversendala.SendOut</a></td>
-<td>1</td></tr>
-<tr class="a">
 <td><a href="#de.aikiit.mailversendala.template.FileMailTemplate">de.aikiit.mailversendala.template.FileMailTemplate</a></td>
-<td>4</td></tr></table></section><a name="de.aikiit.mailversendala.MailConfig"></a><section>
+<td>2</td></tr>
+<tr class="a">
+<td><a href="#de.aikiit.mailversendala.template.VelocityMailTemplate">de.aikiit.mailversendala.template.VelocityMailTemplate</a></td>
+<td>1</td></tr></table></section><a name="de.aikiit.mailversendala.MailConfig"></a><section>
 <h2>de.aikiit.mailversendala.MailConfig</h2>
 <table class="table table-striped">
 <tr class="a">
@@ -114,7 +114,7 @@
 <td>Exception thrown in class de.aikiit.mailversendala.MailConfig at new de.aikiit.mailversendala.MailConfig() will leave the constructor. The object under construction remains partially initialized and may be vulnerable to Finalizer attacks.</td>
 <td>BAD_PRACTICE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#CT_CONSTRUCTOR_THROW">CT_CONSTRUCTOR_THROW</a></td>
-<td><a href="xref/de/aikiit/mailversendala/MailConfig.html#L55">55</a></td>
+<td><a href="xref/de/aikiit/mailversendala/MailConfig.html#L58">58</a></td>
 <td>Medium</td></tr></table></section><a name="de.aikiit.mailversendala.Mailversendala"></a><section>
 <h2>de.aikiit.mailversendala.Mailversendala</h2>
 <table class="table table-striped">
@@ -128,21 +128,7 @@
 <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td>
 <td>SECURITY</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
-<td><a href="xref/de/aikiit/mailversendala/Mailversendala.html#L59">59</a></td>
-<td>Medium</td></tr></table></section><a name="de.aikiit.mailversendala.SendOut"></a><section>
-<h2>de.aikiit.mailversendala.SendOut</h2>
-<table class="table table-striped">
-<tr class="a">
-<th>Bug</th>
-<th>Category</th>
-<th>Details</th>
-<th>Line</th>
-<th>Priority</th></tr>
-<tr class="b">
-<td>new de.aikiit.mailversendala.SendOut(Mailing) may expose internal representation by storing an externally mutable object into SendOut.recipient</td>
-<td>MALICIOUS_CODE</td>
-<td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td><a href="xref/de/aikiit/mailversendala/SendOut.html#L54">54</a></td>
+<td><a href="xref/de/aikiit/mailversendala/Mailversendala.html#L62">62</a></td>
 <td>Medium</td></tr></table></section><a name="de.aikiit.mailversendala.template.FileMailTemplate"></a><section>
 <h2>de.aikiit.mailversendala.template.FileMailTemplate</h2>
 <table class="table table-striped">
@@ -153,28 +139,30 @@
 <th>Line</th>
 <th>Priority</th></tr>
 <tr class="b">
-<td>Exception thrown in class de.aikiit.mailversendala.template.FileMailTemplate at new de.aikiit.mailversendala.template.FileMailTemplate(MailConfig) will leave the constructor. The object under construction remains partially initialized and may be vulnerable to Finalizer attacks.</td>
-<td>BAD_PRACTICE</td>
-<td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#CT_CONSTRUCTOR_THROW">CT_CONSTRUCTOR_THROW</a></td>
-<td><a href="xref/de/aikiit/mailversendala/template/FileMailTemplate.html#L57">57</a></td>
+<td>This API (java/nio/file/Paths.get(Ljava/lang/String;[Ljava/lang/String;)Ljava/nio/file/Path;) reads a file whose location might be specified by user input</td>
+<td>SECURITY</td>
+<td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
+<td><a href="xref/de/aikiit/mailversendala/template/FileMailTemplate.html#L56">56</a></td>
 <td>Medium</td></tr>
 <tr class="a">
-<td>Exception thrown in class de.aikiit.mailversendala.template.FileMailTemplate at new de.aikiit.mailversendala.template.FileMailTemplate(InputStream, InputStream) will leave the constructor. The object under construction remains partially initialized and may be vulnerable to Finalizer attacks.</td>
-<td>BAD_PRACTICE</td>
-<td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#CT_CONSTRUCTOR_THROW">CT_CONSTRUCTOR_THROW</a></td>
-<td><a href="xref/de/aikiit/mailversendala/template/FileMailTemplate.html#L47">47</a></td>
-<td>Medium</td></tr>
+<td>This API (java/nio/file/Paths.get(Ljava/lang/String;[Ljava/lang/String;)Ljava/nio/file/Path;) reads a file whose location might be specified by user input</td>
+<td>SECURITY</td>
+<td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
+<td><a href="xref/de/aikiit/mailversendala/template/FileMailTemplate.html#L57">57</a></td>
+<td>Medium</td></tr></table></section><a name="de.aikiit.mailversendala.template.VelocityMailTemplate"></a><section>
+<h2>de.aikiit.mailversendala.template.VelocityMailTemplate</h2>
+<table class="table table-striped">
+<tr class="a">
+<th>Bug</th>
+<th>Category</th>
+<th>Details</th>
+<th>Line</th>
+<th>Priority</th></tr>
 <tr class="b">
-<td>This API (java/nio/file/Paths.get(Ljava/lang/String;[Ljava/lang/String;)Ljava/nio/file/Path;) reads a file whose location might be specified by user input</td>
-<td>SECURITY</td>
-<td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
-<td><a href="xref/de/aikiit/mailversendala/template/FileMailTemplate.html#L57">57</a></td>
-<td>Medium</td></tr>
-<tr class="a">
-<td>This API (java/nio/file/Paths.get(Ljava/lang/String;[Ljava/lang/String;)Ljava/nio/file/Path;) reads a file whose location might be specified by user input</td>
-<td>SECURITY</td>
-<td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
-<td><a href="xref/de/aikiit/mailversendala/template/FileMailTemplate.html#L58">58</a></td>
+<td>Exception thrown in class de.aikiit.mailversendala.template.VelocityMailTemplate at new de.aikiit.mailversendala.template.VelocityMailTemplate(MailConfig) will leave the constructor. The object under construction remains partially initialized and may be vulnerable to Finalizer attacks.</td>
+<td>BAD_PRACTICE</td>
+<td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#CT_CONSTRUCTOR_THROW">CT_CONSTRUCTOR_THROW</a></td>
+<td><a href="xref/de/aikiit/mailversendala/template/VelocityMailTemplate.html#L58">58</a></td>
 <td>Medium</td></tr></table></section>        </main>
       </div>
     </div>

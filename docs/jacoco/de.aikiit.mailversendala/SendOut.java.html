@@ -21,6 +21,8 @@
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 import de.aikiit.mailversendala.csv.Mailing;
+import de.aikiit.mailversendala.template.MailTemplate;
+import de.aikiit.mailversendala.template.VelocityMailTemplate;
 import org.apache.commons.mail.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,14 +30,13 @@ import org.apache.logging.log4j.Logger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  * This class performs the actual mail sending and encapsulates all the technicalities to create and send out an email.
  */
 public class SendOut {
-<span class="fc" id="L37">    private static final Logger LOG =</span>
-<span class="fc" id="L38">            LogManager.getLogger(SendOut.class);</span>
+<span class="fc" id="L38">    private static final Logger LOG =</span>
+<span class="fc" id="L39">            LogManager.getLogger(SendOut.class);</span>
 
     // is transformed into User-Agent-Header
     private static final String SENT_BY = &quot;X-Mailer&quot;;
@@ -50,51 +51,69 @@ public class SendOut {
      * Create mail based on the given mailing recipient.
      * @param recipient mailing contents and parameters.
      */
-<span class="fc" id="L53">    public SendOut(Mailing recipient) {</span>
-<span class="fc" id="L54">        this.recipient = recipient;</span>
-<span class="fc" id="L55">        this.mailConfig = new MailConfig();</span>
+    public SendOut(Mailing recipient) {
+<span class="fc" id="L55">        this(recipient, new MailConfig());</span>
+<span class="fc" id="L56">    }</span>
 
-<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        if (mailConfig.sendOutMails()) {</span>
-<span class="nc" id="L58">            LOG.warn(&quot;Running in DEMO mode, thus no mails will be sent out.&quot;);</span>
+    /**
+     * Create a sender using the same configuration as the mailing run.
+     * @param recipient mailing recipient.
+     * @param mailConfig SMTP and message configuration.
+     */
+    public SendOut(Mailing recipient, MailConfig mailConfig) {
+<span class="fc" id="L64">        this(recipient, mailConfig, new SimpleEmail(), new HtmlEmail());</span>
+<span class="fc" id="L65">    }</span>
+
+    /**
+     * Configure supplied mail clients, allowing tests to use isolated mail sessions.
+     */
+<span class="fc" id="L70">    SendOut(Mailing recipient, MailConfig mailConfig, Email email, HtmlEmail htmlEmail) {</span>
+<span class="fc" id="L71">        this.recipient = recipient;</span>
+<span class="fc" id="L72">        this.mailConfig = mailConfig;</span>
+<span class="fc" id="L73">        this.email = email;</span>
+<span class="fc" id="L74">        this.htmlEmail = htmlEmail;</span>
+
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        if (!mailConfig.sendOutMails()) {</span>
+<span class="fc" id="L77">            LOG.warn(&quot;Running in DEMO mode, thus no mails will be sent out.&quot;);</span>
         }
 
-<span class="fc" id="L61">        LOG.info(&quot;Initialized authentication.&quot;);</span>
-<span class="fc" id="L62">        DefaultAuthenticator authenticator = new DefaultAuthenticator(mailConfig.getUsername(), mailConfig.getPassword());</span>
+<span class="fc" id="L80">        LOG.info(&quot;Initialized authentication.&quot;);</span>
+<span class="fc" id="L81">        DefaultAuthenticator authenticator = new DefaultAuthenticator(mailConfig.getUsername(), mailConfig.getPassword());</span>
 
-<span class="fc" id="L64">        int port = mailConfig.getPort();</span>
+<span class="fc" id="L83">        int port = mailConfig.getPort();</span>
 
-<span class="fc" id="L66">        this.email = new SimpleEmail();</span>
-<span class="fc" id="L67">        email.setHostName(mailConfig.getHost());</span>
-<span class="fc" id="L68">        email.setSmtpPort(port);</span>
-<span class="fc" id="L69">        email.setAuthenticator(authenticator);</span>
-<span class="fc" id="L70">        email.setSSLCheckServerIdentity(true);</span>
-<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        if (465 == port) {</span>
-<span class="fc" id="L72">            LOG.info(&quot;Using SSL.&quot;);</span>
-<span class="fc" id="L73">            email.setSSLOnConnect(true);</span>
+<span class="fc" id="L85">        email.setHostName(mailConfig.getHost());</span>
+<span class="fc" id="L86">        email.setSmtpPort(port);</span>
+<span class="fc" id="L87">        email.setAuthenticator(authenticator);</span>
+<span class="fc" id="L88">        email.setSSLCheckServerIdentity(true);</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (465 == port) {</span>
+<span class="fc" id="L90">            LOG.info(&quot;Using SSL.&quot;);</span>
+<span class="fc" id="L91">            email.setSSLOnConnect(true);</span>
         } else {
-<span class="nc" id="L75">            LOG.info(&quot;Using TLS.&quot;);</span>
-<span class="nc" id="L76">            email.setStartTLSRequired(true);</span>
+<span class="fc" id="L93">            LOG.info(&quot;Using TLS.&quot;);</span>
+<span class="fc" id="L94">            email.setStartTLSEnabled(true);</span>
+<span class="fc" id="L95">            email.setStartTLSRequired(true);</span>
         }
-<span class="fc" id="L78">        email.setBounceAddress(mailConfig.getFrom());</span>
-<span class="fc" id="L79">        email.addHeader(SENT_BY, SENT_BY_ME);</span>
-<span class="fc" id="L80">        LOG.info(&quot;Simple email initialized.&quot;);</span>
+<span class="fc" id="L97">        email.setBounceAddress(mailConfig.getFrom());</span>
+<span class="fc" id="L98">        email.addHeader(SENT_BY, SENT_BY_ME);</span>
+<span class="fc" id="L99">        LOG.info(&quot;Simple email initialized.&quot;);</span>
 
-<span class="fc" id="L82">        this.htmlEmail = new HtmlEmail();</span>
-<span class="fc" id="L83">        htmlEmail.setHostName(mailConfig.getHost());</span>
-<span class="fc" id="L84">        htmlEmail.setSmtpPort(port);</span>
-<span class="fc" id="L85">        htmlEmail.setSSLCheckServerIdentity(true);</span>
-<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        if (465 == port) {</span>
-<span class="fc" id="L87">            LOG.info(&quot;Using SSL.&quot;);</span>
-<span class="fc" id="L88">            htmlEmail.setSSLOnConnect(true);</span>
+<span class="fc" id="L101">        htmlEmail.setHostName(mailConfig.getHost());</span>
+<span class="fc" id="L102">        htmlEmail.setSmtpPort(port);</span>
+<span class="fc" id="L103">        htmlEmail.setSSLCheckServerIdentity(true);</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        if (465 == port) {</span>
+<span class="fc" id="L105">            LOG.info(&quot;Using SSL.&quot;);</span>
+<span class="fc" id="L106">            htmlEmail.setSSLOnConnect(true);</span>
         } else {
-<span class="nc" id="L90">            LOG.info(&quot;Using TLS.&quot;);</span>
-<span class="nc" id="L91">            htmlEmail.setStartTLSRequired(true);</span>
+<span class="fc" id="L108">            LOG.info(&quot;Using TLS.&quot;);</span>
+<span class="fc" id="L109">            htmlEmail.setStartTLSEnabled(true);</span>
+<span class="fc" id="L110">            htmlEmail.setStartTLSRequired(true);</span>
         }
-<span class="fc" id="L93">        htmlEmail.setBounceAddress(mailConfig.getFrom());</span>
-<span class="fc" id="L94">        htmlEmail.setAuthenticator(authenticator);</span>
-<span class="fc" id="L95">        htmlEmail.addHeader(SENT_BY, SENT_BY_ME);</span>
-<span class="fc" id="L96">        LOG.info(&quot;HTML and text email initialized.&quot;);</span>
-<span class="fc" id="L97">    }</span>
+<span class="fc" id="L112">        htmlEmail.setBounceAddress(mailConfig.getFrom());</span>
+<span class="fc" id="L113">        htmlEmail.setAuthenticator(authenticator);</span>
+<span class="fc" id="L114">        htmlEmail.addHeader(SENT_BY, SENT_BY_ME);</span>
+<span class="fc" id="L115">        LOG.info(&quot;HTML and text email initialized.&quot;);</span>
+<span class="fc" id="L116">    }</span>
 
     /**
      * Test method to verify the actual mail creation and send out.
@@ -102,38 +121,54 @@ public class SendOut {
      * @throws Exception in case of errors.
      */
     public static void main(String... args) throws Exception {
-<span class="pc bpc" id="L105" title="2 of 6 branches missed.">        if (args == null || args.length &lt; 1 || Strings.isNullOrEmpty(args[0])) {</span>
-<span class="fc" id="L106">            LOG.error(&quot;Please call this method with a mail address to send to.&quot;);</span>
+<span class="pc bpc" id="L124" title="2 of 6 branches missed.">        if (args == null || args.length &lt; 1 || Strings.isNullOrEmpty(args[0])) {</span>
+<span class="fc" id="L125">            LOG.error(&quot;Please call this method with a mail address to send to.&quot;);</span>
         } else {
-<span class="nc" id="L108">            String email = args[0];</span>
-<span class="nc" id="L109">            LOG.warn(&quot;Init: Using mail address from runtime parameter: {}&quot;, email);</span>
+<span class="nc" id="L127">            String email = args[0];</span>
+<span class="nc" id="L128">            LOG.warn(&quot;Init: Using mail address from runtime parameter: {}&quot;, email);</span>
 
-<span class="nc" id="L111">            Mailing mailing = Mailing.builder().email(email).firstname(&quot;Your name&quot;).surname(&quot;Is my name&quot;).language(Locale.GERMAN.getLanguage()).build();</span>
-<span class="nc" id="L112">            SendOut sendOut = new SendOut(mailing);</span>
-<span class="nc" id="L113">            LOG.info(&quot;Init: DONE&quot;);</span>
-<span class="nc" id="L114">            sendOut.send();</span>
-<span class="nc" id="L115">            LOG.info(&quot;Send simple text-based message: DONE&quot;);</span>
-<span class="nc" id="L116">            sendOut.sendComplex();</span>
-<span class="nc" id="L117">            LOG.info(&quot;Send complex HTML and text-based message: DONE&quot;);</span>
+<span class="nc" id="L130">            Mailing mailing = Mailing.builder().email(email).firstname(&quot;Your name&quot;).surname(&quot;Is my name&quot;).build();</span>
+<span class="nc" id="L131">            MailConfig configuration = new MailConfig();</span>
+<span class="nc" id="L132">            VelocityMailTemplate templates = new VelocityMailTemplate(configuration);</span>
+<span class="nc" id="L133">            SendOut sendOut = new SendOut(mailing, configuration);</span>
+<span class="nc" id="L134">            sendOut.send(templates.render(mailing));</span>
+<span class="nc" id="L135">            LOG.info(&quot;Send HTML and plain-text message: DONE&quot;);</span>
         }
-<span class="fc" id="L119">    }</span>
+<span class="fc" id="L137">    }</span>
+
+    /**
+     * Send a rendered message with HTML and plain-text alternatives in UTF-8.
+     * @param template rendered message bodies.
+     * @throws EmailException if message construction or delivery fails.
+     */
+    public void send(MailTemplate template) throws EmailException {
+<span class="fc" id="L145">        htmlEmail.setCharset(Charsets.UTF_8.name());</span>
+<span class="fc" id="L146">        htmlEmail.setFrom(mailConfig.getFrom());</span>
+<span class="fc" id="L147">        htmlEmail.addTo(recipient.getEmail());</span>
+<span class="fc" id="L148">        htmlEmail.setSubject(mailConfig.getSubject());</span>
+<span class="fc" id="L149">        htmlEmail.setHtmlMsg(template.getHtml());</span>
+<span class="fc" id="L150">        htmlEmail.setTextMsg(template.getPlaintext());</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        if (mailConfig.sendOutMails()) {</span>
+<span class="fc" id="L152">            htmlEmail.send();</span>
+        }
+<span class="fc" id="L154">    }</span>
 
     /**
      * Send out an email that contains only text contents.
      * @throws EmailException in case of errors.
      */
     public void send() throws EmailException {
-<span class="fc" id="L126">        email.setFrom(mailConfig.getFrom());</span>
-<span class="fc" id="L127">        email.addTo(this.recipient.getEmail());</span>
+<span class="fc" id="L161">        email.setFrom(mailConfig.getFrom());</span>
+<span class="fc" id="L162">        email.addTo(this.recipient.getEmail());</span>
 
-<span class="fc" id="L129">        email.setCharset(Charsets.UTF_8.name());</span>
+<span class="fc" id="L164">        email.setCharset(Charsets.UTF_8.name());</span>
 
-<span class="fc" id="L131">        email.setSubject(mailConfig.getSubject() + &quot; &quot; + new Date());</span>
-<span class="fc" id="L132">        email.setMsg(&quot;This is a test mail from Mailversendala... :-)&quot;);</span>
-<span class="pc bpc" id="L133" title="1 of 2 branches missed.">        if (mailConfig.sendOutMails()) {</span>
-<span class="nc" id="L134">            email.send();</span>
+<span class="fc" id="L166">        email.setSubject(mailConfig.getSubject() + &quot; &quot; + new Date());</span>
+<span class="fc" id="L167">        email.setMsg(&quot;This is a test mail from Mailversendala... :-)&quot;);</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">        if (mailConfig.sendOutMails()) {</span>
+<span class="fc" id="L169">            email.send();</span>
         }
-<span class="fc" id="L136">    }</span>
+<span class="fc" id="L171">    }</span>
 
     /**
      * Send out an email with plain text and HTML contents.
@@ -142,23 +177,29 @@ public class SendOut {
      * @throws MalformedURLException in case of problem while generating the HTML-part of.
      */
     public void sendComplex() throws EmailException, MalformedURLException {
-<span class="fc" id="L145">        htmlEmail.addTo(this.recipient.getEmail(), this.recipient.getFirstname() + &quot; &quot; + this.recipient.getSurname());</span>
-<span class="fc" id="L146">        htmlEmail.setFrom(mailConfig.getFrom(), &quot;Me&quot;);</span>
-<span class="fc" id="L147">        htmlEmail.setSubject(&quot;HTML&quot; + mailConfig.getSubject() + &quot; &quot; + new Date());</span>
+<span class="nc" id="L180">        sendComplex(new URL(&quot;https://www.apache.org/images/asf_logo_wide.gif&quot;));</span>
+<span class="nc" id="L181">    }</span>
+
+    /**
+     * Send HTML mail using the supplied inline image, without requiring a remote resource.
+     */
+    void sendComplex(URL imageUrl) throws EmailException {
+<span class="fc" id="L187">        htmlEmail.addTo(this.recipient.getEmail(), this.recipient.getFirstname() + &quot; &quot; + this.recipient.getSurname());</span>
+<span class="fc" id="L188">        htmlEmail.setFrom(mailConfig.getFrom(), &quot;Me&quot;);</span>
+<span class="fc" id="L189">        htmlEmail.setSubject(&quot;HTML&quot; + mailConfig.getSubject() + &quot; &quot; + new Date());</span>
 
         // embed the image and get the content id
-<span class="fc" id="L150">        URL url = new URL(&quot;https://www.apache.org/images/asf_logo_wide.gif&quot;);</span>
-<span class="fc" id="L151">        String cid = htmlEmail.embed(url, &quot;ASF logo&quot;);</span>
+<span class="fc" id="L192">        String cid = htmlEmail.embed(imageUrl, &quot;ASF logo&quot;);</span>
 
         // set the html message
-<span class="fc" id="L154">        htmlEmail.setHtmlMsg(&quot;&lt;html&gt;The ASF logo - &lt;img src=\&quot;cid:&quot; + cid + &quot;\&quot;&gt;&lt;/html&gt;&quot;);</span>
+<span class="fc" id="L195">        htmlEmail.setHtmlMsg(&quot;&lt;html&gt;The ASF logo - &lt;img src=\&quot;cid:&quot; + cid + &quot;\&quot;&gt;&lt;/html&gt;&quot;);</span>
 
         // set the alternative message
-<span class="fc" id="L157">        htmlEmail.setTextMsg(&quot;Your email client does not support HTML messages - thus no ASF logo visible.&quot;);</span>
+<span class="fc" id="L198">        htmlEmail.setTextMsg(&quot;Your email client does not support HTML messages - thus no ASF logo visible.&quot;);</span>
 
-<span class="pc bpc" id="L159" title="1 of 2 branches missed.">        if (mailConfig.sendOutMails()) {</span>
-<span class="nc" id="L160">            htmlEmail.send();</span>
+<span class="fc bfc" id="L200" title="All 2 branches covered.">        if (mailConfig.sendOutMails()) {</span>
+<span class="fc" id="L201">            htmlEmail.send();</span>
         }
-<span class="fc" id="L162">    }</span>
+<span class="fc" id="L203">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

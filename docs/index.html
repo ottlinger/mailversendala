@@ -40,7 +40,7 @@
           <nav class="well sidebar-nav">
   <ul class="nav nav-list">
    <li class="nav-header">mailversendala</li>
-    <li class="active"><a>Home</a></li>
+    <li class="active"><a>Introduction</a></li>
    <li class="nav-header">Project Documentation</li>
     <li><a href="project-info.html"><span class="icon-chevron-down"></span>Project Information</a>
      <ul class="nav nav-list">
@@ -172,8 +172,16 @@ $ java -Dcsvpath=/tmp/my.csv -jar target/mailversendala-1.0.0-SNAPSHOT-executabl
 <td>/tmp/mailversendala-example.csv</td></tr>
 <tr class="b">
 <td>templatepath</td>
-<td>fully qualified path to your template directory. This directory needs to contain mailtemplate.html and mailtemplate.txt</td>
+<td>Path to the external UTF-8 Velocity template directory</td>
 <td>/tmp/mailversendala</td></tr>
+<tr class="a">
+<td>htmltemplate</td>
+<td>HTML template filename, relative to templatepath</td>
+<td>mailtemplate.html</td></tr>
+<tr class="b">
+<td>plaintexttemplate</td>
+<td>Plain-text template filename, relative to templatepath</td>
+<td>mailtemplate.txt</td></tr>
 <tr class="a">
 <td>subject</td>
 <td>full subject line of the example mail</td>
@@ -187,7 +195,34 @@ $ java -Dcsvpath=/tmp/my.csv -jar target/mailversendala-1.0.0-SNAPSHOT-executabl
 <td>mail address that an example mail is sent to <strong>deprecated</strong></td>
 <td><a href="mailto:xmas@man.com" class="externalLink">xmas@man.com</a></td></tr></tbody>
 </table>
-</section><section><a id="Development"></a>
+</section><section><a id="HTML_and_plain-text_mail_templates"></a>
+<h3>HTML and plain-text mail templates</h3>
+<p>Each CSV recipient receives <strong>one email with both HTML and plain-text alternatives</strong>. The mail client chooses which version to display. Both bodies are rendered with Apache Velocity; the configured <code>subject</code> is used unchanged and both alternatives use UTF-8.</p>
+<p>Create two UTF-8 files outside the JAR, for example:</p>
+<p><strong><code>/tmp/mailversendala/welcome.html</code></strong></p>
+
+<pre class="prettyprint"><code class="language-html">&lt;html&gt;&lt;body&gt;
+&lt;p&gt;Hello ${firstName} ${lastName},&lt;/p&gt;
+&lt;p&gt;Your invitation is ready.&lt;/p&gt;
+&lt;/body&gt;&lt;/html&gt;
+</code></pre>
+<p><strong><code>/tmp/mailversendala/welcome.txt</code></strong></p>
+
+<pre class="prettyprint"><code class="language-text">Hello ${firstName} ${lastName},
+
+Your invitation is ready.
+</code></pre>
+<p>Configure the directory and filenames in <code>javaconfiguration.properties</code>, or override these settings using JVM properties <strong>before</strong> <code>-jar</code>:</p>
+
+<pre class="prettyprint"><code class="language-sh">java -Dtemplatepath=/tmp/mailversendala \
+     -Dhtmltemplate=welcome.html \
+     -Dplaintexttemplate=welcome.txt \
+     -Dcsvpath=/tmp/recipients.csv \
+     -jar target/mailversendala-1.0.0-SNAPSHOT-executable.jar
+</code></pre>
+<p>SMTP credentials and <code>from</code> must also be configured. Demo mode is enabled by default; set <code>demomode=false</code> only when ready to deliver the messages.</p>
+<p>Available recipient variables are <code>${firstName}</code>, <code>${lastName}</code>, and <code>${email}</code>. <code>${firstname}</code> and <code>${surname}</code> are aliases matching the CSV column names. Missing recipient values become empty strings. References in HTML are HTML-escaped automatically; plain-text values are not HTML-escaped. Use these variables in HTML text or double-quoted attributes, not as JavaScript or unvalidated URLs.</p>
+<p>Both templates are loaded and compiled once per run. Missing or syntactically invalid templates abort the run before delivery; rendering or SMTP errors are counted per recipient. Unknown variables are rendering errors rather than being sent as literal placeholders. Templates can use Velocity directives such as <code>#if</code> and <code>#foreach</code>; only use trusted template files. No example logo or other remote resource is downloaded by the template-based sending flow.</p></section><section><a id="Development"></a>
 <h3>Development</h3>
 <p>In order to properly integrate the project into your IDE you need to setup lombok support - please follow the guidelines about integration, e.g. <a href="https://projectlombok.org/setup/eclipse" class="externalLink">Eclipse integration</a>.</p></section></section><section><a id="Copyright"></a>
 <h2>Copyright</h2>

@@ -54,13 +54,33 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="#de.aikiit.mailversendala.template">de.aikiit.mailversendala.template</a></div>
+<div class="col-first even-row-color"><a href="#de.aikiit.mailversendala">de.aikiit.mailversendala</a></div>
 <div class="col-last even-row-color">
+<div class="block">Provides the application itself and its main configuration and runtime classes.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#de.aikiit.mailversendala.template">de.aikiit.mailversendala.template</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Contains all template-related parts of the application.</div>
 </div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
+<li>
+<section class="detail" id="de.aikiit.mailversendala">
+<h2>Uses of <a href="../MailTemplate.html" title="interface in de.aikiit.mailversendala.template">MailTemplate</a> in <a href="../../package-summary.html">de.aikiit.mailversendala</a></h2>
+<div class="caption"><span>Methods in <a href="../../package-summary.html">de.aikiit.mailversendala</a> with parameters of type <a href="../MailTemplate.html" title="interface in de.aikiit.mailversendala.template">MailTemplate</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SendOut.</span><code><a href="../../SendOut.html#send(de.aikiit.mailversendala.template.MailTemplate)" class="member-name-link">send</a><wbr>(<a href="../MailTemplate.html" title="interface in de.aikiit.mailversendala.template">MailTemplate</a>&nbsp;template)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Send a rendered message with HTML and plain-text alternatives in UTF-8.</div>
+</div>
+</div>
+</section>
+</li>
 <li>
 <section class="detail" id="de.aikiit.mailversendala.template">
 <h2>Uses of <a href="../MailTemplate.html" title="interface in de.aikiit.mailversendala.template">MailTemplate</a> in <a href="../package-summary.html">de.aikiit.mailversendala.template</a></h2>
@@ -69,15 +89,21 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-first even-row-color"><code>final record&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="../FileMailTemplate.html" class="type-name-link" title="class in de.aikiit.mailversendala.template">FileMailTemplate</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Template class that is based on a file, whose contents is replaced in a structured manner.</div>
+<div class="block">Immutable mail bodies read from files, streams or supplied directly as strings.</div>
 </div>
-<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../VelocityMailTemplate.html" class="type-name-link" title="class in de.aikiit.mailversendala.template">VelocityMailTemplate</a></code></div>
-<div class="col-last odd-row-color">
-<div class="block">Mailing template that is based on Apache Velocity templates.</div>
+</div>
+<div class="caption"><span>Methods in <a href="../package-summary.html">de.aikiit.mailversendala.template</a> that return <a href="../MailTemplate.html" title="interface in de.aikiit.mailversendala.template">MailTemplate</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../MailTemplate.html" title="interface in de.aikiit.mailversendala.template">MailTemplate</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">VelocityMailTemplate.</span><code><a href="../VelocityMailTemplate.html#render(de.aikiit.mailversendala.csv.Mailing)" class="member-name-link">render</a><wbr>(<a href="../../csv/Mailing.html" title="class in de.aikiit.mailversendala.csv">Mailing</a>&nbsp;recipient)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Render both alternatives for one recipient, without retaining recipient state.</div>
 </div>
 </div>
 </section>

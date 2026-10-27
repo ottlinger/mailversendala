@@ -94,6 +94,11 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Create mail based on the given mailing recipient.</div>
 </div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(de.aikiit.mailversendala.csv.Mailing,de.aikiit.mailversendala.MailConfig)" class="member-name-link">SendOut</a><wbr>(<a href="csv/Mailing.html" title="class in de.aikiit.mailversendala.csv">Mailing</a>&nbsp;recipient,
+ <a href="MailConfig.html" title="class in de.aikiit.mailversendala">MailConfig</a>&nbsp;mailConfig)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Create a sender using the same configuration as the mailing run.</div>
+</div>
 </div>
 </section>
 </li>
@@ -119,8 +124,13 @@ loadScripts(document, 'script');</script>
 <div class="block">Send out an email that contains only text contents.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendComplex()" class="member-name-link">sendComplex</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#send(de.aikiit.mailversendala.template.MailTemplate)" class="member-name-link">send</a><wbr>(<a href="template/MailTemplate.html" title="interface in de.aikiit.mailversendala.template">MailTemplate</a>&nbsp;template)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Send a rendered message with HTML and plain-text alternatives in UTF-8.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendComplex()" class="member-name-link">sendComplex</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Send out an email with plain text and HTML contents.</div>
 </div>
 </div>
@@ -151,6 +161,19 @@ loadScripts(document, 'script');</script>
 </dl>
 </section>
 </li>
+<li>
+<section class="detail" id="&lt;init&gt;(de.aikiit.mailversendala.csv.Mailing,de.aikiit.mailversendala.MailConfig)">
+<h3>SendOut</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">SendOut</span><wbr><span class="parameters">(<a href="csv/Mailing.html" title="class in de.aikiit.mailversendala.csv">Mailing</a>&nbsp;recipient,
+ <a href="MailConfig.html" title="class in de.aikiit.mailversendala">MailConfig</a>&nbsp;mailConfig)</span></div>
+<div class="block">Create a sender using the same configuration as the mailing run.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>recipient</code> - mailing recipient.</dd>
+<dd><code>mailConfig</code> - SMTP and message configuration.</dd>
+</dl>
+</section>
+</li>
 </ul>
 </section>
 </li>
@@ -170,6 +193,20 @@ loadScripts(document, 'script');</script>
 <dd><code>args</code> - allows sending an email to a given mail address. One parameter is required.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - in case of errors.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="send(de.aikiit.mailversendala.template.MailTemplate)">
+<h3>send</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">send</span><wbr><span class="parameters">(<a href="template/MailTemplate.html" title="interface in de.aikiit.mailversendala.template">MailTemplate</a>&nbsp;template)</span>
+          throws <span class="exceptions">org.apache.commons.mail.EmailException</span></div>
+<div class="block">Send a rendered message with HTML and plain-text alternatives in UTF-8.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>template</code> - rendered message bodies.</dd>
+<dt>Throws:</dt>
+<dd><code>org.apache.commons.mail.EmailException</code> - if message construction or delivery fails.</dd>
 </dl>
 </section>
 </li>

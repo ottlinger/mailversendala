@@ -18,7 +18,6 @@
  */
 
 
-import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import de.aikiit.mailversendala.MailConfig;
 
@@ -31,11 +30,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * Template class that is based on a file, whose contents is replaced in a structured manner.
+ * Immutable mail bodies read from files, streams or supplied directly as strings.
+ * @param html HTML-format contents.
+ * @param plaintext plain-text contents.
  */
-public class FileMailTemplate implements MailTemplate {
-    private final String html;
-    private final String plaintext;
+<span class="fc" id="L37">public record FileMailTemplate(String html, String plaintext) implements MailTemplate {</span>
 
     /**
      * Read given input streams and populate internal mailing contents.
@@ -43,33 +42,33 @@ public class FileMailTemplate implements MailTemplate {
      * @param plaintext plain text-contents.
      * @throws IOException in case of errors.
      */
-<span class="fc" id="L46">    public FileMailTemplate(InputStream html, InputStream plaintext) throws IOException {</span>
-<span class="fc" id="L47">        this.html = CharStreams.toString(new InputStreamReader(html, Charsets.UTF_8));</span>
-<span class="fc" id="L48">        this.plaintext = CharStreams.toString(new InputStreamReader(plaintext, Charsets.UTF_8));</span>
-<span class="fc" id="L49">    }</span>
+    public FileMailTemplate(InputStream html, InputStream plaintext) throws IOException {
+<span class="fc" id="L46">        this(CharStreams.toString(new InputStreamReader(html, StandardCharsets.UTF_8)),</span>
+<span class="fc" id="L47">                CharStreams.toString(new InputStreamReader(plaintext, StandardCharsets.UTF_8)));</span>
+<span class="fc" id="L48">    }</span>
 
     /**
      * Apply given configuration and generate internal mailing contents.
      * @param config configuration parameters of the application.
      * @throws IOException in case of errors.
      */
-<span class="fc" id="L56">    public FileMailTemplate(MailConfig config) throws IOException {</span>
-<span class="fc" id="L57">        this.html = readInLanguage(Paths.get(config.getTemplatePath(), BASE_NAME_HTML));</span>
-<span class="fc" id="L58">        this.plaintext = readInLanguage(Paths.get(config.getTemplatePath(), BASE_NAME_PLAINTEXT));</span>
-<span class="fc" id="L59">    }</span>
+    public FileMailTemplate(MailConfig config) throws IOException {
+<span class="fc" id="L56">        this(readTemplate(Paths.get(config.getTemplatePath(), config.getHtmlTemplate())),</span>
+<span class="fc" id="L57">                readTemplate(Paths.get(config.getTemplatePath(), config.getPlaintextTemplate())));</span>
+<span class="fc" id="L58">    }</span>
 
-    private static String readInLanguage(Path file) throws IOException {
-<span class="fc" id="L62">        return Files.readString(file, StandardCharsets.UTF_8);</span>
+    private static String readTemplate(Path file) throws IOException {
+<span class="fc" id="L61">        return Files.readString(file, StandardCharsets.UTF_8);</span>
     }
 
     @Override
     public String getHtml() {
-<span class="fc" id="L67">        return html;</span>
+<span class="fc" id="L66">        return html;</span>
     }
 
     @Override
     public String getPlaintext() {
-<span class="fc" id="L72">        return plaintext;</span>
+<span class="fc" id="L71">        return plaintext;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

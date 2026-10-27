@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VelocityMailTemplate.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mailversendala</a> &gt; <a href="index.source.html" class="el_package">de.aikiit.mailversendala.template</a> &gt; <span class="el_source">VelocityMailTemplate.java</span></div><h1>VelocityMailTemplate.java</h1><pre class="source lang-java linenums">package de.aikiit.mailversendala.template;
-
-/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VelocityMailTemplate.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mailversendala</a> &gt; <a href="index.source.html" class="el_package">de.aikiit.mailversendala.template</a> &gt; <span class="el_source">VelocityMailTemplate.java</span></div><h1>VelocityMailTemplate.java</h1><pre class="source lang-java linenums">/*
  * Copyright (c) P. Ottlinger
  *
  * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
@@ -9,66 +7,99 @@
  *
  *   https://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+package de.aikiit.mailversendala.template;
 
-
+import de.aikiit.mailversendala.MailConfig;
+import de.aikiit.mailversendala.csv.Mailing;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.app.event.EventCartridge;
+import org.apache.velocity.app.event.implement.EscapeHtmlReference;
+import org.apache.velocity.exception.VelocityException;
 import org.apache.velocity.runtime.RuntimeConstants;
-import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
-import java.io.File;
+import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 /**
- * Mailing template that is based on Apache Velocity templates.
+ * Compiles external UTF-8 templates once per run and renders isolated recipient contexts.
+ * HTML references are escaped; plain-text references are left unchanged.
  */
-public class VelocityMailTemplate implements MailTemplate {
+public class VelocityMailTemplate {
 
-<span class="fc" id="L35">    private final VelocityEngine velocityEngine = new VelocityEngine();</span>
+    private final Template html;
+    private final Template plaintext;
 
     /**
-     * Instantiate underlying template engine.
+     * Load both templates from the configured external directory before sending begins.
+     * @param configuration directory and template filenames.
+     * @throws IOException if a template is missing, unreadable or syntactically invalid.
      */
-<span class="fc" id="L40">    public VelocityMailTemplate() {</span>
-<span class="fc" id="L41">        velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, &quot;class&quot;);</span>
-<span class="fc" id="L42">        velocityEngine.setProperty(&quot;class.resource.loader.class&quot;,</span>
-<span class="fc" id="L43">                ClasspathResourceLoader.class.getName());</span>
-<span class="fc" id="L44">        velocityEngine.init();</span>
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L47">    public VelocityMailTemplate(MailConfig configuration) throws IOException {</span>
+<span class="fc" id="L48">        VelocityEngine engine = new VelocityEngine();</span>
+<span class="fc" id="L49">        engine.setProperty(RuntimeConstants.RESOURCE_LOADERS, &quot;file&quot;);</span>
+<span class="fc" id="L50">        engine.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, configuration.getTemplatePath());</span>
+<span class="fc" id="L51">        engine.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_CACHE, true);</span>
+<span class="fc" id="L52">        engine.setProperty(RuntimeConstants.RUNTIME_REFERENCES_STRICT, true);</span>
+        try {
+<span class="fc" id="L54">            engine.init();</span>
+<span class="fc" id="L55">            html = engine.getTemplate(configuration.getHtmlTemplate(), StandardCharsets.UTF_8.name());</span>
+<span class="fc" id="L56">            plaintext = engine.getTemplate(configuration.getPlaintextTemplate(), StandardCharsets.UTF_8.name());</span>
+<span class="fc" id="L57">        } catch (VelocityException e) {</span>
+<span class="fc" id="L58">            throw new IOException(&quot;Cannot load mail templates from &quot; + configuration.getTemplatePath(), e);</span>
+<span class="fc" id="L59">        }</span>
+<span class="fc" id="L60">    }</span>
 
-    @Override
-    public String getHtml() {
-<span class="fc" id="L49">        return loadAndGetContents(&quot;template&quot; + File.separator + BASE_NAME_HTML);</span>
+    /**
+     * Render both alternatives for one recipient, without retaining recipient state.
+     * @param recipient CSV recipient data.
+     * @return rendered HTML and plain-text bodies.
+     */
+    public MailTemplate render(Mailing recipient) {
+<span class="fc" id="L68">        VelocityContext htmlContext = context(recipient);</span>
+<span class="fc" id="L69">        EventCartridge events = new EventCartridge();</span>
+<span class="fc" id="L70">        events.addEventHandler(new EscapeHtmlReference());</span>
+<span class="fc" id="L71">        events.attachToContext(htmlContext);</span>
+<span class="fc" id="L72">        return new RenderedMail(merge(html, htmlContext), merge(plaintext, context(recipient)));</span>
     }
 
-    @Override
-    public String getPlaintext() {
-<span class="fc" id="L54">        return loadAndGetContents(&quot;template&quot; + File.separator + BASE_NAME_PLAINTEXT);</span>
+    private VelocityContext context(Mailing recipient) {
+<span class="fc" id="L76">        VelocityContext context = new VelocityContext();</span>
+<span class="fc" id="L77">        String firstName = Objects.requireNonNullElse(recipient.getFirstname(), &quot;&quot;);</span>
+<span class="fc" id="L78">        String lastName = Objects.requireNonNullElse(recipient.getSurname(), &quot;&quot;);</span>
+<span class="fc" id="L79">        context.put(&quot;firstName&quot;, firstName);</span>
+<span class="fc" id="L80">        context.put(&quot;lastName&quot;, lastName);</span>
+<span class="fc" id="L81">        context.put(&quot;firstname&quot;, firstName);</span>
+<span class="fc" id="L82">        context.put(&quot;surname&quot;, lastName);</span>
+<span class="fc" id="L83">        context.put(&quot;email&quot;, Objects.requireNonNullElse(recipient.getEmail(), &quot;&quot;));</span>
+<span class="fc" id="L84">        return context;</span>
     }
 
-    private VelocityContext handleAndGetContextChanges() {
-<span class="fc" id="L58">        VelocityContext context = new VelocityContext();</span>
-<span class="fc" id="L59">        context.put(&quot;firstName&quot;, &quot;ME&quot;);</span>
-<span class="fc" id="L60">        context.put(&quot;lastName&quot;, &quot;REALLY&quot;);</span>
-<span class="fc" id="L61">        return context;</span>
+    private String merge(Template template, VelocityContext context) {
+<span class="fc" id="L88">        StringWriter writer = new StringWriter();</span>
+<span class="fc" id="L89">        template.merge(context, writer);</span>
+<span class="fc" id="L90">        return writer.toString();</span>
     }
 
-    private String loadAndGetContents(String templateName) {
-<span class="fc" id="L65">        Template t = velocityEngine.getTemplate(templateName);</span>
+<span class="fc" id="L93">    private record RenderedMail(String html, String plaintext) implements MailTemplate {</span>
+        @Override
+        public String getHtml() {
+<span class="fc" id="L96">            return html;</span>
+        }
 
-<span class="fc" id="L67">        StringWriter writer = new StringWriter();</span>
-<span class="fc" id="L68">        t.merge(handleAndGetContextChanges(), writer);</span>
-<span class="fc" id="L69">        t.process();</span>
-
-<span class="fc" id="L71">        return writer.toString().trim();</span>
+        @Override
+        public String getPlaintext() {
+<span class="fc" id="L101">            return plaintext;</span>
+        }
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

@@ -40,7 +40,7 @@
           <nav class="well sidebar-nav">
   <ul class="nav nav-list">
    <li class="nav-header">mailversendala</li>
-    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html">Introduction</a></li>
    <li class="nav-header">Project Documentation</li>
     <li><a href="project-info.html"><span class="icon-chevron-right"></span>Project Information</a></li>
     <li><a href="project-reports.html"><span class="icon-chevron-down"></span>Project Reports</a>
@@ -74,22 +74,22 @@
 <pre>*****************************************************
 Summary
 *****************************************************
-Generated at: 2026-10-27T17:11:36+01:00
+Generated at: 2026-10-27T19:01:46+01:00
     by Apache Creadur RAT::Core 0.18 (Apache Software Foundation)
 
 -----------------------------------------------------
 Counters
 -----------------------------------------------------
     (Entries starting with '!' exceed the minimum or maximum values)
-  Approved:           30    A count of approved licenses.
+  Approved:           33    A count of approved licenses.
   Archives:           0    A count of archive files.
-  Binaries:           15    A count of binary files.
+  Binaries:           16    A count of binary files.
   Document types:     4    A count of distinct document types.
   Ignored:            12    A count of ignored files.
   License categories: 1    A count of distinct license categories.
   License names:      1    A count of distinct license names.
   Notices:            1    A count of notice files.
-  Standards:          30    A count of standard files.
+  Standards:          33    A count of standard files.
   Unapproved:         0    A count of unapproved licenses.
   Unknown:            0    A count of unknown file types.
 
@@ -98,22 +98,22 @@ Counters
 Licenses detected
 -----------------------------------------------------
 
-Apache License 2.0: 30 
+Apache License 2.0: 33 
 
 -----------------------------------------------------
 License Categories detected
 -----------------------------------------------------
 
-AL   : 30 
+AL   : 33 
 
 -----------------------------------------------------
 Document Types detected
 -----------------------------------------------------
 
-BINARY: 15 
+BINARY: 16 
 IGNORED: 12 
 NOTICE: 1 
-STANDARD: 30 
+STANDARD: 33 
 
 *****************************************************
 Detail
@@ -153,7 +153,7 @@ Detail
   N         text/plain    ISO-8859-1
 
   /README.md
-  S         text/x-web-markdown    ISO-8859-1
+  S         text/html    ISO-8859-1
     AL       AL2.0         Apache License 2.0
 
   /dependency-reduced-pom.xml
@@ -243,6 +243,14 @@ Detail
   S         text/x-java-source    ISO-8859-1
     AL       AL2.0         Apache License 2.0
 
+  /src/test/java/de/aikiit/mailversendala/ExecutableJarIT.java
+  S         text/x-java-source    ISO-8859-1
+    AL       AL2.0         Apache License 2.0
+
+  /src/test/java/de/aikiit/mailversendala/LoggingConfigurationTest.java
+  S         text/x-java-source    ISO-8859-1
+    AL       AL2.0         Apache License 2.0
+
   /src/test/java/de/aikiit/mailversendala/MailConfigTest.java
   S         text/x-java-source    ISO-8859-1
     AL       AL2.0         Apache License 2.0
@@ -252,6 +260,10 @@ Detail
     AL       AL2.0         Apache License 2.0
 
   /src/test/java/de/aikiit/mailversendala/MailversendalaTest.java
+  S         text/x-java-source    ISO-8859-1
+    AL       AL2.0         Apache License 2.0
+
+  /src/test/java/de/aikiit/mailversendala/SendOutGreenMailTest.java
   S         text/x-java-source    ISO-8859-1
     AL       AL2.0         Apache License 2.0
 
@@ -278,6 +290,9 @@ Detail
   /src/test/resources/META-INF/javaconfiguration.properties.template
   S         text/plain    ISO-8859-1
     AL       AL2.0         Apache License 2.0
+
+  /src/test/resources/greenmail.p12
+  B         application/x-x509-key; format=der    
 
   /src/test/resources/log4j2.properties
   S         text/x-java-properties    ISO-8859-1
