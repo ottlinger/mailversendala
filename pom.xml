@@ -18,7 +18,7 @@
   </licenses>
   <properties>
     <rat.version>0.18</rat.version>
-    <logger.version>3.0.0-beta3</logger.version>
+    <logger.version>2.26.1</logger.version>
     <lombok.version>1.18.48</lombok.version>
     <assertj.version>3.27.7</assertj.version>
     <mockito.version>5.24.0</mockito.version>
@@ -131,6 +131,23 @@
           <version>${surefire.version}</version>
         </plugin>
         <plugin>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>${surefire.version}</version>
+          <configuration>
+            <systemPropertyVariables>
+              <executableJar>${project.build.directory}/${project.build.finalName}-executable.jar</executableJar>
+            </systemPropertyVariables>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>integration-test</goal>
+                <goal>verify</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
           <artifactId>maven-resources-plugin</artifactId>
           <version>3.5.0</version>
         </plugin>
@@ -144,6 +161,10 @@
             <coverageThreshold>79</coverageThreshold>
             <mutationThreshold>35</mutationThreshold>
             <verbose>false</verbose>
+            <!-- Packaged-JAR tests run separately via Failsafe, outside the mutated JVM. -->
+            <excludedTestClasses>
+              <param>*IT</param>
+            </excludedTestClasses>
           </configuration>
           <dependencies>
             <dependency>
@@ -180,6 +201,7 @@
                 <shadedArtifactAttached>true</shadedArtifactAttached>
                 <shadedClassifierName>executable</shadedClassifierName>
                 <transformers>
+                  <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                   <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                     <manifestEntries>
                       <Main-Class>de.aikiit.mailversendala.App</Main-Class>
@@ -285,6 +307,9 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <artifactId>maven-failsafe-plugin</artifactId>
+      </plugin>
       <plugin>
         <artifactId>maven-antrun-plugin</artifactId>
       </plugin>
@@ -506,7 +531,6 @@
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
-      <version>${logger.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
