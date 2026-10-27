@@ -46,7 +46,7 @@ public class SendOutTest {
     public void sendOutHtmlMessageWithoutSendingInTestMode() throws EmailException, MalformedURLException {
         SendOut sendOut = new SendOut(DUMMY_RECIPIENT);
         assertThat(sendOut).isNotNull();
-        sendOut.sendComplex();
+        sendOut.sendComplex(getClass().getResource("/template/img/monkey-toy-16-118729.png"));
     }
 
     @Test

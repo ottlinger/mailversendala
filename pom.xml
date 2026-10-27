@@ -441,6 +441,13 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
+    <!-- GreenMail 1.6.x matches the javax.mail API used by Commons Email 1.x. -->
+    <dependency>
+      <groupId>com.icegreen</groupId>
+      <artifactId>greenmail</artifactId>
+      <version>1.6.15</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.apache.maven.skins</groupId>
       <artifactId>maven-fluido-skin</artifactId>

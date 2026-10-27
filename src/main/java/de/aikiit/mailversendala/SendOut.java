@@ -51,10 +51,19 @@ public class SendOut {
      * @param recipient mailing contents and parameters.
      */
     public SendOut(Mailing recipient) {
-        this.recipient = recipient;
-        this.mailConfig = new MailConfig();
+        this(recipient, new MailConfig(), new SimpleEmail(), new HtmlEmail());
+    }
 
-        if (mailConfig.sendOutMails()) {
+    /**
+     * Configure supplied mail clients, allowing tests to use isolated mail sessions.
+     */
+    SendOut(Mailing recipient, MailConfig mailConfig, Email email, HtmlEmail htmlEmail) {
+        this.recipient = recipient;
+        this.mailConfig = mailConfig;
+        this.email = email;
+        this.htmlEmail = htmlEmail;
+
+        if (!mailConfig.sendOutMails()) {
             LOG.warn("Running in DEMO mode, thus no mails will be sent out.");
         }
 
@@ -63,7 +72,6 @@ public class SendOut {
 
         int port = mailConfig.getPort();
 
-        this.email = new SimpleEmail();
         email.setHostName(mailConfig.getHost());
         email.setSmtpPort(port);
         email.setAuthenticator(authenticator);
@@ -73,13 +81,13 @@ public class SendOut {
             email.setSSLOnConnect(true);
         } else {
             LOG.info("Using TLS.");
+            email.setStartTLSEnabled(true);
             email.setStartTLSRequired(true);
         }
         email.setBounceAddress(mailConfig.getFrom());
         email.addHeader(SENT_BY, SENT_BY_ME);
         LOG.info("Simple email initialized.");
 
-        this.htmlEmail = new HtmlEmail();
         htmlEmail.setHostName(mailConfig.getHost());
         htmlEmail.setSmtpPort(port);
         htmlEmail.setSSLCheckServerIdentity(true);
@@ -88,6 +96,7 @@ public class SendOut {
             htmlEmail.setSSLOnConnect(true);
         } else {
             LOG.info("Using TLS.");
+            htmlEmail.setStartTLSEnabled(true);
             htmlEmail.setStartTLSRequired(true);
         }
         htmlEmail.setBounceAddress(mailConfig.getFrom());
@@ -142,13 +151,19 @@ public class SendOut {
      * @throws MalformedURLException in case of problem while generating the HTML-part of.
      */
     public void sendComplex() throws EmailException, MalformedURLException {
+        sendComplex(new URL("https://www.apache.org/images/asf_logo_wide.gif"));
+    }
+
+    /**
+     * Send HTML mail using the supplied inline image, without requiring a remote resource.
+     */
+    void sendComplex(URL imageUrl) throws EmailException {
         htmlEmail.addTo(this.recipient.getEmail(), this.recipient.getFirstname() + " " + this.recipient.getSurname());
         htmlEmail.setFrom(mailConfig.getFrom(), "Me");
         htmlEmail.setSubject("HTML" + mailConfig.getSubject() + " " + new Date());
 
         // embed the image and get the content id
-        URL url = new URL("https://www.apache.org/images/asf_logo_wide.gif");
-        String cid = htmlEmail.embed(url, "ASF logo");
+        String cid = htmlEmail.embed(imageUrl, "ASF logo");
 
         // set the html message
         htmlEmail.setHtmlMsg("<html>The ASF logo - <img src=\"cid:" + cid + "\"></html>");
