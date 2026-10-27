@@ -18,7 +18,6 @@ package de.aikiit.mailversendala.template;
  */
 
 
-import com.google.common.base.Charsets;
 import de.aikiit.mailversendala.MailConfig;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -30,6 +29,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,8 +40,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class FileMailTemplateTest {
 
-    private static final String TEXT = "This is a mailtemplate";
-    private static final String HTML = "<html><body>This is an <b>HTML</b> mailtemplate</body></html>";
+    private static final String TEXT = "Grüße für Jörg & Zoë";
+    private static final String HTML = "<html><body>Grüße für <b>Jörg &amp; Zoë</b></body></html>";
     private static FileMailTemplate template;
 
     @Mock
@@ -52,8 +52,8 @@ public class FileMailTemplateTest {
 
     @BeforeAll
     static void createTemplate() throws IOException {
-        InputStream html = new ByteArrayInputStream(HTML.getBytes());
-        InputStream plaintext = new ByteArrayInputStream(TEXT.getBytes());
+        InputStream html = new ByteArrayInputStream(HTML.getBytes(StandardCharsets.UTF_8));
+        InputStream plaintext = new ByteArrayInputStream(TEXT.getBytes(StandardCharsets.UTF_8));
         template = new FileMailTemplate(html, plaintext);
     }
 
@@ -68,18 +68,37 @@ public class FileMailTemplateTest {
     }
 
     @Test
+    public void recordAccessorsMatchInterfaceGetters() {
+        FileMailTemplate result = new FileMailTemplate(HTML, TEXT);
+
+        assertThat(result.html()).isEqualTo(result.getHtml()).isEqualTo(HTML);
+        assertThat(result.plaintext()).isEqualTo(result.getPlaintext()).isEqualTo(TEXT);
+    }
+
+    @Test
+    public void equalityAndHashCodeAreBasedOnBothBodies() {
+        FileMailTemplate first = new FileMailTemplate(HTML, TEXT);
+        FileMailTemplate same = new FileMailTemplate(HTML, TEXT);
+
+        assertThat(first).isEqualTo(same).hasSameHashCodeAs(same);
+        assertThat(first).isNotEqualTo(new FileMailTemplate("Other HTML", TEXT));
+        assertThat(first).isNotEqualTo(new FileMailTemplate(HTML, "Other text"));
+    }
+
+    @Test
     public void dataExtractionFromConfigFilePath() throws IOException {
         String configBasePath = folder.toString();
         when(config.getTemplatePath()).thenReturn(configBasePath);
         when(config.getHtmlTemplate()).thenReturn("custom.html");
         when(config.getPlaintextTemplate()).thenReturn("custom.txt");
 
-        Files.writeString(Paths.get(configBasePath, "custom.txt"), TEXT, Charsets.UTF_8);
-        Files.writeString(Paths.get(configBasePath, "custom.html"), HTML, Charsets.UTF_8);
+        Files.writeString(Paths.get(configBasePath, "custom.txt"), TEXT, StandardCharsets.UTF_8);
+        Files.writeString(Paths.get(configBasePath, "custom.html"), HTML, StandardCharsets.UTF_8);
 
         template = new FileMailTemplate(config);
 
         assertThat(template.getHtml()).isEqualTo(HTML);
         assertThat(template.getPlaintext()).isEqualTo(TEXT);
+        assertThat(template).isEqualTo(new FileMailTemplate(HTML, TEXT));
     }
 }

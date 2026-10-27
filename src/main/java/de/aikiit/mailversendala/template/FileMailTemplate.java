@@ -18,7 +18,6 @@ package de.aikiit.mailversendala.template;
  */
 
 
-import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import de.aikiit.mailversendala.MailConfig;
 
@@ -31,11 +30,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * Template class that is based on a file, whose contents is replaced in a structured manner.
+ * Immutable mail bodies read from files, streams or supplied directly as strings.
+ * @param html HTML-format contents.
+ * @param plaintext plain-text contents.
  */
-public class FileMailTemplate implements MailTemplate {
-    private final String html;
-    private final String plaintext;
+public record FileMailTemplate(String html, String plaintext) implements MailTemplate {
 
     /**
      * Read given input streams and populate internal mailing contents.
@@ -44,8 +43,8 @@ public class FileMailTemplate implements MailTemplate {
      * @throws IOException in case of errors.
      */
     public FileMailTemplate(InputStream html, InputStream plaintext) throws IOException {
-        this.html = CharStreams.toString(new InputStreamReader(html, Charsets.UTF_8));
-        this.plaintext = CharStreams.toString(new InputStreamReader(plaintext, Charsets.UTF_8));
+        this(CharStreams.toString(new InputStreamReader(html, StandardCharsets.UTF_8)),
+                CharStreams.toString(new InputStreamReader(plaintext, StandardCharsets.UTF_8)));
     }
 
     /**
@@ -54,8 +53,8 @@ public class FileMailTemplate implements MailTemplate {
      * @throws IOException in case of errors.
      */
     public FileMailTemplate(MailConfig config) throws IOException {
-        this.html = readTemplate(Paths.get(config.getTemplatePath(), config.getHtmlTemplate()));
-        this.plaintext = readTemplate(Paths.get(config.getTemplatePath(), config.getPlaintextTemplate()));
+        this(readTemplate(Paths.get(config.getTemplatePath(), config.getHtmlTemplate())),
+                readTemplate(Paths.get(config.getTemplatePath(), config.getPlaintextTemplate())));
     }
 
     private static String readTemplate(Path file) throws IOException {
