@@ -63,9 +63,9 @@
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>          Path jar = Path.of(System.getProperty(<span class="jxr_string">"executableJar"</span>)).toAbsolutePath();
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>          assertThat(jar).isRegularFile();
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>          Path csv = directory.resolve(<span class="jxr_string">"recipients.csv"</span>);
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>          Files.writeString(csv, <span class="jxr_string">"firstname,surname,email\nAda,Lovelace,recipient@example.test\n"</span>);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>          Files.writeString(csv, <span class="jxr_string">"firstname,surname,email,salutation\nAda,Lovelace,recipient@example.test,Dear\n"</span>);
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>          Files.writeString(directory.resolve(<span class="jxr_string">"welcome.html"</span>),
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>                  <span class="jxr_string">"&lt;p&gt;Hello ${firstName} ${lastName}&lt;/p&gt;&lt;img src='images/logo.png'&gt;"</span>);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>                  <span class="jxr_string">"&lt;p&gt;${salutation} ${firstName} ${lastName}&lt;/p&gt;&lt;img src='images/logo.png'&gt;"</span>);
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>          Files.createDirectory(directory.resolve(<span class="jxr_string">"images"</span>));
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>          Files.createDirectory(directory.resolve(<span class="jxr_string">"attachments"</span>));
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>          <strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> image = getClass().getResourceAsStream(<span class="jxr_string">"/template/img/monkey-toy-16-118729.png"</span>);
@@ -73,7 +73,7 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>              Files.copy(image, directory.resolve(<span class="jxr_string">"images/logo.png"</span>));
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>              Files.copy(pdf, directory.resolve(<span class="jxr_string">"attachments/information.pdf"</span>));
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>          }
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>          Files.writeString(directory.resolve(<span class="jxr_string">"welcome.txt"</span>), <span class="jxr_string">"Hello ${firstName} ${lastName}"</span>);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>          Files.writeString(directory.resolve(<span class="jxr_string">"welcome.txt"</span>), <span class="jxr_string">"${salutation} ${firstName} ${lastName}"</span>);
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>          Path outputFile = directory.resolve(<span class="jxr_string">"application.log"</span>);
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>          Process process = <strong class="jxr_keyword">new</strong> ProcessBuilder(

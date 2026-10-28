@@ -55,21 +55,26 @@ public class CsvParser {
 <span class="fc" id="L55">            Iterable&lt;CSVRecord&gt; records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader);</span>
 <span class="fc" id="L56">            records.forEach(record -&gt; {</span>
                         try {
-<span class="fc" id="L58">                            Mailing mailing = Mailing.builder().//</span>
-<span class="fc" id="L59">                                    email(record.get(Headers.EMAIL)).//</span>
-<span class="fc" id="L60">                                    firstname(record.get(Headers.FIRSTNAME)).//</span>
-<span class="fc" id="L61">                                    surname(record.get(Headers.SURNAME)).//</span>
-<span class="fc" id="L62">                                    build();</span>
+<span class="fc" id="L58">                            String email = record.get(Headers.EMAIL);</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">                            if (email.isBlank()) {</span>
+<span class="fc" id="L60">                                throw new IllegalArgumentException(&quot;Required field 'email' must not be blank&quot;);</span>
+                            }
+<span class="fc" id="L62">                            Mailing mailing = Mailing.builder().//</span>
+<span class="fc" id="L63">                                    email(email).//</span>
+<span class="fc" id="L64">                                    firstname(record.get(Headers.FIRSTNAME)).//</span>
+<span class="fc" id="L65">                                    surname(record.get(Headers.SURNAME)).//</span>
+<span class="fc" id="L66">                                    salutation(record.get(Headers.SALUTATION)).//</span>
+<span class="fc" id="L67">                                    build();</span>
 
-<span class="fc" id="L64">                            LOG.debug(&quot;Parsed and added mailing: {}&quot;, mailing);</span>
-<span class="fc" id="L65">                            results.add(mailing);</span>
-<span class="fc" id="L66">                        } catch (IllegalArgumentException e) {</span>
-<span class="fc" id="L67">                            LOG.error(&quot;Unable to parse CSV-row '{}'.&quot;, record);</span>
-<span class="fc" id="L68">                        }</span>
-<span class="fc" id="L69">                    }</span>
+<span class="fc" id="L69">                            LOG.debug(&quot;Parsed and added mailing: {}&quot;, mailing);</span>
+<span class="fc" id="L70">                            results.add(mailing);</span>
+<span class="fc" id="L71">                        } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L72">                            LOG.error(&quot;Unable to parse CSV-row '{}': {}&quot;, record, e.getMessage());</span>
+<span class="fc" id="L73">                        }</span>
+<span class="fc" id="L74">                    }</span>
             );
         }
-<span class="fc" id="L72">        return results;</span>
+<span class="fc" id="L77">        return results;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

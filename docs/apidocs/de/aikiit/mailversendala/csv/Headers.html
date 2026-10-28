@@ -70,7 +70,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">Headers</span></div>
-<div class="block">Contains the headers that need to be in the CSV-file.</div>
+<div class="block">Contains the required CSV headers.</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><code><a href="#EMAIL" class="member-name-link">EMAIL</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Email used to send the mailing to.</div>
+<div class="block">Required, non-blank email address used to send the mailing to.</div>
 </div>
 <div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#FIRSTNAME" class="member-name-link">FIRSTNAME</a></code></div>
@@ -102,8 +102,13 @@ loadScripts(document, 'script');</script>
 <div class="block">Firstname in the mailing.</div>
 </div>
 <div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#SURNAME" class="member-name-link">SURNAME</a></code></div>
+<div class="col-second even-row-color"><code><a href="#SALUTATION" class="member-name-link">SALUTATION</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">Greeting prefix, for example "Liebe" or "Lieber".</div>
+</div>
+<div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#SURNAME" class="member-name-link">SURNAME</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Surname in the mailing.</div>
 </div>
 </div>
@@ -152,12 +157,27 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="EMAIL">
 <h3>EMAIL</h3>
 <div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">EMAIL</span></div>
-<div class="block">Email used to send the mailing to.</div>
+<div class="block">Required, non-blank email address used to send the mailing to.</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
 <ul class="see-list">
 <li><a href="../../../../constant-values.html#de.aikiit.mailversendala.csv.Headers.EMAIL">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="SALUTATION">
+<h3>SALUTATION</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">SALUTATION</span></div>
+<div class="block">Greeting prefix, for example "Liebe" or "Lieber".</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list">
+<li><a href="../../../../constant-values.html#de.aikiit.mailversendala.csv.Headers.SALUTATION">Constant Field Values</a></li>
 </ul>
 </dd>
 </dl>

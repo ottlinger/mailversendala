@@ -58,10 +58,17 @@
         <main id="bodyColumn" class="span10">
  <section><a id="Changelog"></a>
 <h1>Changelog</h1><section><a id="Unreleased"></a>
-<h2>Unreleased</h2><section><a id="Changed"></a>
+<h2>Unreleased</h2><section><a id="Added"></a>
+<h3>Added</h3>
+<ul>
+
+<li>Add the required <code>salutation</code> CSV column and <code>${salutation}</code> template variable for recipient-specific greeting prefixes. <code>${salutation} ${firstName}</code> renders <code>Liebe Erika</code> or <code>Lieber Peter</code> when the CSV contains <code>Liebe</code> or <code>Lieber</code>. CSV files must include the new column.</li>
+<li>Document greeting templates and update the example CSV and templates.</li>
+</ul></section><section><a id="Changed"></a>
 <h3>Changed</h3>
 <ul>
 
+<li>Require a non-blank <code>email</code> value for every CSV recipient. Rows with a missing, empty, or whitespace-only email field are logged and skipped.</li>
 <li>Migrate GreenMail from 1.6.15 to 2.1.14, implementing the dependency update proposed in <a href="https://github.com/ottlinger/mailversendala/pull/552" class="externalLink">PR #552</a>.</li>
 <li>Replace Commons Email 1.6.0 with Commons Email 2's Jakarta variant (<code>commons-email2-jakarta</code> 2.0.0-M1, a milestone release) and migrate application and test imports from <code>javax.mail</code> to <code>jakarta.mail</code> for GreenMail 2 compatibility.</li>
 <li>Use Eclipse Angus Mail 2.0.5 as the shared mail implementation for the application and tests, excluding legacy and duplicate bundled mail implementations.</li>
@@ -69,6 +76,8 @@
 <h3>Tests</h3>
 <ul>
 
+<li>Cover missing email columns/fields and empty or whitespace-only email values, including continued parsing of valid recipients after invalid rows.</li>
+<li>Cover salutation parsing, rejection of rows without the required column, HTML escaping, and personalized HTML/plain-text delivery through GreenMail.</li>
 <li>Retain coverage of authenticated SMTPS delivery, MIME content, attachments, invalid credentials, demo mode, and rejection of plaintext fallback.</li>
 <li>Verify that the executable JAR includes Jakarta Mail/Activation APIs and provider service descriptors without legacy Javax APIs or the test-only GreenMail server.</li>
 </ul></section></section></section>        </main>

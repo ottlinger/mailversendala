@@ -81,24 +81,25 @@ public class VelocityMailTemplate {
 <span class="fc" id="L81">        context.put(&quot;firstname&quot;, firstName);</span>
 <span class="fc" id="L82">        context.put(&quot;surname&quot;, lastName);</span>
 <span class="fc" id="L83">        context.put(&quot;email&quot;, Objects.requireNonNullElse(recipient.getEmail(), &quot;&quot;));</span>
-<span class="fc" id="L84">        return context;</span>
+<span class="fc" id="L84">        context.put(&quot;salutation&quot;, Objects.requireNonNullElse(recipient.getSalutation(), &quot;&quot;));</span>
+<span class="fc" id="L85">        return context;</span>
     }
 
     private String merge(Template template, VelocityContext context) {
-<span class="fc" id="L88">        StringWriter writer = new StringWriter();</span>
-<span class="fc" id="L89">        template.merge(context, writer);</span>
-<span class="fc" id="L90">        return writer.toString();</span>
+<span class="fc" id="L89">        StringWriter writer = new StringWriter();</span>
+<span class="fc" id="L90">        template.merge(context, writer);</span>
+<span class="fc" id="L91">        return writer.toString();</span>
     }
 
-<span class="fc" id="L93">    private record RenderedMail(String html, String plaintext) implements MailTemplate {</span>
+<span class="fc" id="L94">    private record RenderedMail(String html, String plaintext) implements MailTemplate {</span>
         @Override
         public String getHtml() {
-<span class="fc" id="L96">            return html;</span>
+<span class="fc" id="L97">            return html;</span>
         }
 
         @Override
         public String getPlaintext() {
-<span class="fc" id="L101">            return plaintext;</span>
+<span class="fc" id="L102">            return plaintext;</span>
         }
     }
 }

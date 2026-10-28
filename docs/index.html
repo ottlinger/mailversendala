@@ -70,20 +70,28 @@
 <h1>mailversendala</h1>
 <p>Application to send out mass emails based on a list of recipients in a CSV file.</p><section><a id="CSV_format"></a>
 <h2>CSV format</h2>
-<p>The application can be fed with a CSV file (separator is ,). It needs to have a header line and the following naming for columns:</p>
+<p>The application accepts UTF-8 CSV files (separator is <code>,</code>) with a header line. The columns <code>firstname</code>, <code>surname</code>, <code>email</code>, and <code>salutation</code> are required. Columns are matched by name, so their order does not matter.</p>
 <table class="table table-striped">
 <thead>
 <tr class="a">
 <th>firstname</th>
 <th>surname</th>
-<th>email</th></tr></thead><tbody>
+<th>email</th>
+<th>salutation</th></tr></thead><tbody>
 <tr class="b">
-<td>Your</td>
-<td>Family</td>
-<td><a href="mailto:foo@bar.com" class="externalLink">foo@bar.com</a></td></tr></tbody>
+<td>Erika</td>
+<td>M&#xfc;ller</td>
+<td><a href="mailto:erika@example.test" class="externalLink">erika@example.test</a></td>
+<td>Liebe</td></tr>
+<tr class="a">
+<td>Peter</td>
+<td>Schmidt</td>
+<td><a href="mailto:peter@example.test" class="externalLink">peter@example.test</a></td>
+<td>Lieber</td></tr></tbody>
 </table>
 
-<p>Email needs to be a complete mail address. An example file is <a href="https://github.com/ottlinger/mailversendala/blob/master/src/test/resources/mailversendala-example.csv" class="externalLink">mailversendala-example.csv</a>.</p></section><section><a id="Project_webpage"></a>
+<p>Enter the greeting prefix in <code>salutation</code>, for example <code>Liebe</code>, <code>Lieber</code>, or <code>Guten Tag</code>, without the recipient's name. The application uses this value as supplied; it does not infer a greeting from the name or gender.</p>
+<p>Every recipient must have a complete mail address in <code>email</code>. Empty values or values consisting only of whitespace are not accepted. Rows with a missing or blank <code>email</code> field are logged and skipped; they are not sent. An example file is <a href="https://github.com/ottlinger/mailversendala/blob/master/src/test/resources/mailversendala-example.csv" class="externalLink">mailversendala-example.csv</a>.</p></section><section><a id="Project_webpage"></a>
 <h2>Project webpage</h2>
 <p>A Maven-generated site report is also available <a href="https://ottlinger.github.io/mailversendala/" class="externalLink">here</a>.</p></section><section><a id="Project_Status"></a>
 <h2>Project Status</h2>
@@ -208,13 +216,13 @@ $ java -Dcsvpath=/tmp/my.csv -jar target/mailversendala-1.0.0-SNAPSHOT-executabl
 <p><strong><code>/tmp/mailversendala/welcome.html</code></strong></p>
 
 <pre class="prettyprint"><code class="language-html">&lt;html&gt;&lt;body&gt;
-&lt;p&gt;Hello ${firstName} ${lastName},&lt;/p&gt;
+&lt;p&gt;${salutation} ${firstName},&lt;/p&gt;
 &lt;p&gt;Your invitation is ready.&lt;/p&gt;
 &lt;/body&gt;&lt;/html&gt;
 </code></pre>
 <p><strong><code>/tmp/mailversendala/welcome.txt</code></strong></p>
 
-<pre class="prettyprint"><code class="language-text">Hello ${firstName} ${lastName},
+<pre class="prettyprint"><code class="language-text">${salutation} ${firstName},
 
 Your invitation is ready.
 </code></pre>
@@ -227,7 +235,8 @@ Your invitation is ready.
      -jar target/mailversendala-1.0.0-SNAPSHOT-executable.jar
 </code></pre>
 <p>SMTP credentials and <code>from</code> must also be configured. Demo mode is enabled by default; set <code>demomode=false</code> only when ready to deliver the messages.</p>
-<p>Available recipient variables are <code>${firstName}</code>, <code>${lastName}</code>, and <code>${email}</code>. <code>${firstname}</code> and <code>${surname}</code> are aliases matching the CSV column names. Missing recipient values become empty strings. References in HTML are HTML-escaped automatically; plain-text values are not HTML-escaped. Use these variables in HTML text or double-quoted attributes, not as JavaScript or unvalidated URLs.</p>
+<p>Available recipient variables are <code>${salutation}</code>, <code>${firstName}</code>, <code>${lastName}</code>, and <code>${email}</code>. <code>${firstname}</code> and <code>${surname}</code> are aliases matching the CSV column names. With the CSV above, <code>${salutation} ${firstName}</code> renders <code>Liebe Erika</code> for Erika and <code>Lieber Peter</code> for Peter, in both HTML and plain text. The template supplies the separating space and any punctuation; the CSV value supplies the greeting.</p>
+<p>References in HTML are HTML-escaped automatically; plain-text values are not HTML-escaped. Use these variables in HTML text or double-quoted attributes, not as JavaScript or unvalidated URLs.</p>
 <p>Both templates are loaded and compiled once per run. Missing or syntactically invalid templates abort the run before delivery; rendering or SMTP errors are counted per recipient. Unknown variables are rendering errors rather than being sent as literal placeholders. Templates can use Velocity directives such as <code>#if</code> and <code>#foreach</code>; only use trusted template files. The template-based sending flow never downloads remote images or attachments.</p></section><section><a id="Inline_images_and_file_attachments"></a>
 <h3>Inline images and file attachments</h3>
 <p>Images referenced by HTML <code>&lt;img src=&quot;...&quot;&gt;</code> elements are automatically embedded in the email using MIME Content-IDs. The image is sent with the message rather than downloaded from a website. PDF documents, images, and other files can also be added as ordinary, downloadable attachments. HTML and plain-text alternatives are preserved in both cases.</p>
