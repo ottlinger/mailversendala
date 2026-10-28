@@ -39,10 +39,10 @@ public class MailingTest {
         assertThat(mailing).isNotNull();
         assertThat(mailing.toString()).isNotNull();
 
-        assertThat(mailing.getEmail()).isEqualTo(EMAIL);
-        assertThat(mailing.getSurname()).isEqualTo(NAME);
-        assertThat(mailing.getFirstname()).isEqualTo(FIRSTNAME);
-        assertThat(mailing.getSalutation()).isEqualTo(SALUTATION);
+        assertThat(mailing.email()).isEqualTo(EMAIL);
+        assertThat(mailing.surname()).isEqualTo(NAME);
+        assertThat(mailing.firstname()).isEqualTo(FIRSTNAME);
+        assertThat(mailing.salutation()).isEqualTo(SALUTATION);
     }
 
     @Test
@@ -52,10 +52,28 @@ public class MailingTest {
         assertThat(mailing).isNotNull();
         assertThat(mailing.toString()).isNotNull();
 
-        assertThat(mailing.getEmail()).isEqualTo(EMAIL);
-        assertThat(mailing.getSurname()).isEqualTo(NAME);
-        assertThat(mailing.getFirstname()).isEqualTo(FIRSTNAME);
-        assertThat(mailing.getSalutation()).isEqualTo(SALUTATION);
+        assertThat(mailing.email()).isEqualTo(EMAIL);
+        assertThat(mailing.surname()).isEqualTo(NAME);
+        assertThat(mailing.firstname()).isEqualTo(FIRSTNAME);
+        assertThat(mailing.salutation()).isEqualTo(SALUTATION);
+    }
+
+    @Test
+    void builderAndConstructorProduceEqualRecords() {
+        Mailing constructed = new Mailing(FIRSTNAME, NAME, EMAIL, SALUTATION);
+        Mailing built = Mailing.builder().firstname(FIRSTNAME).surname(NAME)
+                .email(EMAIL).salutation(SALUTATION).build();
+
+        assertThat(Mailing.class.isRecord()).isTrue();
+        assertThat(built).isEqualTo(constructed).hasSameHashCodeAs(constructed);
+        assertThat(built).isNotEqualTo(new Mailing(FIRSTNAME, NAME, "other@example.test", SALUTATION));
+    }
+
+    @Test
+    void builderAllowsMissingValues() {
+        Mailing mailing = Mailing.builder().build();
+
+        assertThat(mailing).isEqualTo(new Mailing(null, null, null, null));
     }
 
 }

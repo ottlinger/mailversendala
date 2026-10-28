@@ -28,6 +28,9 @@ limitations under the License.
 
 ### Changed
 
+- Convert `Mailing` to an immutable Java record while retaining its Lombok builder
+  and constructor argument order. Replace JavaBean getters with record accessors
+  (`firstname()`, `surname()`, `email()`, `salutation()`); setters are no longer available.
 - Require a non-blank `email` value for every CSV recipient. Rows with a missing,
   empty, or whitespace-only email field are logged and skipped.
 - Migrate GreenMail from 1.6.15 to 2.1.14, implementing the dependency update
@@ -40,6 +43,8 @@ limitations under the License.
 
 ### Tests
 
+- Adapt recipient and CSV parsing tests to record accessors and verify `Mailing`
+  value equality, hash codes, and builder support for omitted values.
 - Cover missing email columns/fields and empty or whitespace-only email values,
   including continued parsing of valid recipients after invalid rows.
 - Cover salutation parsing, rejection of rows without the required column, HTML

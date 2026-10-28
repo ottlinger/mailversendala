@@ -74,14 +74,14 @@ public class VelocityMailTemplate {
 
     private VelocityContext context(Mailing recipient) {
         VelocityContext context = new VelocityContext();
-        String firstName = Objects.requireNonNullElse(recipient.getFirstname(), "");
-        String lastName = Objects.requireNonNullElse(recipient.getSurname(), "");
+        String firstName = Objects.requireNonNullElse(recipient.firstname(), "");
+        String lastName = Objects.requireNonNullElse(recipient.surname(), "");
         context.put("firstName", firstName);
         context.put("lastName", lastName);
         context.put("firstname", firstName);
         context.put("surname", lastName);
-        context.put("email", Objects.requireNonNullElse(recipient.getEmail(), ""));
-        context.put("salutation", Objects.requireNonNullElse(recipient.getSalutation(), ""));
+        context.put("email", Objects.requireNonNullElse(recipient.email(), ""));
+        context.put("salutation", Objects.requireNonNullElse(recipient.salutation(), ""));
         return context;
     }
 

@@ -54,7 +54,7 @@ public class CsvParserTest {
         CsvParser parser = new CsvParser(new StringReader(CSV_INPUT));
         var mailings = parser.parse();
         assertThat(mailings).hasSize(3);
-        assertThat(mailings).extracting(Mailing::getSalutation).containsExactly("Dear", "Hallo", "Привет");
+        assertThat(mailings).extracting(Mailing::salutation).containsExactly("Dear", "Hallo", "Привет");
     }
 
     @Test
@@ -68,10 +68,10 @@ public class CsvParserTest {
 
         var mailings = new CsvParser(new StringReader(csv)).parse();
 
-        assertThat(mailings).extracting(Mailing::getSalutation).containsExactly("Liebe", "Lieber", "Dear");
-        assertThat(mailings).extracting(Mailing::getFirstname).containsExactly("Erika", "Peter", "Ada");
-        assertThat(mailings).extracting(Mailing::getSurname).containsExactly("Müller", "Schmidt", "Lovelace");
-        assertThat(mailings).extracting(Mailing::getEmail)
+        assertThat(mailings).extracting(Mailing::salutation).containsExactly("Liebe", "Lieber", "Dear");
+        assertThat(mailings).extracting(Mailing::firstname).containsExactly("Erika", "Peter", "Ada");
+        assertThat(mailings).extracting(Mailing::surname).containsExactly("Müller", "Schmidt", "Lovelace");
+        assertThat(mailings).extracting(Mailing::email)
                 .containsExactly("erika@example.test", "peter@example.test", "ada@example.test");
     }
 
@@ -99,8 +99,8 @@ public class CsvParserTest {
         var mailings = new CsvParser(new StringReader(csv)).parse();
 
         assertThat(mailings).hasSize(1);
-        assertThat(mailings.get(0).getEmail()).isEqualTo("peter@example.test");
-        assertThat(mailings.get(0).getFirstname()).isEqualTo("Peter");
+        assertThat(mailings.get(0).email()).isEqualTo("peter@example.test");
+        assertThat(mailings.get(0).firstname()).isEqualTo("Peter");
     }
 
     @Test

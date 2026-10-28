@@ -159,7 +159,7 @@ public class SendOut {
     void send(MailTemplate template, MailResources resources) throws EmailException {
         htmlEmail.setCharset(Charsets.UTF_8.name());
         htmlEmail.setFrom(mailConfig.getFrom());
-        htmlEmail.addTo(recipient.getEmail());
+        htmlEmail.addTo(recipient.email());
         htmlEmail.setSubject(mailConfig.getSubject());
         resources.applyTo(htmlEmail, template);
         if (mailConfig.sendOutMails()) {
@@ -173,7 +173,7 @@ public class SendOut {
      */
     public void send() throws EmailException {
         email.setFrom(mailConfig.getFrom());
-        email.addTo(this.recipient.getEmail());
+        email.addTo(this.recipient.email());
 
         email.setCharset(Charsets.UTF_8.name());
 
@@ -198,7 +198,7 @@ public class SendOut {
      * Send HTML mail using the supplied inline image, without requiring a remote resource.
      */
     void sendComplex(URL imageUrl) throws EmailException {
-        htmlEmail.addTo(this.recipient.getEmail(), this.recipient.getFirstname() + " " + this.recipient.getSurname());
+        htmlEmail.addTo(this.recipient.email(), this.recipient.firstname() + " " + this.recipient.surname());
         htmlEmail.setFrom(mailConfig.getFrom(), "Me");
         htmlEmail.setSubject("HTML" + mailConfig.getSubject() + " " + new Date());
 
