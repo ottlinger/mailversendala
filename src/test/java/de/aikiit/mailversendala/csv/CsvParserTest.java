@@ -31,6 +31,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class CsvParserTest {
 
+    /**
+     * Example contents of a CSV with 3 recipients.
+     */
     public static final String CSV_INPUT = """
             firstname,surname,email,salutation
             Me,Again,foo@bar.com,Dear
