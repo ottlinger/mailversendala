@@ -82,14 +82,14 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>      <strong class="jxr_keyword">private</strong> VelocityContext context(<a name="Mailing" href="../../../../de/aikiit/mailversendala/csv/Mailing.html#Mailing">Mailing</a> recipient) {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>          VelocityContext context = <strong class="jxr_keyword">new</strong> VelocityContext();
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>          String firstName = Objects.requireNonNullElse(recipient.getFirstname(), <span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>          String lastName = Objects.requireNonNullElse(recipient.getSurname(), <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>          String firstName = Objects.requireNonNullElse(recipient.firstname(), <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>          String lastName = Objects.requireNonNullElse(recipient.surname(), <span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>          context.put(<span class="jxr_string">"firstName"</span>, firstName);
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>          context.put(<span class="jxr_string">"lastName"</span>, lastName);
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>          context.put(<span class="jxr_string">"firstname"</span>, firstName);
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>          context.put(<span class="jxr_string">"surname"</span>, lastName);
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>          context.put(<span class="jxr_string">"email"</span>, Objects.requireNonNullElse(recipient.getEmail(), <span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>          context.put(<span class="jxr_string">"salutation"</span>, Objects.requireNonNullElse(recipient.getSalutation(), <span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>          context.put(<span class="jxr_string">"email"</span>, Objects.requireNonNullElse(recipient.email(), <span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>          context.put(<span class="jxr_string">"salutation"</span>, Objects.requireNonNullElse(recipient.salutation(), <span class="jxr_string">""</span>));
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>          <strong class="jxr_keyword">return</strong> context;
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>      }
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  

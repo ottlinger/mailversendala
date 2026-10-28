@@ -167,7 +167,7 @@
 <a class="jxr_linenumber" name="L159" href="#L159">159</a>     <strong class="jxr_keyword">void</strong> send(<a name="MailTemplate" href="../../../de/aikiit/mailversendala/template/MailTemplate.html#MailTemplate">MailTemplate</a> template, <a name="MailResources" href="../../../de/aikiit/mailversendala/template/MailResources.html#MailResources">MailResources</a> resources) <strong class="jxr_keyword">throws</strong> EmailException {
 <a class="jxr_linenumber" name="L160" href="#L160">160</a>         htmlEmail.setCharset(Charsets.UTF_8.name());
 <a class="jxr_linenumber" name="L161" href="#L161">161</a>         htmlEmail.setFrom(mailConfig.getFrom());
-<a class="jxr_linenumber" name="L162" href="#L162">162</a>         htmlEmail.addTo(recipient.getEmail());
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>         htmlEmail.addTo(recipient.email());
 <a class="jxr_linenumber" name="L163" href="#L163">163</a>         htmlEmail.setSubject(mailConfig.getSubject());
 <a class="jxr_linenumber" name="L164" href="#L164">164</a>         resources.applyTo(htmlEmail, template);
 <a class="jxr_linenumber" name="L165" href="#L165">165</a>         <strong class="jxr_keyword">if</strong> (mailConfig.sendOutMails()) {
@@ -181,7 +181,7 @@
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L174" href="#L174">174</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> send() <strong class="jxr_keyword">throws</strong> EmailException {
 <a class="jxr_linenumber" name="L175" href="#L175">175</a>         email.setFrom(mailConfig.getFrom());
-<a class="jxr_linenumber" name="L176" href="#L176">176</a>         email.addTo(<strong class="jxr_keyword">this</strong>.recipient.getEmail());
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>         email.addTo(<strong class="jxr_keyword">this</strong>.recipient.email());
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 
 <a class="jxr_linenumber" name="L178" href="#L178">178</a>         email.setCharset(Charsets.UTF_8.name());
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 
@@ -206,7 +206,7 @@
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">     * Send HTML mail using the supplied inline image, without requiring a remote resource.</em>
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L200" href="#L200">200</a>     <strong class="jxr_keyword">void</strong> sendComplex(URL imageUrl) <strong class="jxr_keyword">throws</strong> EmailException {
-<a class="jxr_linenumber" name="L201" href="#L201">201</a>         htmlEmail.addTo(<strong class="jxr_keyword">this</strong>.recipient.getEmail(), <strong class="jxr_keyword">this</strong>.recipient.getFirstname() + <span class="jxr_string">" "</span> + <strong class="jxr_keyword">this</strong>.recipient.getSurname());
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>         htmlEmail.addTo(<strong class="jxr_keyword">this</strong>.recipient.email(), <strong class="jxr_keyword">this</strong>.recipient.firstname() + <span class="jxr_string">" "</span> + <strong class="jxr_keyword">this</strong>.recipient.surname());
 <a class="jxr_linenumber" name="L202" href="#L202">202</a>         htmlEmail.setFrom(mailConfig.getFrom(), <span class="jxr_string">"Me"</span>);
 <a class="jxr_linenumber" name="L203" href="#L203">203</a>         htmlEmail.setSubject(<span class="jxr_string">"HTML"</span> + mailConfig.getSubject() + <span class="jxr_string">" "</span> + <strong class="jxr_keyword">new</strong> Date());
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 

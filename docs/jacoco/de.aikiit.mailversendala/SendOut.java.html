@@ -159,7 +159,7 @@ public class SendOut {
     void send(MailTemplate template, MailResources resources) throws EmailException {
 <span class="fc" id="L160">        htmlEmail.setCharset(Charsets.UTF_8.name());</span>
 <span class="fc" id="L161">        htmlEmail.setFrom(mailConfig.getFrom());</span>
-<span class="fc" id="L162">        htmlEmail.addTo(recipient.getEmail());</span>
+<span class="fc" id="L162">        htmlEmail.addTo(recipient.email());</span>
 <span class="fc" id="L163">        htmlEmail.setSubject(mailConfig.getSubject());</span>
 <span class="fc" id="L164">        resources.applyTo(htmlEmail, template);</span>
 <span class="fc bfc" id="L165" title="All 2 branches covered.">        if (mailConfig.sendOutMails()) {</span>
@@ -173,7 +173,7 @@ public class SendOut {
      */
     public void send() throws EmailException {
 <span class="fc" id="L175">        email.setFrom(mailConfig.getFrom());</span>
-<span class="fc" id="L176">        email.addTo(this.recipient.getEmail());</span>
+<span class="fc" id="L176">        email.addTo(this.recipient.email());</span>
 
 <span class="fc" id="L178">        email.setCharset(Charsets.UTF_8.name());</span>
 
@@ -198,7 +198,7 @@ public class SendOut {
      * Send HTML mail using the supplied inline image, without requiring a remote resource.
      */
     void sendComplex(URL imageUrl) throws EmailException {
-<span class="fc" id="L201">        htmlEmail.addTo(this.recipient.getEmail(), this.recipient.getFirstname() + &quot; &quot; + this.recipient.getSurname());</span>
+<span class="fc" id="L201">        htmlEmail.addTo(this.recipient.email(), this.recipient.firstname() + &quot; &quot; + this.recipient.surname());</span>
 <span class="fc" id="L202">        htmlEmail.setFrom(mailConfig.getFrom(), &quot;Me&quot;);</span>
 <span class="fc" id="L203">        htmlEmail.setSubject(&quot;HTML&quot; + mailConfig.getSubject() + &quot; &quot; + new Date());</span>
 

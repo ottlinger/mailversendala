@@ -68,6 +68,7 @@
 <h3>Changed</h3>
 <ul>
 
+<li>Convert <code>Mailing</code> to an immutable Java record while retaining its Lombok builder and constructor argument order. Replace JavaBean getters with record accessors (<code>firstname()</code>, <code>surname()</code>, <code>email()</code>, <code>salutation()</code>); setters are no longer available.</li>
 <li>Require a non-blank <code>email</code> value for every CSV recipient. Rows with a missing, empty, or whitespace-only email field are logged and skipped.</li>
 <li>Migrate GreenMail from 1.6.15 to 2.1.14, implementing the dependency update proposed in <a href="https://github.com/ottlinger/mailversendala/pull/552" class="externalLink">PR #552</a>.</li>
 <li>Replace Commons Email 1.6.0 with Commons Email 2's Jakarta variant (<code>commons-email2-jakarta</code> 2.0.0-M1, a milestone release) and migrate application and test imports from <code>javax.mail</code> to <code>jakarta.mail</code> for GreenMail 2 compatibility.</li>
@@ -76,6 +77,7 @@
 <h3>Tests</h3>
 <ul>
 
+<li>Adapt recipient and CSV parsing tests to record accessors and verify <code>Mailing</code> value equality, hash codes, and builder support for omitted values.</li>
 <li>Cover missing email columns/fields and empty or whitespace-only email values, including continued parsing of valid recipients after invalid rows.</li>
 <li>Cover salutation parsing, rejection of rows without the required column, HTML escaping, and personalized HTML/plain-text delivery through GreenMail.</li>
 <li>Retain coverage of authenticated SMTPS delivery, MIME content, attachments, invalid credentials, demo mode, and rejection of plaintext fallback.</li>

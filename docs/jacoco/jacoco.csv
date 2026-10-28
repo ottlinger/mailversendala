@@ -1,5 +1,6 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 mailversendala,de.aikiit.mailversendala.csv,CsvParser,0,73,0,4,0,25,0,6,0,4
+mailversendala,de.aikiit.mailversendala.csv,Mailing,0,15,0,0,0,1,0,1,0,1
 mailversendala,de.aikiit.mailversendala.template,MailResources,29,380,6,44,6,71,6,24,0,5
 mailversendala,de.aikiit.mailversendala.template,FileMailTemplate,0,59,0,0,0,10,0,6,0,6
 mailversendala,de.aikiit.mailversendala.template,VelocityMailTemplate,0,153,0,0,0,31,0,4,0,4
