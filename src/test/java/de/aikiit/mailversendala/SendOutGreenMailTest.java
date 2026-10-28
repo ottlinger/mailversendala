@@ -22,22 +22,22 @@ import de.aikiit.mailversendala.template.VelocityMailTemplate;
 import de.aikiit.mailversendala.template.MailResources;
 import de.aikiit.mailversendala.template.FileMailTemplate;
 import org.jsoup.Jsoup;
-import org.apache.commons.mail.Email;
-import org.apache.commons.mail.EmailConstants;
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.HtmlEmail;
-import org.apache.commons.mail.SimpleEmail;
+import org.apache.commons.mail2.jakarta.Email;
+import org.apache.commons.mail2.core.EmailConstants;
+import org.apache.commons.mail2.core.EmailException;
+import org.apache.commons.mail2.jakarta.HtmlEmail;
+import org.apache.commons.mail2.jakarta.SimpleEmail;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import javax.mail.AuthenticationFailedException;
-import javax.mail.Message;
-import javax.mail.Multipart;
-import javax.mail.Part;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.AuthenticationFailedException;
+import jakarta.mail.Message;
+import jakarta.mail.Multipart;
+import jakarta.mail.Part;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -172,7 +172,7 @@ class SendOutGreenMailTest {
 
     @Test
     void refusesPlaintextFallbackWhenServerDoesNotSupportStartTls() throws Exception {
-        // GreenMail 1.6.x deliberately has no STARTTLS support on its SMTP listener.
+        // GreenMail's SMTP listener does not advertise STARTTLS.
         GreenMail smtpOnly = new GreenMail(new ServerSetup(0, "127.0.0.1", ServerSetup.PROTOCOL_SMTP));
         try {
             smtpOnly.setUser(RECIPIENT, USERNAME, PASSWORD);

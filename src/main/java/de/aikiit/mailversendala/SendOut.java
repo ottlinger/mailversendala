@@ -24,7 +24,11 @@ import de.aikiit.mailversendala.csv.Mailing;
 import de.aikiit.mailversendala.template.MailResources;
 import de.aikiit.mailversendala.template.MailTemplate;
 import de.aikiit.mailversendala.template.VelocityMailTemplate;
-import org.apache.commons.mail.*;
+import org.apache.commons.mail2.core.EmailException;
+import org.apache.commons.mail2.jakarta.DefaultAuthenticator;
+import org.apache.commons.mail2.jakarta.Email;
+import org.apache.commons.mail2.jakarta.HtmlEmail;
+import org.apache.commons.mail2.jakarta.SimpleEmail;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

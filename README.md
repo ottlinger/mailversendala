@@ -38,7 +38,12 @@ A Maven-generated site report is also available [here](https://ottlinger.github.
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/f27ed60267144c1a88e12f0539ff9a6a)](https://app.codacy.com/gh/ottlinger/mailversendala/dashboard)
 ## How to run and use the application
 
-You need to checkout the application and build it with the help of [Java](https://java.sun.com) and [Maven](https://maven.apache.org/).
+You need to checkout the application and build it with the help of [Java](https://java.sun.com) (17 or newer) and [Maven](https://maven.apache.org/).
+
+Mail delivery uses Commons Email 2's Jakarta variant (`2.0.0-M1`, currently a milestone release)
+with Eclipse Angus as the Jakarta Mail/Activation implementation. Local delivery tests use
+GreenMail 2.1.x with the same mail stack; the executable JAR includes the runtime providers
+but not GreenMail or the legacy `javax.mail`/`javax.activation` APIs.
 
 ```
 $ git clone https://github.com/ottlinger/mailversendala.git
@@ -235,6 +240,12 @@ in `src/test/resources/template/img/readme.txt`.
 
 In order to properly integrate the project into your IDE you need to setup lombok support -
 please follow the guidelines about integration, e.g. [Eclipse integration](https://projectlombok.org/setup/eclipse).
+
+## Changelog
+
+See [CHANGELOG.md](https://github.com/ottlinger/mailversendala/blob/master/CHANGELOG.md)
+for changes, including the GreenMail 2 migration related to
+[PR #552](https://github.com/ottlinger/mailversendala/pull/552).
 
 ## Copyright
 

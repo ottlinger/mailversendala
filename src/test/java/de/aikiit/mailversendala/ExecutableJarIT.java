@@ -21,6 +21,7 @@ import org.junit.jupiter.api.io.TempDir;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
+import java.util.jar.JarFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,6 +32,23 @@ class ExecutableJarIT {
 
     @TempDir
     Path directory;
+
+    @Test
+    void bundlesJakartaMailAndActivationProvidersWithoutLegacyJavaxMail() throws Exception {
+        try (JarFile jar = new JarFile(System.getProperty("executableJar"))) {
+            assertThat(jar.getEntry("jakarta/mail/Session.class")).isNotNull();
+            assertThat(jar.getEntry("jakarta/activation/DataHandler.class")).isNotNull();
+            assertThat(jar.getEntry("org/eclipse/angus/mail/smtp/SMTPTransport.class")).isNotNull();
+            assertThat(jar.getEntry("META-INF/services/jakarta.mail.Provider")).isNotNull();
+            assertThat(jar.getEntry("META-INF/services/jakarta.mail.util.StreamProvider")).isNotNull();
+            assertThat(jar.getEntry("META-INF/services/jakarta.activation.spi.MailcapRegistryProvider")).isNotNull();
+            assertThat(jar.getEntry("META-INF/services/jakarta.activation.spi.MimeTypeRegistryProvider")).isNotNull();
+            assertThat(jar.getEntry("javax/mail/Session.class")).isNull();
+            assertThat(jar.getEntry("javax/activation/DataHandler.class")).isNull();
+            assertThat(jar.getEntry("com/sun/mail/smtp/SMTPTransport.class")).isNull();
+            assertThat(jar.getEntry("com/icegreen/greenmail/util/GreenMail.class")).isNull();
+        }
+    }
 
     @Test
     void startsPackagedApplicationWithLoggingAndExternalTemplates() throws Exception {

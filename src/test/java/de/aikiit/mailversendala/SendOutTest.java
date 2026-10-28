@@ -19,7 +19,7 @@ package de.aikiit.mailversendala;
 
 
 import de.aikiit.mailversendala.csv.Mailing;
-import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail2.core.EmailException;
 import org.junit.jupiter.api.Test;
 
 import java.net.MalformedURLException;
