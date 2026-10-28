@@ -22,6 +22,10 @@ import lombok.Builder;
 
 /**
  * Comprises a mailing recipient.
+ * @param firstname  firstname in the mailing.
+ * @param surname    surname in the mailing.
+ * @param email      required, non-blank email address used to send the mailing to.
+ * @param salutation greeting prefix, for example "Liebe" or "Lieber" in German.
  */
 @Builder
 public record Mailing(
