@@ -200,13 +200,13 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="send(de.aikiit.mailversendala.template.MailTemplate)">
 <h3>send</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">send</span><wbr><span class="parameters">(<a href="template/MailTemplate.html" title="interface in de.aikiit.mailversendala.template">MailTemplate</a>&nbsp;template)</span>
-          throws <span class="exceptions">org.apache.commons.mail.EmailException</span></div>
+          throws <span class="exceptions">org.apache.commons.mail2.core.EmailException</span></div>
 <div class="block">Send a rendered message with HTML and plain-text alternatives in UTF-8.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>template</code> - rendered message bodies.</dd>
 <dt>Throws:</dt>
-<dd><code>org.apache.commons.mail.EmailException</code> - if message construction or delivery fails.</dd>
+<dd><code>org.apache.commons.mail2.core.EmailException</code> - if message construction or delivery fails.</dd>
 </dl>
 </section>
 </li>
@@ -214,11 +214,11 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="send()">
 <h3>send</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">send</span>()
-          throws <span class="exceptions">org.apache.commons.mail.EmailException</span></div>
+          throws <span class="exceptions">org.apache.commons.mail2.core.EmailException</span></div>
 <div class="block">Send out an email that contains only text contents.</div>
 <dl class="notes">
 <dt>Throws:</dt>
-<dd><code>org.apache.commons.mail.EmailException</code> - in case of errors.</dd>
+<dd><code>org.apache.commons.mail2.core.EmailException</code> - in case of errors.</dd>
 </dl>
 </section>
 </li>
@@ -226,12 +226,12 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="sendComplex()">
 <h3>sendComplex</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendComplex</span>()
-                 throws <span class="exceptions">org.apache.commons.mail.EmailException,
+                 throws <span class="exceptions">org.apache.commons.mail2.core.EmailException,
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/MalformedURLException.html" title="class or interface in java.net" class="external-link">MalformedURLException</a></span></div>
 <div class="block">Send out an email with plain text and HTML contents.</div>
 <dl class="notes">
 <dt>Throws:</dt>
-<dd><code>org.apache.commons.mail.EmailException</code> - in case of mail-related errors.</dd>
+<dd><code>org.apache.commons.mail2.core.EmailException</code> - in case of mail-related errors.</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/MalformedURLException.html" title="class or interface in java.net" class="external-link">MalformedURLException</a></code> - in case of problem while generating the HTML-part of.</dd>
 </dl>
 </section>

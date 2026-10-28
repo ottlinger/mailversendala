@@ -16,14 +16,14 @@
 package de.aikiit.mailversendala.template;
 
 import de.aikiit.mailversendala.MailConfig;
-import org.apache.commons.mail.EmailAttachment;
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.HtmlEmail;
+import org.apache.commons.mail2.jakarta.EmailAttachment;
+import org.apache.commons.mail2.core.EmailException;
+import org.apache.commons.mail2.jakarta.HtmlEmail;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import javax.mail.util.ByteArrayDataSource;
+import jakarta.mail.util.ByteArrayDataSource;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
