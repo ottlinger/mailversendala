@@ -29,10 +29,12 @@ public class MailingTest {
     private static final String EMAIL = "foo@bar.uk";
     private static final String NAME = "FooBarUK";
     private static final String FIRSTNAME = "Deforest";
+    private static final String SALUTATION = "Dear";
 
     @Test
     public void objectCreationWithBuilder() {
-        Mailing mailing = Mailing.builder().email(EMAIL).surname(NAME).firstname(FIRSTNAME).build();
+        Mailing mailing = Mailing.builder().email(EMAIL).surname(NAME).firstname(FIRSTNAME)
+                .salutation(SALUTATION).build();
 
         assertThat(mailing).isNotNull();
         assertThat(mailing.toString()).isNotNull();
@@ -40,11 +42,12 @@ public class MailingTest {
         assertThat(mailing.getEmail()).isEqualTo(EMAIL);
         assertThat(mailing.getSurname()).isEqualTo(NAME);
         assertThat(mailing.getFirstname()).isEqualTo(FIRSTNAME);
+        assertThat(mailing.getSalutation()).isEqualTo(SALUTATION);
     }
 
     @Test
     public void objectCreationWithoutBuilder() {
-        Mailing mailing = new Mailing(FIRSTNAME, NAME, EMAIL);
+        Mailing mailing = new Mailing(FIRSTNAME, NAME, EMAIL, SALUTATION);
 
         assertThat(mailing).isNotNull();
         assertThat(mailing.toString()).isNotNull();
@@ -52,6 +55,7 @@ public class MailingTest {
         assertThat(mailing.getEmail()).isEqualTo(EMAIL);
         assertThat(mailing.getSurname()).isEqualTo(NAME);
         assertThat(mailing.getFirstname()).isEqualTo(FIRSTNAME);
+        assertThat(mailing.getSalutation()).isEqualTo(SALUTATION);
     }
 
 }

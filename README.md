@@ -4,13 +4,23 @@ Application to send out mass emails based on a list of recipients in a CSV file.
 
 ## CSV format
 
-The application can be fed with a CSV file (separator is ,). It needs to have a header line and the following naming for columns:
+The application accepts UTF-8 CSV files (separator is `,`) with a header line.
+The columns `firstname`, `surname`, `email`, and `salutation` are required.
+Columns are matched by name, so their order does not matter.
 
-| firstname  | surname | email |
-| --------------------- | ----------- | ----------------------- |
-| Your | Family | foo@bar.com |
+| firstname | surname | email | salutation |
+| --------- | ------- | ----- | ---------- |
+| Erika | Müller | erika@example.test | Liebe |
+| Peter | Schmidt | peter@example.test | Lieber |
 
-Email needs to be a complete mail address.
+Enter the greeting prefix in `salutation`,
+for example `Liebe`, `Lieber`, or `Guten Tag`, without the recipient's name.
+The application uses this value as supplied; it does not infer a greeting from the
+name or gender.
+
+Every recipient must have a complete mail address in `email`. Empty values or
+values consisting only of whitespace are not accepted. Rows with a missing or
+blank `email` field are logged and skipped; they are not sent.
 An example file is [mailversendala-example.csv](./src/test/resources/mailversendala-example.csv).
 
 ## Project webpage
@@ -126,14 +136,14 @@ Create two UTF-8 files outside the JAR, for example:
 **`/tmp/mailversendala/welcome.html`**
 ```html
 <html><body>
-<p>Hello ${firstName} ${lastName},</p>
+<p>${salutation} ${firstName},</p>
 <p>Your invitation is ready.</p>
 </body></html>
 ```
 
 **`/tmp/mailversendala/welcome.txt`**
 ```text
-Hello ${firstName} ${lastName},
+${salutation} ${firstName},
 
 Your invitation is ready.
 ```
@@ -152,9 +162,14 @@ java -Dtemplatepath=/tmp/mailversendala \
 SMTP credentials and `from` must also be configured. Demo mode is enabled by default;
 set `demomode=false` only when ready to deliver the messages.
 
-Available recipient variables are `${firstName}`, `${lastName}`, and `${email}`.
-`${firstname}` and `${surname}` are aliases matching the CSV column names. Missing recipient values become empty strings. References in HTML are
-HTML-escaped automatically; plain-text values are not HTML-escaped. Use these
+Available recipient variables are `${salutation}`, `${firstName}`, `${lastName}`,
+and `${email}`. `${firstname}` and `${surname}` are aliases matching the CSV column
+names. With the CSV above, `${salutation} ${firstName}` renders `Liebe Erika` for
+Erika and `Lieber Peter` for Peter, in both HTML and plain text. The template supplies
+the separating space and any punctuation; the CSV value supplies the greeting.
+
+References in HTML are HTML-escaped automatically; plain-text values are not
+HTML-escaped. Use these
 variables in HTML text or double-quoted attributes, not as JavaScript or unvalidated URLs.
 
 Both templates are loaded and compiled once per run. Missing or syntactically invalid

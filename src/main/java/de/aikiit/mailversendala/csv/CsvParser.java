@@ -55,16 +55,21 @@ public class CsvParser {
             Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader);
             records.forEach(record -> {
                         try {
+                            String email = record.get(Headers.EMAIL);
+                            if (email.isBlank()) {
+                                throw new IllegalArgumentException("Required field 'email' must not be blank");
+                            }
                             Mailing mailing = Mailing.builder().//
-                                    email(record.get(Headers.EMAIL)).//
+                                    email(email).//
                                     firstname(record.get(Headers.FIRSTNAME)).//
                                     surname(record.get(Headers.SURNAME)).//
+                                    salutation(record.get(Headers.SALUTATION)).//
                                     build();
 
                             LOG.debug("Parsed and added mailing: {}", mailing);
                             results.add(mailing);
                         } catch (IllegalArgumentException e) {
-                            LOG.error("Unable to parse CSV-row '{}'.", record);
+                            LOG.error("Unable to parse CSV-row '{}': {}", record, e.getMessage());
                         }
                     }
             );

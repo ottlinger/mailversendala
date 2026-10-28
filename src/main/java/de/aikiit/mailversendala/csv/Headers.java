@@ -21,7 +21,7 @@ package de.aikiit.mailversendala.csv;
 import de.aikiit.mailversendala.MailConfig;
 
 /**
- * Contains the headers that need to be in the CSV-file.
+ * Contains the required CSV headers.
  *
  * @see MailConfig
  */
@@ -35,7 +35,11 @@ public interface Headers {
      */
     String SURNAME = "surname";
     /**
-     * Email used to send the mailing to.
+     * Required, non-blank email address used to send the mailing to.
      */
     String EMAIL = "email";
+    /**
+     * Greeting prefix, for example "Liebe" or "Lieber".
+     */
+    String SALUTATION = "salutation";
 }

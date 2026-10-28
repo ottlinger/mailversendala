@@ -18,8 +18,18 @@ limitations under the License.
 
 ## Unreleased
 
+### Added
+
+- Add the required `salutation` CSV column and `${salutation}` template
+  variable for recipient-specific greeting prefixes. `${salutation} ${firstName}`
+  renders `Liebe Erika` or `Lieber Peter` when the CSV contains `Liebe` or `Lieber`.
+  CSV files must include the new column.
+- Document greeting templates and update the example CSV and templates.
+
 ### Changed
 
+- Require a non-blank `email` value for every CSV recipient. Rows with a missing,
+  empty, or whitespace-only email field are logged and skipped.
 - Migrate GreenMail from 1.6.15 to 2.1.14, implementing the dependency update
   proposed in [PR #552](https://github.com/ottlinger/mailversendala/pull/552).
 - Replace Commons Email 1.6.0 with Commons Email 2's Jakarta variant
@@ -30,6 +40,10 @@ limitations under the License.
 
 ### Tests
 
+- Cover missing email columns/fields and empty or whitespace-only email values,
+  including continued parsing of valid recipients after invalid rows.
+- Cover salutation parsing, rejection of rows without the required column, HTML
+  escaping, and personalized HTML/plain-text delivery through GreenMail.
 - Retain coverage of authenticated SMTPS delivery, MIME content, attachments,
   invalid credentials, demo mode, and rejection of plaintext fallback.
 - Verify that the executable JAR includes Jakarta Mail/Activation APIs and provider

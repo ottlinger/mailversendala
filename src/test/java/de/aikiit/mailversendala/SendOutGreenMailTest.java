@@ -18,6 +18,7 @@ package de.aikiit.mailversendala;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
 import de.aikiit.mailversendala.csv.Mailing;
+import de.aikiit.mailversendala.csv.CsvParser;
 import de.aikiit.mailversendala.template.VelocityMailTemplate;
 import de.aikiit.mailversendala.template.MailResources;
 import de.aikiit.mailversendala.template.FileMailTemplate;
@@ -39,6 +40,7 @@ import jakarta.mail.Part;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -232,6 +234,36 @@ class SendOutGreenMailTest {
                 .contains("Ada Lovelace").doesNotContain("Grace Hopper");
         assertThat(onlyPartOfType(secondParts, EmailConstants.TEXT_HTML).getContent().toString())
                 .contains("Grace Hopper").doesNotContain("Ada Lovelace");
+    }
+
+    @Test
+    void deliversPersonalizedSalutationsFromCsv(@TempDir Path directory) throws Exception {
+        Files.writeString(directory.resolve("greeting.html"), "<p>${salutation} ${firstName}</p>");
+        Files.writeString(directory.resolve("greeting.txt"), "${salutation} ${firstName}");
+        when(config.getTemplatePath()).thenReturn(directory.toString());
+        when(config.getHtmlTemplate()).thenReturn("greeting.html");
+        when(config.getPlaintextTemplate()).thenReturn("greeting.txt");
+        VelocityMailTemplate templates = new VelocityMailTemplate(config);
+        String csv = "firstname,surname,email,salutation\n"
+                + "Erika,Müller," + RECIPIENT + ",Liebe\n"
+                + "Peter,Schmidt," + RECIPIENT + ",Lieber\n";
+
+        for (Mailing recipient : new CsvParser(new StringReader(csv)).parse()) {
+            newSendOut(recipient).send(templates.render(recipient));
+        }
+
+        assertThat(greenMail.waitForIncomingEmail(5000, 2)).isTrue();
+        MimeMessage[] messages = greenMail.getReceivedMessages();
+        assertThat(messages).hasSize(2);
+        String[] greetings = {"Liebe Erika", "Lieber Peter"};
+        for (int i = 0; i < messages.length; i++) {
+            List<Part> parts = new ArrayList<>();
+            collectParts(messages[i], parts);
+            assertThat(onlyPartOfType(parts, EmailConstants.TEXT_HTML).getContent().toString())
+                    .isEqualTo("<p>" + greetings[i] + "</p>");
+            assertThat(onlyPartOfType(parts, EmailConstants.TEXT_PLAIN).getContent().toString())
+                    .isEqualTo(greetings[i]);
+        }
     }
 
     @Test

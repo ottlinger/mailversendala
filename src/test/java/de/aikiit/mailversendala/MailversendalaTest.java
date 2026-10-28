@@ -95,7 +95,8 @@ public class MailversendalaTest {
     @Test
     void missingImageForLaterRecipientAbortsBeforeFirstDelivery() throws IOException {
         Path csv = testFolder.resolve("image-recipients.csv");
-        Files.writeString(csv, "firstname,surname,email\nvalid,One,first@example.test\nmissing,Two,second@example.test\n");
+        Files.writeString(csv, "firstname,surname,email,salutation\n"
+                + "valid,One,first@example.test,Dear\nmissing,Two,second@example.test,Dear\n");
         Files.writeString(testFolder.resolve("images.html"), "<p>Hello ${firstname}</p><img src='${firstname}.png'>");
         Files.writeString(testFolder.resolve("images.txt"), "Hello ${firstname}");
         try (var input = getClass().getResourceAsStream("/template/img/monkey-toy-16-118729.png")) {

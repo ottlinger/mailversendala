@@ -55,9 +55,9 @@ class ExecutableJarIT {
         Path jar = Path.of(System.getProperty("executableJar")).toAbsolutePath();
         assertThat(jar).isRegularFile();
         Path csv = directory.resolve("recipients.csv");
-        Files.writeString(csv, "firstname,surname,email\nAda,Lovelace,recipient@example.test\n");
+        Files.writeString(csv, "firstname,surname,email,salutation\nAda,Lovelace,recipient@example.test,Dear\n");
         Files.writeString(directory.resolve("welcome.html"),
-                "<p>Hello ${firstName} ${lastName}</p><img src='images/logo.png'>");
+                "<p>${salutation} ${firstName} ${lastName}</p><img src='images/logo.png'>");
         Files.createDirectory(directory.resolve("images"));
         Files.createDirectory(directory.resolve("attachments"));
         try (var image = getClass().getResourceAsStream("/template/img/monkey-toy-16-118729.png");
@@ -65,7 +65,7 @@ class ExecutableJarIT {
             Files.copy(image, directory.resolve("images/logo.png"));
             Files.copy(pdf, directory.resolve("attachments/information.pdf"));
         }
-        Files.writeString(directory.resolve("welcome.txt"), "Hello ${firstName} ${lastName}");
+        Files.writeString(directory.resolve("welcome.txt"), "${salutation} ${firstName} ${lastName}");
         Path outputFile = directory.resolve("application.log");
 
         Process process = new ProcessBuilder(

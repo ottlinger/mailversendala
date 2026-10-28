@@ -17,11 +17,13 @@ package de.aikiit.mailversendala.template;
 
 import de.aikiit.mailversendala.MailConfig;
 import de.aikiit.mailversendala.csv.Mailing;
+import de.aikiit.mailversendala.csv.CsvParser;
 import org.apache.velocity.exception.VelocityException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -65,7 +67,8 @@ class VelocityMailTemplateTest {
 
     @Test
     void treatsAbsentRecipientFieldsAsEmptyStringsAndPreservesWhitespace() throws Exception {
-        VelocityMailTemplate templates = templates("  <p>${firstname}${surname}${email}</p>\n", "\n${firstName}${lastName}\n");
+        VelocityMailTemplate templates = templates("  <p>${salutation}${firstname}${surname}${email}</p>\n",
+                "\n${salutation}${firstName}${lastName}\n");
 
         MailTemplate result = templates.render(Mailing.builder().build());
 
@@ -82,6 +85,38 @@ class VelocityMailTemplateTest {
 
         assertThat(result.getHtml()).isEqualTo("Hello Ada");
         assertThat(result.getPlaintext()).isEqualTo("Hello Ada");
+    }
+
+    @Test
+    void rendersIndividualSalutationsFromCsvInBothAlternatives() throws Exception {
+        String csv = """
+                firstname,surname,email,salutation
+                Erika,Müller,erika@example.test,Liebe
+                Peter,Schmidt,peter@example.test,Lieber
+                """;
+        VelocityMailTemplate templates = templates("<p>${salutation} ${firstName}</p>",
+                "${salutation} ${firstName}");
+        var recipients = new CsvParser(new StringReader(csv)).parse();
+
+        MailTemplate erika = templates.render(recipients.get(0));
+        MailTemplate peter = templates.render(recipients.get(1));
+
+        assertThat(erika.getHtml()).isEqualTo("<p>Liebe Erika</p>");
+        assertThat(erika.getPlaintext()).isEqualTo("Liebe Erika");
+        assertThat(peter.getHtml()).isEqualTo("<p>Lieber Peter</p>");
+        assertThat(peter.getPlaintext()).isEqualTo("Lieber Peter");
+    }
+
+    @Test
+    void escapesSalutationOnlyInHtml() throws Exception {
+        VelocityMailTemplate templates = templates("<p>${salutation} ${firstName}</p>",
+                "${salutation} ${firstName}");
+        Mailing recipient = Mailing.builder().salutation("Liebe <Freundin> & Kollegin").firstname("Erika").build();
+
+        MailTemplate result = templates.render(recipient);
+
+        assertThat(result.getHtml()).isEqualTo("<p>Liebe &lt;Freundin&gt; &amp; Kollegin Erika</p>");
+        assertThat(result.getPlaintext()).isEqualTo("Liebe <Freundin> & Kollegin Erika");
     }
 
     @Test

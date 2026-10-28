@@ -1,4 +1,4 @@
-firstname,surname,email
-Me,Again,foo@bar.com
-Ich,wieder,foo@bar.de
-я,то́же,foo@bar.ru
+firstname,surname,email,salutation
+Erika,Müller,erika@example.test,Liebe
+Peter,Schmidt,peter@example.test,Lieber
+я,то́же,foo@bar.ru,Dear

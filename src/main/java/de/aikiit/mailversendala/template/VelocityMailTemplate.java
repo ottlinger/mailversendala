@@ -81,6 +81,7 @@ public class VelocityMailTemplate {
         context.put("firstname", firstName);
         context.put("surname", lastName);
         context.put("email", Objects.requireNonNullElse(recipient.getEmail(), ""));
+        context.put("salutation", Objects.requireNonNullElse(recipient.getSalutation(), ""));
         return context;
     }
 
