@@ -92,8 +92,16 @@
                       <!-- Repository files are not deployed with the Maven site. -->
                       <replacestring from="(./src/"
                                      to="(${project.url}/blob/master/src/"/>
+                      <replacestring from="(${project.url}/blob/master/CHANGELOG.md)"
+                                     to="(changelog.html)"/>
                     </filterchain>
                   </copy>
+                  <!-- Keep CHANGELOG.md as the single source for the changelog page. -->
+                  <copy file="${project.basedir}/CHANGELOG.md"
+                        tofile="${project.build.directory}/generated-site/markdown/changelog.md"
+                        encoding="${project.build.sourceEncoding}"
+                        outputencoding="${project.build.sourceEncoding}"
+                        overwrite="true"/>
                 </target>
               </configuration>
             </execution>

@@ -243,9 +243,7 @@ please follow the guidelines about integration, e.g. [Eclipse integration](https
 
 ## Changelog
 
-See [CHANGELOG.md](https://github.com/ottlinger/mailversendala/blob/master/CHANGELOG.md)
-for changes, including the GreenMail 2 migration related to
-[PR #552](https://github.com/ottlinger/mailversendala/pull/552).
+See [CHANGELOG.md](https://github.com/ottlinger/mailversendala/blob/master/CHANGELOG.md).
 
 ## Copyright
 

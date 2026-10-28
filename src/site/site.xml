@@ -33,6 +33,7 @@ limitations under the License.
   <body>
     <menu name="${project.name}">
       <item name="Introduction" href="index.html"/>
+      <item name="Changelog" href="changelog.html"/>
     </menu>
     <menu ref="parent"/>
     <menu ref="modules"/>
