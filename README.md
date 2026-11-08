@@ -87,7 +87,9 @@ In case you want to use the application productively you need to configure it, p
 ## How to configure the application
 
 In order to properly configure the application you need to set some mail-related properties.
-Please use the file [javaconfiguration.properties.template](./src/test/resources/META-INF/javaconfiguration.properties.template) and save it as *javaconfiguration.properties*.
+Use [javaconfiguration.properties.template](./src/test/resources/META-INF/javaconfiguration.properties.template)
+as a starting point and save it as `META-INF/javaconfiguration.properties` in a directory
+on the classpath. See the external configuration example below.
 
 Technically the configuration is based on [Apache Tamaya (incubating)](https://tamaya.apache.org)
 
@@ -104,6 +106,107 @@ $ export csvpath=/tmp/my.csv; java -jar target/mailversendala-1.0.0-SNAPSHOT-exe
 $ java -Dcsvpath=/tmp/my.csv -jar target/mailversendala-1.0.0-SNAPSHOT-executable.jar
 // configuration option set as JVM parameter
 ```
+
+### External configuration without credentials on the command line
+
+You can keep your SMTP credentials in an external configuration file without changing
+the application or including them in the JAR. Tamaya loads
+`META-INF/javaconfiguration.properties` from the classpath. Simply placing the file
+beside the JAR and starting with `java -jar` is **not sufficient**.
+
+For example, organise your files as follows:
+
+```text
+mailing/
+├── mailversendala-1.0.0-SNAPSHOT-executable.jar
+├── config/
+│   └── META-INF/
+│       └── javaconfiguration.properties
+├── data/
+│   └── recipients.csv
+└── templates/
+    ├── mailtemplate.html
+    ├── mailtemplate.txt
+    └── attachments/
+        └── information.pdf         # optional
+```
+
+**`config/META-INF/javaconfiguration.properties`**
+```properties
+host=smtp.example.com
+port=465
+username=user@example.com
+password=YOUR_SMTP_PASSWORD
+
+from=user@example.com
+subject=Your invitation
+
+# Test without actually sending any emails first.
+demomode=true
+
+csvpath=data/recipients.csv
+templatepath=templates
+htmltemplate=mailtemplate.html
+plaintexttemplate=mailtemplate.txt
+
+# Optional:
+# attachments=attachments/information.pdf
+```
+
+Relative paths are resolved from the **working directory when the application starts**,
+not from the configuration file's directory. In this example, start from `mailing/`.
+Alternatively, use absolute paths.
+
+**`data/recipients.csv`** (UTF-8)
+```csv
+firstname,surname,email,salutation
+Erika,Müller,erika@example.test,Dear
+Peter,Schmidt,peter@example.test,Dear
+```
+
+**`templates/mailtemplate.html`** (UTF-8)
+```html
+<html><body>
+<p>${salutation} ${firstName},</p>
+<p>Here is your invitation.</p>
+</body></html>
+```
+
+**`templates/mailtemplate.txt`** (UTF-8)
+```text
+${salutation} ${firstName},
+
+Here is your invitation.
+```
+
+From `mailing/`, start the application on macOS or Linux with:
+
+```sh
+java -cp "config:mailversendala-1.0.0-SNAPSHOT-executable.jar" \
+  de.aikiit.mailversendala.App
+```
+
+Use **`-cp` instead of `-jar`** to include the external configuration directory in the
+classpath. On Windows, use `;` instead of `:` as the classpath separator:
+
+```sh
+java -cp "config;mailversendala-1.0.0-SNAPSHOT-executable.jar" de.aikiit.mailversendala.App
+```
+
+Keep `demomode=true` for the initial test. Set `demomode=false` in the configuration
+file only when you are ready to send emails. Replace the example recipient addresses
+with real addresses before sending.
+
+The password is still stored in **plain text**, but is not included in shell history
+or process arguments. Restrict access to the configuration on macOS or Linux:
+
+```sh
+chmod 700 config config/META-INF
+chmod 600 config/META-INF/javaconfiguration.properties
+```
+
+On Windows, restrict access using the file and folder security settings. **Do not
+commit the credentials file to version control or package it inside the JAR.**
 
 ### Configurable program options
 
