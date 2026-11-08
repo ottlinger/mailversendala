@@ -48,7 +48,11 @@ A Maven-generated site report is also available [here](https://ottlinger.github.
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/f27ed60267144c1a88e12f0539ff9a6a)](https://app.codacy.com/gh/ottlinger/mailversendala/dashboard)
 ## How to run and use the application
 
-You need to checkout the application and build it with the help of [Java](https://java.sun.com) (17 or newer) and [Maven](https://maven.apache.org/).
+Check out the application and build it with [Java](https://java.sun.com) (17 or newer)
+and the included [Maven Wrapper](https://maven.apache.org/wrapper/). A separate Maven
+installation is not required; the wrapper downloads the configured Maven version.
+Use `./mvnw verify` on macOS/Linux or `.\mvnw.cmd verify` on Windows to build and
+run all unit and packaged-JAR integration tests.
 
 Mail delivery uses Commons Email 2's Jakarta variant (`2.0.0-M1`, currently a milestone release)
 with Eclipse Angus as the Jakarta Mail/Activation implementation. Local delivery tests use
@@ -60,7 +64,7 @@ $ git clone https://github.com/ottlinger/mailversendala.git
 Cloning into 'mailversendala'...
 ...
 
-$ ./mvnw
+$ ./mvnw verify
 ....
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
