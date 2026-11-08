@@ -20,9 +20,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.appender.ConsoleAppender;
 import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.layout.PatternLayout;
+import org.apache.logging.log4j.core.impl.Log4jLogEvent;
+import org.apache.logging.log4j.message.SimpleMessage;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
+import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,6 +39,12 @@ class LoggingConfigurationTest {
             context.setConfigLocation(Path.of("src/main/resources/log4j2.properties").toAbsolutePath().toUri());
 
             assertConsoleConfiguration(context.getConfiguration(), "Mailversendala", Level.INFO);
+            PatternLayout layout = (PatternLayout) context.getConfiguration().getAppenders().get("STDOUT").getLayout();
+            assertThat(layout.getCharset()).isEqualTo(StandardCharsets.UTF_8);
+            assertThat(new String(layout.toByteArray(Log4jLogEvent.newBuilder()
+                    .setLoggerName("Mailversendala").setLevel(Level.INFO)
+                    .setMessage(new SimpleMessage("vorbereitet für: Jörg"))
+                    .build()), StandardCharsets.UTF_8)).contains("vorbereitet für: Jörg");
         }
     }
 

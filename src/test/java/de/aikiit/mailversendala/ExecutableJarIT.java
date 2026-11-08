@@ -20,6 +20,7 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
@@ -89,6 +90,11 @@ class ExecutableJarIT {
 
         Process process = new ProcessBuilder(
                 Path.of(System.getProperty("java.home"), "bin", "java").toString(),
+                // The merged stdout/stderr file must be UTF-8, including non-Log4j output.
+                "-Dfile.encoding=UTF-8",
+                "-Dstdout.encoding=UTF-8", "-Dstderr.encoding=UTF-8",
+                // Java 17 uses these names for the standard streams.
+                "-Dsun.stdout.encoding=UTF-8", "-Dsun.stderr.encoding=UTF-8",
                 "-Dconfig=" + config,
                 // JVM properties must still override values from the external file.
                 "-Dcsvpath=" + csv,
@@ -102,7 +108,7 @@ class ExecutableJarIT {
             assertThat(process.waitFor(30, TimeUnit.SECONDS))
                     .as("Packaged application must terminate within 30 seconds; output: %s", outputFile)
                     .isTrue();
-            String output = Files.readString(outputFile);
+            String output = Files.readString(outputFile, StandardCharsets.UTF_8);
             assertThat(process.exitValue()).withFailMessage("Application failed:\n%s", output).isZero();
             assertThat(output)
                     .contains("INFO", "Mailversendala", "Loaded external configuration file:",
