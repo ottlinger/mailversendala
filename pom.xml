@@ -4,7 +4,7 @@
   <groupId>de.aikiit</groupId>
   <artifactId>mailversendala</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <name>mailversendala</name>
   <description>A tool to send out mails with parameters and dynamic elements in it.</description>
   <url>https://github.com/ottlinger/mailversendala</url>
