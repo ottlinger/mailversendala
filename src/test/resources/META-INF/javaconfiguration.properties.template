@@ -18,6 +18,8 @@ username=user@example.com
 password=chooseMeWisely
 to=xmas@man.com
 from=santa@cruz.com
+# Optional single reply address. Leave empty to use the sender address for replies.
+replyto=
 subject=Do adapt your configuration - will not work
 csvpath=/tmp/mailversendala-example.csv
 demomode=true

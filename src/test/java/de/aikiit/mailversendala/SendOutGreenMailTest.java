@@ -32,6 +32,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import jakarta.mail.AuthenticationFailedException;
 import jakarta.mail.Message;
@@ -147,6 +150,57 @@ class SendOutGreenMailTest {
         assertThat(image.getDisposition()).isEqualToIgnoringCase(Part.INLINE);
         try (InputStream receivedImage = image.getInputStream(); InputStream fixture = IMAGE.openStream()) {
             assertThat(receivedImage.readAllBytes()).isEqualTo(fixture.readAllBytes());
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"plaintext", "complex", "templates"})
+    void deliversConfiguredReplyToForEveryMessageType(String variant, @TempDir Path directory) throws Exception {
+        when(config.getReplyTo()).thenReturn("  replies@example.test  ");
+
+        sendVariant(variant, directory);
+
+        MimeMessage message = receivedMessage();
+        assertAddressesAndHeaders(message);
+        assertThat(message.getHeader("Reply-To")).containsExactly("replies@example.test");
+        assertThat(message.getReplyTo()).hasSize(1);
+        assertThat(((InternetAddress) message.getReplyTo()[0]).getAddress()).isEqualTo("replies@example.test");
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {"   "})
+    void omitsReplyToWhenNotConfigured(String replyTo, @TempDir Path directory) throws Exception {
+        when(config.getReplyTo()).thenReturn(replyTo);
+        for (String variant : List.of("plaintext", "complex", "templates")) {
+            sendVariant(variant, directory);
+        }
+
+        assertThat(greenMail.waitForIncomingEmail(5000, 3)).isTrue();
+        for (MimeMessage message : greenMail.getReceivedMessages()) {
+            assertThat(message.getHeader("Reply-To")).isNull();
+            assertThat(((InternetAddress) message.getReplyTo()[0]).getAddress()).isEqualTo(FROM);
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"plaintext", "complex", "templates"})
+    void rejectsInvalidReplyToBeforeDelivery(String variant, @TempDir Path directory) {
+        when(config.getReplyTo()).thenReturn("not-an-email");
+
+        assertThatThrownBy(() -> sendVariant(variant, directory)).isInstanceOf(EmailException.class);
+        assertThat(greenMail.getReceivedMessages()).isEmpty();
+    }
+
+    private void sendVariant(String variant, Path directory) throws Exception {
+        switch (variant) {
+            case "plaintext" -> newSendOut().send();
+            case "complex" -> newSendOut().sendComplex(IMAGE);
+            case "templates" -> {
+                VelocityMailTemplate templates = externalTemplates(directory);
+                newSendOut().send(templates.render(MAILING));
+            }
+            default -> throw new IllegalArgumentException("Unknown message variant: " + variant);
         }
     }
 

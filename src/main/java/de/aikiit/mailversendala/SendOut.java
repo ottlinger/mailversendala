@@ -159,11 +159,19 @@ public class SendOut {
     void send(MailTemplate template, MailResources resources) throws EmailException {
         htmlEmail.setCharset(Charsets.UTF_8.name());
         htmlEmail.setFrom(mailConfig.getFrom());
+        configureReplyTo(htmlEmail);
         htmlEmail.addTo(recipient.email());
         htmlEmail.setSubject(mailConfig.getSubject());
         resources.applyTo(htmlEmail, template);
         if (mailConfig.sendOutMails()) {
             htmlEmail.send();
+        }
+    }
+
+    private void configureReplyTo(Email message) throws EmailException {
+        String replyTo = mailConfig.getReplyTo();
+        if (replyTo != null && !replyTo.isBlank()) {
+            message.addReplyTo(replyTo.trim());
         }
     }
 
@@ -173,6 +181,7 @@ public class SendOut {
      */
     public void send() throws EmailException {
         email.setFrom(mailConfig.getFrom());
+        configureReplyTo(email);
         email.addTo(this.recipient.email());
 
         email.setCharset(Charsets.UTF_8.name());
@@ -200,6 +209,7 @@ public class SendOut {
     void sendComplex(URL imageUrl) throws EmailException {
         htmlEmail.addTo(this.recipient.email(), this.recipient.firstname() + " " + this.recipient.surname());
         htmlEmail.setFrom(mailConfig.getFrom(), "Me");
+        configureReplyTo(htmlEmail);
         htmlEmail.setSubject("HTML" + mailConfig.getSubject() + " " + new Date());
 
         // embed the image and get the content id

@@ -47,6 +47,7 @@ public class MailConfig {
     private final String password;
     private final String to;
     private final String from;
+    private final String replyTo;
     private final String subject;
     private final String csvPath;
     private final String templatePath;
@@ -74,6 +75,7 @@ public class MailConfig {
         this.password = configuration.getOrDefault("password", "chooseMeWisely");
         this.to = configuration.getOrDefault("to", "xmas@man.com");
         this.from = configuration.getOrDefault("from", "santa@cruz.com");
+        this.replyTo = configuration.getOrDefault("replyto", "");
         this.subject = configuration.getOrDefault("subject", "Do adapt your configuration - will not work");
         this.csvPath = configuration.getOrDefault("csvpath", "mailversendala-example.csv");
         this.isDemoMode = Boolean.parseBoolean(configuration.getOrDefault("demomode", "true"));

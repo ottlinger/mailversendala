@@ -144,6 +144,8 @@ username=user@example.com
 password=YOUR_SMTP_PASSWORD
 
 from=user@example.com
+# Optional: send replies to a different address.
+# replyto=replies@example.com
 subject=Your invitation
 
 # Test without actually sending any emails first.
@@ -232,6 +234,7 @@ The following parameters can be set:
 | attachments | Optional comma-separated attachment paths, relative to templatepath | attachments/information.pdf |
 | subject | full subject line of the example mail | Whatever you want is a subject line |
 | from | mail address that is sent from | santa@cruz.com |
+| replyto | Optional single Reply-To email address; empty or omitted means replies go to `from` | replies@example.com (default: empty) |
 | to | mail address that an example mail is sent to **deprecated** | xmas@man.com |
 
 ### HTML and plain-text mail templates
