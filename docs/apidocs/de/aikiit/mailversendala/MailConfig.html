@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">MailConfig</a>()</code></div>
 <div class="col-last even-row-color">
-<div class="block">Read from Tamaya configuration or fallback to dummy default values.</div>
+<div class="block">Read an optional UTF-8 properties file specified by <code>-Dconfig=path</code>.</div>
 </div>
 </div>
 </section>
@@ -139,7 +139,9 @@ loadScripts(document, 'script');</script>
 <h3>MailConfig</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">MailConfig</span>()</div>
-<div class="block">Read from Tamaya configuration or fallback to dummy default values.</div>
+<div class="block">Read an optional UTF-8 properties file specified by <code>-Dconfig=path</code>.
+JVM properties and environment variables override the file, which overrides
+Tamaya's classpath configuration and the built-in defaults.</div>
 </div>
 </section>
 </li>

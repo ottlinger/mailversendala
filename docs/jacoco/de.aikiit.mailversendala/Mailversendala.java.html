@@ -20,6 +20,8 @@
 
 import de.aikiit.mailversendala.csv.CsvParser;
 import de.aikiit.mailversendala.csv.Mailing;
+import de.aikiit.mailversendala.template.FileMailTemplate;
+import de.aikiit.mailversendala.template.HtmlMarkupValidator;
 import de.aikiit.mailversendala.template.MailResources;
 import de.aikiit.mailversendala.template.MailTemplate;
 import de.aikiit.mailversendala.template.VelocityMailTemplate;
@@ -33,6 +35,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -40,9 +43,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Encapsulates the actual CSV parsing and mailing generation.
  */
-<span class="nc" id="L43">public class Mailversendala {</span>
-<span class="fc" id="L44">    private static final Logger LOG =</span>
-<span class="fc" id="L45">            LogManager.getLogger(Mailversendala.class);</span>
+<span class="nc" id="L46">public class Mailversendala {</span>
+<span class="fc" id="L47">    private static final Logger LOG =</span>
+<span class="fc" id="L48">            LogManager.getLogger(Mailversendala.class);</span>
 
     /**
      * Send out mails with the given configuration and return result object afterwards.
@@ -51,64 +54,87 @@ import java.util.concurrent.atomic.AtomicInteger;
      * @throws IOException in case of errors.
      */
     public static MailingResult sendOut(MailConfig configuration) throws IOException {
-<span class="fc" id="L54">        LOG.info(&quot;**** MAILVERSENDALA: Starting .... ****&quot;);</span>
+<span class="fc" id="L57">        LOG.info(&quot;**** MAILVERSENDALA: Starting .... ****&quot;);</span>
 
-<span class="fc" id="L56">        String csvPath = configuration.getCsvPath();</span>
-<span class="fc" id="L57">        MailingResult result = new MailingResult();</span>
+<span class="fc" id="L59">        String csvPath = configuration.getCsvPath();</span>
+<span class="fc" id="L60">        MailingResult result = new MailingResult();</span>
 
-<span class="fc" id="L59">        LOG.info(&quot;Consuming CSV: {}&quot;, csvPath);</span>
+<span class="fc" id="L62">        LOG.info(&quot;Consuming CSV: {}&quot;, csvPath);</span>
 
-<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        if (!Strings.isNullOrEmpty(csvPath)) {</span>
-<span class="fc" id="L62">            LOG.info(configuration.getCsvPath());</span>
-
-<span class="fc" id="L64">            File asFile = new File(configuration.getCsvPath());</span>
-<span class="fc bfc" id="L65" title="All 2 branches covered.">            if (asFile.exists()) {</span>
-<span class="fc" id="L66">                try (FileReader r = new FileReader(asFile, StandardCharsets.UTF_8)) {</span>
-<span class="fc" id="L67">                    CsvParser parser = new CsvParser(r);</span>
-<span class="fc" id="L68">                    final List&lt;Mailing&gt; mailings = parser.parse();</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        if (!Strings.isNullOrEmpty(csvPath)) {</span>
+<span class="fc" id="L65">            File asFile = new File(configuration.getCsvPath());</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">            if (asFile.exists()) {</span>
+<span class="fc" id="L67">                try (FileReader r = new FileReader(asFile, StandardCharsets.UTF_8)) {</span>
+<span class="fc" id="L68">                    CsvParser parser = new CsvParser(r);</span>
+<span class="fc" id="L69">                    final List&lt;Mailing&gt; mailings = parser.parse();</span>
 
                     // Load and compile both external templates before sending any messages.
-<span class="fc" id="L71">                    final VelocityMailTemplate templates = new VelocityMailTemplate(configuration);</span>
-<span class="fc" id="L72">                    final int total = mailings.size();</span>
-<span class="fc" id="L73">                    LOG.info(&quot;Will send out {} mails ... hold on tight :-)&quot;, total);</span>
+<span class="fc" id="L72">                    final VelocityMailTemplate templates = new VelocityMailTemplate(configuration);</span>
+<span class="fc" id="L73">                    String testAddress = configuration.getTo();</span>
+<span class="fc bfc" id="L74" title="All 4 branches covered.">                    boolean sendTestMail = testAddress != null &amp;&amp; !testAddress.isBlank();</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">                    final int total = mailings.size() + (sendTestMail ? 1 : 0);</span>
+<span class="fc" id="L76">                    LOG.info(&quot;Will send out {} mails ... hold on tight :-)&quot;, total);</span>
 
-<span class="fc" id="L75">                    MailResources resources = new MailResources(configuration);</span>
-<span class="fc" id="L76">                    List&lt;PreparedMail&gt; prepared = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L77" title="All 2 branches covered.">                    for (Mailing mailing : mailings) {</span>
+<span class="fc" id="L78">                    MailResources resources = new MailResources(configuration);</span>
+<span class="fc" id="L79">                    List&lt;PreparedMail&gt; prepared = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">                    if (sendTestMail) {</span>
+                        // The single test mail deliberately keeps all placeholders unresolved.
+<span class="fc" id="L82">                        MailTemplate rawTemplate = new FileMailTemplate(configuration);</span>
+<span class="fc" id="L83">                        resources.validate(rawTemplate);</span>
+<span class="fc" id="L84">                        Mailing testRecipient = Mailing.builder().email(testAddress.trim()).build();</span>
+<span class="fc" id="L85">                        prepared.add(new PreparedMail(testRecipient, rawTemplate));</span>
+<span class="fc" id="L86">                        LOG.debug(&quot;Prepared unrendered test mail to: {}&quot;, testRecipient.email());</span>
+                    }
+<span class="fc bfc" id="L88" title="All 2 branches covered.">                    for (Mailing mailing : mailings) {</span>
                         try {
-<span class="fc" id="L79">                            MailTemplate rendered = templates.render(mailing);</span>
-<span class="fc" id="L80">                            resources.validate(rendered);</span>
-<span class="fc" id="L81">                            prepared.add(new PreparedMail(mailing, rendered));</span>
-<span class="fc" id="L82">                        } catch (VelocityException e) {</span>
-<span class="fc" id="L83">                            result.addError();</span>
-<span class="fc" id="L84">                            LOG.error(&quot;Problem while rendering {}&quot;, mailing, e);</span>
-<span class="fc" id="L85">                        }</span>
-<span class="fc" id="L86">                    }</span>
+<span class="fc" id="L90">                            MailTemplate rendered = templates.render(mailing);</span>
+<span class="fc" id="L91">                            HtmlMarkupValidator.validate(rendered.getHtml(),</span>
+<span class="fc" id="L92">                                    Path.of(configuration.getTemplatePath(), configuration.getHtmlTemplate())</span>
+<span class="fc" id="L93">                                            + &quot; (recipient: &quot; + mailing.email() + &quot;)&quot;);</span>
+<span class="fc" id="L94">                            resources.validate(rendered);</span>
+<span class="fc" id="L95">                            prepared.add(new PreparedMail(mailing, rendered));</span>
+<span class="fc" id="L96">                        } catch (VelocityException e) {</span>
+<span class="fc" id="L97">                            result.addError();</span>
+<span class="fc" id="L98">                            LOG.error(&quot;Problem while rendering {}&quot;, mailing, e);</span>
+<span class="fc" id="L99">                        }</span>
+<span class="fc" id="L100">                    }</span>
                     // Validate every recipient's resource references before the first SMTP delivery.
-<span class="fc bfc" id="L88" title="All 2 branches covered.">                    for (PreparedMail mail : prepared) {</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">                    if (!prepared.isEmpty()) {</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">                        LOG.info(&quot;SMTP transport: {}&quot;, configuration.getPort() == 465 ? &quot;SMTPS&quot; : &quot;STARTTLS&quot;);</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">                        if (!configuration.sendOutMails()) {</span>
+<span class="fc" id="L105">                            LOG.warn(&quot;Running in DEMO mode, thus no mails will be sent out.&quot;);</span>
+                        }
+                    }
+<span class="fc" id="L108">                    int mailNumber = 0;</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">                    for (PreparedMail mail : prepared) {</span>
+<span class="fc" id="L110">                        mailNumber++;</span>
                         try {
-<span class="fc" id="L90">                            new SendOut(mail.recipient(), configuration).send(mail.template(), resources);</span>
-<span class="fc" id="L91">                            result.addSuccess();</span>
-<span class="fc" id="L92">                            LOG.info(&quot;Successfully send out {}.mail&quot;, result.getMailCounter().orElse(new AtomicInteger(0)));</span>
-<span class="nc" id="L93">                        } catch (EmailException e) {</span>
-<span class="nc" id="L94">                            result.addError();</span>
-<span class="nc" id="L95">                            LOG.error(&quot;Problem while sending out {}&quot;, mail.recipient(), e);</span>
-<span class="fc" id="L96">                        }</span>
-<span class="fc" id="L97">                    }</span>
+<span class="fc" id="L112">                            new SendOut(mail.recipient(), configuration).send(mail.template(), resources);</span>
+<span class="fc" id="L113">                            result.addSuccess();</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">                            if (configuration.sendOutMails()) {</span>
+<span class="nc" id="L115">                                LOG.info(&quot;Mail {}/{} erfolgreich gesendet an: {}&quot;, mailNumber, total, mail.recipient().email());</span>
+                            } else {
+<span class="fc" id="L117">                                LOG.info(&quot;Mail {}/{} im DEMO-Modus vorbereitet für: {}&quot;, mailNumber, total, mail.recipient().email());</span>
+                            }
+<span class="nc" id="L119">                        } catch (EmailException e) {</span>
+<span class="nc" id="L120">                            result.addError();</span>
+<span class="nc" id="L121">                            LOG.error(&quot;Problem while sending out {}&quot;, mail.recipient(), e);</span>
+<span class="fc" id="L122">                        }</span>
+<span class="fc" id="L123">                    }</span>
 
-<span class="fc" id="L99">                    LOG.info(&quot;**** MAILVERSENDALA-report: {} total mails ****&quot;, total);</span>
-<span class="fc" id="L100">                    LOG.info(&quot;**** MAILVERSENDALA-report: {} successfully send out ****&quot;, result.getMailCounter().orElse(new AtomicInteger(0)));</span>
-<span class="fc" id="L101">                    LOG.info(&quot;**** MAILVERSENDALA-report: {} errors ****&quot;, result.getErrorCounter().orElse(new AtomicInteger(0)));</span>
+<span class="fc" id="L125">                    LOG.info(&quot;**** MAILVERSENDALA-report: {} total mails ****&quot;, total);</span>
+<span class="fc" id="L126">                    LOG.info(&quot;**** MAILVERSENDALA-report: {} successfully sent out ****&quot;, result.getMailCounter().orElse(new AtomicInteger(0)));</span>
+<span class="fc" id="L127">                    LOG.info(&quot;**** MAILVERSENDALA-report: {} errors ****&quot;, result.getErrorCounter().orElse(new AtomicInteger(0)));</span>
                 }
 
             } else {
-<span class="fc" id="L105">                LOG.warn(&quot;Nothing to do - please configure your CSV path properly, either as environment variable or as a runtime parameter. Example: java -Dcsvpath=foo -jar fatJar.jar&quot;);</span>
+<span class="fc" id="L131">                LOG.warn(&quot;Nothing to do - please configure your CSV path properly, either as environment variable or as a runtime parameter. Example: java -Dcsvpath=foo -jar fatJar.jar&quot;);</span>
             }
         }
-<span class="fc" id="L108">        LOG.info(&quot;**** MAILVERSENDALA: Application shutdown .... ****&quot;);</span>
-<span class="fc" id="L109">        return result;</span>
+<span class="fc" id="L134">        LOG.info(&quot;**** MAILVERSENDALA: Application shutdown .... ****&quot;);</span>
+<span class="fc" id="L135">        return result;</span>
     }
 
-<span class="fc" id="L112">    private record PreparedMail(Mailing recipient, MailTemplate template) { }</span>
+<span class="fc" id="L138">    private record PreparedMail(Mailing recipient, MailTemplate template) { }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.16.202610240946</span></div></body></html>

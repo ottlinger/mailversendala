@@ -199,6 +199,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the value of the <a href="./de/aikiit/mailversendala/template/FileMailTemplate.html#param-html"><code>html</code></a> record component.</div>
 </dd>
+<dt><a href="de/aikiit/mailversendala/template/HtmlMarkupValidator.html" class="type-name-link" title="class in de.aikiit.mailversendala.template">HtmlMarkupValidator</a> - Class in <a href="de/aikiit/mailversendala/template/package-summary.html">de.aikiit.mailversendala.template</a></dt>
+<dd>
+<div class="block">Checks rendered HTML without changing the outgoing markup or fetching resources.</div>
+</dd>
 </dl>
 <h2 class="title" id="I:M">M</h2>
 <dl class="index">
@@ -208,7 +212,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="de/aikiit/mailversendala/MailConfig.html#%3Cinit%3E()" class="member-name-link">MailConfig()</a> - Constructor for class de.aikiit.mailversendala.<a href="de/aikiit/mailversendala/MailConfig.html" title="class in de.aikiit.mailversendala">MailConfig</a></dt>
 <dd>
-<div class="block">Read from Tamaya configuration or fallback to dummy default values.</div>
+<div class="block">Read an optional UTF-8 properties file specified by <code>-Dconfig=path</code>.</div>
 </dd>
 <dt><a href="de/aikiit/mailversendala/csv/Mailing.html" class="type-name-link" title="class in de.aikiit.mailversendala.csv">Mailing</a> - Record Class in <a href="de/aikiit/mailversendala/csv/package-summary.html">de.aikiit.mailversendala.csv</a></dt>
 <dd>
@@ -341,6 +345,10 @@ during an application run.</div>
 <dt><a href="de/aikiit/mailversendala/template/MailResources.html#validate(de.aikiit.mailversendala.template.MailTemplate)" class="member-name-link">validate(MailTemplate)</a> - Method in class de.aikiit.mailversendala.template.<a href="de/aikiit/mailversendala/template/MailResources.html" title="class in de.aikiit.mailversendala.template">MailResources</a></dt>
 <dd>
 <div class="block">Validate every inline image in a rendered message before the first delivery.</div>
+</dd>
+<dt><a href="de/aikiit/mailversendala/template/HtmlMarkupValidator.html#validate(java.lang.String,java.lang.String)" class="member-name-link">validate(String, String)</a> - Static method in class de.aikiit.mailversendala.template.<a href="de/aikiit/mailversendala/template/HtmlMarkupValidator.html" title="class in de.aikiit.mailversendala.template">HtmlMarkupValidator</a></dt>
+<dd>
+<div class="block">Reject HTML parser errors and likely misspelled HTML tags before delivery.</div>
 </dd>
 <dt><a href="de/aikiit/mailversendala/template/VelocityMailTemplate.html" class="type-name-link" title="class in de.aikiit.mailversendala.template">VelocityMailTemplate</a> - Class in <a href="de/aikiit/mailversendala/template/package-summary.html">de.aikiit.mailversendala.template</a></dt>
 <dd>

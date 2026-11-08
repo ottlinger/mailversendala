@@ -29,7 +29,7 @@
 
         <div id="breadcrumbs">
           <ul class="breadcrumb">
-        <li id="publishDate">Last Published: 1980-02-01<span class="divider">|</span>
+        <li id="publishDate">Last Published: 2026-11-08<span class="divider">|</span>
 </li>
           <li id="projectVersion">Version: 1.0.0-SNAPSHOT</li>
           </ul>
@@ -134,7 +134,7 @@ INFORMATION: Using Service Context of type: org.apache.tamaya.spisupport.Default
 </code></pre>
 <p>In case you want to use the application productively you need to configure it, please continue reading the following paragraph.</p></section><section><a id="How_to_configure_the_application"></a>
 <h2>How to configure the application</h2>
-<p>In order to properly configure the application you need to set some mail-related properties. Please use the file <a href="https://github.com/ottlinger/mailversendala/blob/master/src/test/resources/META-INF/javaconfiguration.properties.template" class="externalLink">javaconfiguration.properties.template</a> and save it as <em>javaconfiguration.properties</em>.</p>
+<p>In order to properly configure the application you need to set some mail-related properties. Use <a href="https://github.com/ottlinger/mailversendala/blob/master/src/test/resources/META-INF/javaconfiguration.properties.template" class="externalLink">javaconfiguration.properties.template</a> as a starting point and pass the saved UTF-8 properties file using <code>-Dconfig=path</code>. See the external configuration example below.</p>
 <p>Technically the configuration is based on <a href="https://tamaya.apache.org" class="externalLink">Apache Tamaya (incubating)</a></p><section><a id="Available_configuration_modes"></a>
 <h3>Available configuration modes</h3>
 <p>If you are running the application as a fat JAR you may want to overwrite each of the configuration keys either by environment variable or runtime property:</p>
@@ -147,7 +147,90 @@ $ export csvpath=/tmp/my.csv; java -jar target/mailversendala-1.0.0-SNAPSHOT-exe
 
 $ java -Dcsvpath=/tmp/my.csv -jar target/mailversendala-1.0.0-SNAPSHOT-executable.jar
 // configuration option set as JVM parameter
-</code></pre></section><section><a id="Configurable_program_options"></a>
+</code></pre></section><section><a id="External_configuration_without_credentials_on_the_command_line"></a>
+<h3>External configuration without credentials on the command line</h3>
+<p>You can keep your SMTP credentials in an external UTF-8 configuration file without including them in the JAR. Pass the file explicitly using <strong><code>-Dconfig=path</code> before <code>-jar</code></strong>. Simply placing the file beside the JAR is <strong>not sufficient</strong>.</p>
+<p>Configuration precedence (highest first): JVM properties (<code>-Dkey=value</code>), environment variables, the explicit config file, Tamaya configuration from the classpath, built-in defaults. An unreadable or malformed explicit config file aborts startup; it does not silently fall back to the JAR values. The loaded file's path is logged, but its contents are not.</p>
+<p>For example, organise your files as follows:</p>
+
+<pre class="prettyprint"><code class="language-text">mailing/
+&#x251c;&#x2500;&#x2500; mailversendala-1.0.0-SNAPSHOT-executable.jar
+&#x251c;&#x2500;&#x2500; config/
+&#x2502;   &#x2514;&#x2500;&#x2500; META-INF/
+&#x2502;       &#x2514;&#x2500;&#x2500; javaconfiguration.properties
+&#x251c;&#x2500;&#x2500; data/
+&#x2502;   &#x2514;&#x2500;&#x2500; recipients.csv
+&#x2514;&#x2500;&#x2500; templates/
+    &#x251c;&#x2500;&#x2500; mailtemplate.html
+    &#x251c;&#x2500;&#x2500; mailtemplate.txt
+    &#x2514;&#x2500;&#x2500; attachments/
+        &#x2514;&#x2500;&#x2500; information.pdf         # optional
+</code></pre>
+<p><strong><code>config/META-INF/javaconfiguration.properties</code></strong></p>
+
+<pre class="prettyprint"><code class="language-properties">host=smtp.example.com
+port=465
+username=user@example.com
+password=YOUR_SMTP_PASSWORD
+
+from=user@example.com
+# Optional: send replies to a different address.
+# replyto=replies@example.com
+subject=Your invitation
+
+# Test without actually sending any emails first.
+demomode=true
+
+csvpath=data/recipients.csv
+templatepath=templates
+htmltemplate=mailtemplate.html
+plaintexttemplate=mailtemplate.txt
+
+# Optional:
+# attachments=attachments/information.pdf
+</code></pre>
+<p>Relative paths are resolved from the <strong>working directory when the application starts</strong>, not from the configuration file's directory. In this example, start from <code>mailing/</code>. Alternatively, use absolute paths.</p>
+<p><strong><code>data/recipients.csv</code></strong> (UTF-8)</p>
+
+<pre class="prettyprint"><code class="language-csv">firstname,surname,email,salutation
+Erika,M&#xfc;ller,erika@example.test,Dear
+Peter,Schmidt,peter@example.test,Dear
+</code></pre>
+<p><strong><code>templates/mailtemplate.html</code></strong> (UTF-8)</p>
+
+<pre class="prettyprint"><code class="language-html">&lt;html&gt;&lt;body&gt;
+&lt;p&gt;${salutation} ${firstName},&lt;/p&gt;
+&lt;p&gt;Here is your invitation.&lt;/p&gt;
+&lt;/body&gt;&lt;/html&gt;
+</code></pre>
+<p><strong><code>templates/mailtemplate.txt</code></strong> (UTF-8)</p>
+
+<pre class="prettyprint"><code class="language-text">${salutation} ${firstName},
+
+Here is your invitation.
+</code></pre>
+<p>From <code>mailing/</code>, start the application with (also works on Windows):</p>
+
+<pre class="prettyprint"><code class="language-sh">java -Dconfig=config/META-INF/javaconfiguration.properties \
+  -jar mailversendala-1.0.0-SNAPSHOT-executable.jar
+</code></pre>
+<p>On Windows, enter the command on a single line. The explicit file can have any name and does not need a <code>META-INF</code> directory.</p>
+<p>Legacy classpath configuration via <code>-cp &quot;config:mailversendala-1.0.0-SNAPSHOT-executable.jar&quot;</code> and main class <code>de.aikiit.mailversendala.App</code> remains supported (use <code>;</code> on Windows). However, classpath order alone does not guarantee precedence between multiple Tamaya configuration resources. Prefer <code>-Dconfig</code> for a deterministic external override.</p>
+<p>Keep <code>demomode=true</code> for the initial test. Set <code>demomode=false</code> in the configuration file only when you are ready to send emails. Replace the example recipient addresses with real addresses before sending.</p>
+<p>The password is still stored in <strong>plain text</strong>, but is not included in shell history or process arguments. Restrict access to the configuration on macOS or Linux:</p>
+
+<pre class="prettyprint"><code class="language-sh">chmod 700 config config/META-INF
+chmod 600 config/META-INF/javaconfiguration.properties
+</code></pre>
+<p>On Windows, restrict access using the file and folder security settings. <strong>Do not commit the credentials file to version control or package it inside the JAR.</strong></p></section><section><a id="Delivery_protocol_for_each_run"></a>
+<h3>Delivery protocol for each run</h3>
+<p>Every application start writes an additional UTF-8 log file into the <strong>current working directory</strong>, alongside the existing console output. A fixed run ID combines a timestamp and UUID, keeping the filename unique and stable even if logging is reconfigured. The filename is Windows-compatible, for example:</p>
+
+<pre class="prettyprint"><code class="language-text">mailversendala-2026-11-08_16-30-42-123-789f7c38-35e9-44a4-8e32-f2a5e301a9ae.log
+</code></pre>
+<p>The INFO-level protocol contains per-recipient delivery/preparation messages, the final success/error report, and application errors. Demo-mode messages are explicitly marked as preparation rather than delivery. Writes are flushed immediately. Existing files are never overwritten; reinitializing the logger appends to the same run's protocol.</p>
+<p><code>*.log</code> is excluded by <code>.gitignore</code>, so these protocols are not checked into Git. Files are retained until you archive or delete them yourself; there is no automatic rotation or deletion. The working directory must be writable.</p>
+<p><strong>Protocols contain recipient email addresses and may contain personal data in error messages.</strong> Restrict access and keep them only as long as needed. These are application logs, not a guarantee that a message reached an inbox: a successful SMTP send means the SMTP server accepted it for further delivery.</p></section><section><a id="Configurable_program_options"></a>
 <h3>Configurable program options</h3>
 <p>The following parameters can be set:</p>
 <table class="table table-striped">
@@ -205,11 +288,29 @@ $ java -Dcsvpath=/tmp/my.csv -jar target/mailversendala-1.0.0-SNAPSHOT-executabl
 <td>mail address that is sent from</td>
 <td><a href="mailto:santa@cruz.com" class="externalLink">santa@cruz.com</a></td></tr>
 <tr class="b">
+<td>replyto</td>
+<td>Optional single Reply-To email address; empty or omitted means replies go to <code>from</code></td>
+<td><a href="mailto:replies@example.com" class="externalLink">replies@example.com</a> (default: empty)</td></tr>
+<tr class="a">
 <td>to</td>
-<td>mail address that an example mail is sent to <strong>deprecated</strong></td>
-<td><a href="mailto:xmas@man.com" class="externalLink">xmas@man.com</a></td></tr></tbody>
+<td>Optional recipient of one additional, unrendered test mail during the normal CSV run</td>
+<td><a href="mailto:xmas@man.com" class="externalLink">xmas@man.com</a> (default: empty)</td></tr></tbody>
 </table>
-</section><section><a id="HTML_and_plain-text_mail_templates"></a>
+</section><section><a id="Additional_test_mail_to_yourself_during_the_CSV_run"></a>
+<h3>Additional test mail to yourself during the CSV run</h3>
+<p>Set <code>to</code> to your own email address in the config file:</p>
+
+<pre class="prettyprint"><code class="language-properties">to=xmas@man.com
+demomode=true
+</code></pre>
+<p>Start the application normally:</p>
+
+<pre class="prettyprint"><code class="language-sh">java -Dconfig=config/META-INF/javaconfiguration.properties \
+  -jar mailversendala-1.0.0-SNAPSHOT-executable.jar
+</code></pre>
+<p>During the CSV run, <strong>one additional test mail</strong> is prepared for <code>to</code> and sent before any personalized CSV messages. It contains the original HTML and plain-text template contents, including unresolved placeholders such as <code>${firstName}</code> or <code>${unknownField}</code>. Rendering errors for CSV recipients therefore do not prevent this test mail. CSV recipients are still personalized separately; <code>to</code> does not replace them. The report includes the additional test mail in its success/error counts.</p>
+<p>The test mail uses the same SMTP settings, subject, Reply-To, images and attachments. Template files and resource references must still be valid and readable; safety checks are not bypassed (unresolved placeholders in image paths cannot identify a real file). Omit <code>to</code> or leave it empty to disable the additional test mail. There is no default test recipient.</p>
+<p>Keep <code>demomode=true</code> for preparation without delivery. With <code>demomode=false</code>, <strong>both the test mail and all successfully rendered CSV messages are sent</strong>; setting <code>to</code> is not a test-only mode.</p></section><section><a id="HTML_and_plain-text_mail_templates"></a>
 <h3>HTML and plain-text mail templates</h3>
 <p>Each CSV recipient receives <strong>one email with both HTML and plain-text alternatives</strong>. The mail client chooses which version to display. Both bodies are rendered with Apache Velocity; the configured <code>subject</code> is used unchanged and both alternatives use UTF-8.</p>
 <p>Create two UTF-8 files outside the JAR, for example:</p>
@@ -237,7 +338,17 @@ Your invitation is ready.
 <p>SMTP credentials and <code>from</code> must also be configured. Demo mode is enabled by default; set <code>demomode=false</code> only when ready to deliver the messages.</p>
 <p>Available recipient variables are <code>${salutation}</code>, <code>${firstName}</code>, <code>${lastName}</code>, and <code>${email}</code>. <code>${firstname}</code> and <code>${surname}</code> are aliases matching the CSV column names. With the CSV above, <code>${salutation} ${firstName}</code> renders <code>Liebe Erika</code> for Erika and <code>Lieber Peter</code> for Peter, in both HTML and plain text. The template supplies the separating space and any punctuation; the CSV value supplies the greeting.</p>
 <p>References in HTML are HTML-escaped automatically; plain-text values are not HTML-escaped. Use these variables in HTML text or double-quoted attributes, not as JavaScript or unvalidated URLs.</p>
-<p>Both templates are loaded and compiled once per run. Missing or syntactically invalid templates abort the run before delivery; rendering or SMTP errors are counted per recipient. Unknown variables are rendering errors rather than being sent as literal placeholders. Templates can use Velocity directives such as <code>#if</code> and <code>#foreach</code>; only use trusted template files. The template-based sending flow never downloads remote images or attachments.</p></section><section><a id="Inline_images_and_file_attachments"></a>
+<p>Both templates are loaded and compiled once per run. Missing or syntactically invalid templates abort the run before delivery; rendering or SMTP errors are counted per recipient. Unknown variables are rendering errors rather than being sent as literal placeholders. Templates can use Velocity directives such as <code>#if</code> and <code>#foreach</code>; only use trusted template files. The template-based sending flow never downloads remote images or attachments.</p></section><section><a id="HTML_markup_checks_before_delivery"></a>
+<h3>HTML markup checks before delivery</h3>
+<p>The normal CSV run checks every successfully rendered HTML body with Jsoup <strong>before any SMTP delivery</strong>, including delivery of the additional test mail. Errors such as mismatched closing tags, invalid nesting, duplicate attributes or unterminated quotes abort the entire run. Ordinary unknown HTML tags such as <code>&lt;spna&gt;</code> instead of <code>&lt;span&gt;</code> are also rejected, since Jsoup would otherwise accept them silently.</p>
+<p>Diagnostics include the HTML template path, the affected recipient, and line/column positions in the <strong>rendered HTML</strong>. Velocity directives may change line numbers relative to the original template. Up to 20 errors are reported per failed body. For example:</p>
+
+<pre class="prettyprint"><code class="language-text">Invalid HTML markup in templates/welcome.html (recipient: ada@example.test) ...
+line/column 2:1: Unknown HTML tag &lt;spna&gt;
+</code></pre>
+<p>Full HTML documents and body fragments are supported, as are HTML void elements such as <code>&lt;br&gt;</code> and <code>&lt;img&gt;</code> without XML-style closing tags. The check does not rewrite the HTML or fetch external resources. It also runs in demo mode, so <code>demomode=true</code> lets you diagnose template problems without sending any mail.</p>
+<p>This is a typo/parser check, not a complete HTML conformance validator or a guarantee of correct rendering in every mail client. Custom elements with hyphenated names, namespaced markup, and Outlook conditional comments are allowed. Not every misspelled attribute can be detected.</p>
+<p>Only rendered CSV bodies are checked: the additional unrendered test mail retains placeholders and Velocity directives intentionally. Checking those directives as finished HTML could reject a valid template. If a CSV body's markup check fails, no messages, including that test mail, are sent. Existing image and attachment checks still apply to the unrendered test mail.</p></section><section><a id="Inline_images_and_file_attachments"></a>
 <h3>Inline images and file attachments</h3>
 <p>Images referenced by HTML <code>&lt;img src=&quot;...&quot;&gt;</code> elements are automatically embedded in the email using MIME Content-IDs. The image is sent with the message rather than downloaded from a website. PDF documents, images, and other files can also be added as ordinary, downloadable attachments. HTML and plain-text alternatives are preserved in both cases.</p>
 <p>For example:</p>

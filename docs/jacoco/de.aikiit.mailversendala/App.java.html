@@ -18,7 +18,6 @@
  */
 
 
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
@@ -27,9 +26,9 @@ import java.io.IOException;
  * Main application that sends out mailings found in the configurable CSV file.
  * Remember to disable demo mode in order to send out mails.
  */
-<span class="fc" id="L30">public class App {</span>
-<span class="fc" id="L31">    private static final Logger LOG =</span>
-<span class="fc" id="L32">            LogManager.getLogger(App.class);</span>
+<span class="fc" id="L29">public class App {</span>
+<span class="fc" id="L30">    private static final Logger LOG =</span>
+<span class="fc" id="L31">            RunLogging.getLogger(App.class);</span>
 
     /**
      * Main method to launch MailVersendala with the given arguments.
@@ -37,8 +36,13 @@ import java.io.IOException;
      * @throws IOException in case of errors.
      */
     public static void main(String[] args) throws IOException {
-<span class="fc" id="L40">        Mailversendala.sendOut(new MailConfig());</span>
-<span class="fc" id="L41">        LOG.info(&quot;Mailversendala is shutting down. Bye Bye :-)&quot;);</span>
-<span class="fc" id="L42">    }</span>
+        try {
+<span class="fc" id="L40">            Mailversendala.sendOut(new MailConfig());</span>
+<span class="fc" id="L41">            LOG.info(&quot;Mailversendala is shutting down. Bye Bye :-)&quot;);</span>
+<span class="nc" id="L42">        } catch (IOException | RuntimeException e) {</span>
+<span class="nc" id="L43">            LOG.error(&quot;Mailversendala run failed; no further messages will be sent.&quot;, e);</span>
+<span class="nc" id="L44">            throw e;</span>
+<span class="fc" id="L45">        }</span>
+<span class="fc" id="L46">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.16.202610240946</span></div></body></html>
