@@ -31,7 +31,7 @@
           <ul class="breadcrumb">
         <li id="publishDate">Last Published: 2026-11-08<span class="divider">|</span>
 </li>
-          <li id="projectVersion">Version: 1.0.0-SNAPSHOT</li>
+          <li id="projectVersion">Version: 2.0.0-SNAPSHOT</li>
           </ul>
         </div>
       </header>
@@ -59,29 +59,46 @@
  <section><a id="Changelog"></a>
 <h1>Changelog</h1><section><a id="Unreleased"></a>
 <h2>Unreleased</h2><section><a id="Added"></a>
+<h3>Added</h3></section><section><a id="Changed"></a>
+<h3>Changed</h3></section><section><a id="Fixed"></a>
+<h3>Fixed</h3></section></section><section><a id="v1.0.0_-_2026-11-08"></a>
+<h2>v1.0.0 - 2026-11-08</h2><section><a id="Added_1"></a>
 <h3>Added</h3>
 <ul>
 
-<li>Add the required <code>salutation</code> CSV column and <code>${salutation}</code> template variable for recipient-specific greeting prefixes. <code>${salutation} ${firstName}</code> renders <code>Liebe Erika</code> or <code>Lieber Peter</code> when the CSV contains <code>Liebe</code> or <code>Lieber</code>. CSV files must include the new column.</li>
-<li>Document greeting templates and update the example CSV and templates.</li>
-</ul></section><section><a id="Changed"></a>
+<li><strong>Personalized HTML and plain-text emails:</strong> Each CSV recipient receives one message with both alternatives, rendered from external UTF-8 Velocity templates. Configure the directory and filenames with <code>templatepath</code>, <code>htmltemplate</code> and <code>plaintexttemplate</code>; the configured subject is preserved. HTML values are escaped automatically. Templates support directives such as <code>#if</code> and <code>#foreach</code>.</li>
+<li><strong>Recipient-specific greetings:</strong> Use the new <code>salutation</code> CSV column and <code>${salutation}</code> placeholder to produce greetings such as <code>Liebe Erika</code> or <code>Lieber Peter</code> with <code>${salutation} ${firstName}</code>. Example CSV files and templates now demonstrate this usage.</li>
+<li><strong>Embedded images and attachments:</strong> Local HTML images are embedded in the message instead of downloaded by the recipient. Add PDFs or other files with the optional comma-separated <code>attachments</code> setting. Paths are relative to <code>templatepath</code>; repeated references to the same image or attachment are deduplicated.</li>
+<li><strong>Explicit external configuration:</strong> Pass <code>-Dconfig=path/to/file.properties</code> before <code>-jar</code> to load a UTF-8 configuration file without putting SMTP credentials on the command line or into the JAR. Configuration precedence is JVM properties, environment variables, the explicit file, then classpath configuration and defaults.</li>
+<li><strong>Configurable Reply-To:</strong> Set <code>replyto</code> to send replies to a different address. Leave it empty or omit it to retain the normal reply-to-sender behavior.</li>
+<li><strong>An additional test mail to yourself:</strong> Set <code>to</code> to your own address to receive one extra message during the normal CSV run, containing the original templates with unresolved placeholders. CSV recipients are still processed separately. Omit <code>to</code> or leave it empty to disable this feature; there is no built-in test recipient. The example configuration retains <code>to=xmas@man.com</code> for adaptation.</li>
+<li><strong>HTML checks before sending:</strong> Jsoup checks every successfully rendered CSV message for markup errors and ordinary misspelled tags such as <code>&lt;spna&gt;</code>. Errors identify the template, recipient and line/column in the rendered HTML, and abort the run before any message is sent. The raw test mail is not checked as finished HTML, but is also withheld if a CSV message fails markup validation. This is a parser/typo check, not a complete HTML conformance or mail-client rendering validator.</li>
+<li><strong>A delivery protocol for every run:</strong> A uniquely named UTF-8 <code>.log</code> file in the current working directory records recipient progress, the final report and errors, including startup failures. Console output remains available. Files are kept until manually archived or deleted and are excluded from Git. Protect these protocols: they contain recipient addresses and may contain personal data in error messages.</li>
+</ul></section><section><a id="Changed_1"></a>
 <h3>Changed</h3>
 <ul>
 
-<li>Convert <code>Mailing</code> to an immutable Java record while retaining its Lombok builder and constructor argument order. Replace JavaBean getters with record accessors (<code>firstname()</code>, <code>surname()</code>, <code>email()</code>, <code>salutation()</code>); setters are no longer available.</li>
-<li>Require a non-blank <code>email</code> value for every CSV recipient. Rows with a missing, empty, or whitespace-only email field are logged and skipped.</li>
-<li>Migrate GreenMail from 1.6.15 to 2.1.14, implementing the dependency update proposed in <a href="https://github.com/ottlinger/mailversendala/pull/552" class="externalLink">PR #552</a>.</li>
-<li>Replace Commons Email 1.6.0 with Commons Email 2's Jakarta variant (<code>commons-email2-jakarta</code> 2.0.0-M1, a milestone release) and migrate application and test imports from <code>javax.mail</code> to <code>jakarta.mail</code> for GreenMail 2 compatibility.</li>
-<li>Use Eclipse Angus Mail 2.0.5 as the shared mail implementation for the application and tests, excluding legacy and duplicate bundled mail implementations.</li>
-</ul></section><section><a id="Tests"></a>
-<h3>Tests</h3>
+<li><strong>Existing CSV files must include <code>salutation</code>.</strong> Rows with a missing, empty or whitespace-only <code>email</code> value are logged and skipped; valid rows continue to be processed. The unused <code>language</code> recipient field and template variable are removed.</li>
+<li>Templates and local resources are prepared before the first SMTP delivery. Missing or invalid template files, unsafe resource paths and missing images abort the run. Remote image URLs, absolute paths, paths escaping <code>templatepath</code> and <code>srcset</code> are rejected. Resource contents are snapshotted so filesystem changes cannot alter an already validated message.</li>
+<li><strong>Demo mode still sends nothing</strong>, including the additional mail to <code>to</code>, while preparing and checking messages. With <code>demomode=false</code>, both the additional test mail and successfully rendered CSV messages are sent; <code>to</code> is not a test-only mode.</li>
+<li>Logging now reports progress and the recipient once per processed message, for example <code>Mail 1/27 erfolgreich gesendet an: foo@bar.de</code>. Demo-mode messages say they were prepared, not sent. The additional test mail is included in the totals. Transport and demo-mode notices appear once per CSV run; initialization and raw test-mail preparation details are only visible at DEBUG level.</li>
+<li>Building from source now requires <strong>Java 17 or newer</strong>. Use the included Maven Wrapper (<code>./mvnw</code>, or <code>.\mvnw.cmd</code> on Windows) to obtain the configured Maven version, satisfying the minimum Maven 3.9 requirement without a separate installation.</li>
+</ul></section><section><a id="Fixed_1"></a>
+<h3>Fixed</h3>
 <ul>
 
-<li>Adapt recipient and CSV parsing tests to record accessors and verify <code>Mailing</code> value equality, hash codes, and builder support for omitted values.</li>
-<li>Cover missing email columns/fields and empty or whitespace-only email values, including continued parsing of valid recipients after invalid rows.</li>
-<li>Cover salutation parsing, rejection of rows without the required column, HTML escaping, and personalized HTML/plain-text delivery through GreenMail.</li>
-<li>Retain coverage of authenticated SMTPS delivery, MIME content, attachments, invalid credentials, demo mode, and rejection of plaintext fallback.</li>
-<li>Verify that the executable JAR includes Jakarta Mail/Activation APIs and provider service descriptors without legacy Javax APIs or the test-only GreenMail server.</li>
+<li>Explicit configuration files reliably override bundled/classpath values. An unreadable or malformed file now stops startup instead of silently using defaults.</li>
+<li>Restore reliable logging initialization and mail-provider discovery in the executable JAR by using stable Log4j 2 and merging provider service descriptors.</li>
+<li>Use explicit UTF-8 logging and subprocess output so umlauts do not break the packaged-JAR tests on Windows. Per-run filenames are Windows-compatible and stay stable when logging is reconfigured during startup.</li>
+<li>Correct the success report wording to <code>successfully sent out</code>.</li>
+</ul></section><section><a id="For_developers"></a>
+<h3>For developers</h3>
+<ul>
+
+<li>Migrate mail delivery and tests to Commons Email 2's Jakarta variant (<code>commons-email2-jakarta</code> 2.0.0-M1, a milestone release), GreenMail 2 and the shared Eclipse Angus Mail implementation. Remove legacy/duplicate Javax mail providers.</li>
+<li>Convert <code>Mailing</code> and <code>FileMailTemplate</code> to immutable Java records. <code>Mailing</code> retains its Lombok builder and constructor argument order; record accessors replace JavaBean getters, and setters are no longer available.</li>
+<li>Replace deprecated Guava charset constants in <code>SendOut</code> with <code>StandardCharsets</code>. Update dependencies and build/test tooling.</li>
+<li>Extend automated coverage for personalized Unicode messages, SMTP authentication and TLS, MIME alternatives, images and attachments, invalid CSV rows, preflight failures, Reply-To, raw test mails, HTML typo diagnostics and per-run protocols. Packaged-JAR regression tests run through <code>./mvnw verify</code> (<code>.\mvnw.cmd verify</code> on Windows), including Windows encoding checks and consecutive runs with separate protocol files.</li>
 </ul></section></section></section>        </main>
       </div>
     </div>
