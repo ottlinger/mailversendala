@@ -16,7 +16,13 @@ limitations under the License.
 
 # Changelog
 
-## v1.0.0
+## Unreleased
+
+### Added
+### Changed
+### Fixed
+
+## v1.0.0 - 2026-11-08
 
 ### Added
 
