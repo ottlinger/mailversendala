@@ -138,6 +138,34 @@ public class MailversendalaTest {
         }
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"<spna>Bad</spna>", "<p>Bad</pp>"})
+    void invalidMarkupForLaterRecipientAbortsBeforeAnyDeliveryIncludingTestMail(String invalidHtml,
+                                                                               @TempDir Path folder) throws Exception {
+        Path csv = folder.resolve("recipients.csv");
+        Files.writeString(csv, "firstname,surname,email,salutation\n"
+                + "Ada,Lovelace,ada@example.test,Dear\nGrace,Hopper,grace@example.test,Hello\n");
+        Files.writeString(folder.resolve("conditional.html"),
+                "#if($firstName == 'Grace')\n" + invalidHtml + "\n#else\n<p>Hello ${firstName}</p>\n#end");
+        Files.writeString(folder.resolve("conditional.txt"), "Hello ${firstName}");
+        when(configuration.getCsvPath()).thenReturn(csv.toString());
+        when(configuration.getTemplatePath()).thenReturn(folder.toString());
+        when(configuration.getHtmlTemplate()).thenReturn("conditional.html");
+        when(configuration.getPlaintextTemplate()).thenReturn("conditional.txt");
+        when(configuration.getTo()).thenReturn("myself@example.test");
+
+        try (MockedConstruction<SendOut> senders = mockConstruction(SendOut.class)) {
+            assertThatThrownBy(() -> Mailversendala.sendOut(configuration))
+                    .isInstanceOf(IOException.class)
+                    .hasMessageContaining("Invalid HTML markup")
+                    .hasMessageContaining("conditional.html")
+                    .hasMessageContaining("recipient: grace@example.test")
+                    .hasMessageContaining("line/column");
+            assertThat(senders.constructed()).isEmpty();
+        }
+        verify(configuration, never()).getHost();
+    }
+
     @Test
     void missingTemplatesAbortBeforeAnySmtpClientIsCreated() {
         when(configuration.getCsvPath()).thenReturn(testFolder.resolve(CSV_NAME).toString());

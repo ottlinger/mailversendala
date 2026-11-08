@@ -21,6 +21,7 @@ package de.aikiit.mailversendala;
 import de.aikiit.mailversendala.csv.CsvParser;
 import de.aikiit.mailversendala.csv.Mailing;
 import de.aikiit.mailversendala.template.FileMailTemplate;
+import de.aikiit.mailversendala.template.HtmlMarkupValidator;
 import de.aikiit.mailversendala.template.MailResources;
 import de.aikiit.mailversendala.template.MailTemplate;
 import de.aikiit.mailversendala.template.VelocityMailTemplate;
@@ -34,6 +35,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -86,6 +88,9 @@ public class Mailversendala {
                     for (Mailing mailing : mailings) {
                         try {
                             MailTemplate rendered = templates.render(mailing);
+                            HtmlMarkupValidator.validate(rendered.getHtml(),
+                                    Path.of(configuration.getTemplatePath(), configuration.getHtmlTemplate())
+                                            + " (recipient: " + mailing.email() + ")");
                             resources.validate(rendered);
                             prepared.add(new PreparedMail(mailing, rendered));
                         } catch (VelocityException e) {

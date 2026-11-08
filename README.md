@@ -324,6 +324,39 @@ placeholders. Templates can use Velocity directives such as `#if` and `#foreach`
 only use trusted template files. The template-based sending flow never downloads remote
 images or attachments.
 
+### HTML markup checks before delivery
+
+The normal CSV run checks every successfully rendered HTML body with Jsoup **before
+any SMTP delivery**, including delivery of the additional test mail. Errors such as
+mismatched closing tags, invalid nesting, duplicate attributes or unterminated quotes
+abort the entire run. Ordinary unknown HTML tags such as `<spna>` instead of `<span>`
+are also rejected, since Jsoup would otherwise accept them silently.
+
+Diagnostics include the HTML template path, the affected recipient, and line/column
+positions in the **rendered HTML**. Velocity directives may change line numbers relative
+to the original template. Up to 20 errors are reported per failed body. For example:
+
+```text
+Invalid HTML markup in templates/welcome.html (recipient: ada@example.test) ...
+line/column 2:1: Unknown HTML tag <spna>
+```
+
+Full HTML documents and body fragments are supported, as are HTML void elements such
+as `<br>` and `<img>` without XML-style closing tags. The check does not rewrite the
+HTML or fetch external resources. It also runs in demo mode, so `demomode=true` lets
+you diagnose template problems without sending any mail.
+
+This is a typo/parser check, not a complete HTML conformance validator or a guarantee
+of correct rendering in every mail client. Custom elements with hyphenated names,
+namespaced markup, and Outlook conditional comments are allowed. Not every misspelled
+attribute can be detected.
+
+Only rendered CSV bodies are checked: the additional unrendered test mail retains
+placeholders and Velocity directives intentionally. Checking those directives as finished
+HTML could reject a valid template. If a CSV body's markup check fails, no messages,
+including that test mail, are sent. Existing image and attachment checks still apply
+to the unrendered test mail.
+
 ### Inline images and file attachments
 
 Images referenced by HTML `<img src="...">` elements are automatically embedded in the
