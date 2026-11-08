@@ -216,6 +216,31 @@ chmod 600 config/META-INF/javaconfiguration.properties
 On Windows, restrict access using the file and folder security settings. **Do not
 commit the credentials file to version control or package it inside the JAR.**
 
+### Delivery protocol for each run
+
+Every application start writes an additional UTF-8 log file into the **current working
+directory**, alongside the existing console output. A fixed run ID combines a timestamp
+and UUID, keeping the filename unique and stable even if logging is reconfigured.
+The filename is Windows-compatible, for example:
+
+```text
+mailversendala-2026-11-08_16-30-42-123-789f7c38-35e9-44a4-8e32-f2a5e301a9ae.log
+```
+
+The INFO-level protocol contains per-recipient delivery/preparation messages, the final
+success/error report, and application errors. Demo-mode messages are explicitly marked
+as preparation rather than delivery. Writes are flushed immediately. Existing files
+are never overwritten; reinitializing the logger appends to the same run's protocol.
+
+`*.log` is excluded by `.gitignore`, so these protocols are not checked into Git.
+Files are retained until you archive or delete them yourself; there is no automatic
+rotation or deletion. The working directory must be writable.
+
+**Protocols contain recipient email addresses and may contain personal data in error
+messages.** Restrict access and keep them only as long as needed. These are application
+logs, not a guarantee that a message reached an inbox: a successful SMTP send means
+the SMTP server accepted it for further delivery.
+
 ### Configurable program options
 
 The following parameters can be set:

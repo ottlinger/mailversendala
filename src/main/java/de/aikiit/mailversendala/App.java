@@ -18,7 +18,6 @@ package de.aikiit.mailversendala;
  */
 
 
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
@@ -29,7 +28,7 @@ import java.io.IOException;
  */
 public class App {
     private static final Logger LOG =
-            LogManager.getLogger(App.class);
+            RunLogging.getLogger(App.class);
 
     /**
      * Main method to launch MailVersendala with the given arguments.
@@ -37,7 +36,12 @@ public class App {
      * @throws IOException in case of errors.
      */
     public static void main(String[] args) throws IOException {
-        Mailversendala.sendOut(new MailConfig());
-        LOG.info("Mailversendala is shutting down. Bye Bye :-)");
+        try {
+            Mailversendala.sendOut(new MailConfig());
+            LOG.info("Mailversendala is shutting down. Bye Bye :-)");
+        } catch (IOException | RuntimeException e) {
+            LOG.error("Mailversendala run failed; no further messages will be sent.", e);
+            throw e;
+        }
     }
 }

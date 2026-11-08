@@ -23,6 +23,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.jar.JarFile;
 
@@ -51,6 +53,66 @@ class ExecutableJarIT {
             assertThat(jar.getEntry("com/sun/mail/smtp/SMTPTransport.class")).isNull();
             assertThat(jar.getEntry("com/icegreen/greenmail/util/GreenMail.class")).isNull();
         }
+    }
+
+    @Test
+    void createsSeparateProtocolFilesInWorkingDirectoryForConsecutiveRuns() throws Exception {
+        Path jar = Path.of(System.getProperty("executableJar")).toAbsolutePath();
+        for (int run = 1; run <= 2; run++) {
+            Path outputFile = directory.resolve("console-" + run + ".log");
+            Process process = new ProcessBuilder(
+                    Path.of(System.getProperty("java.home"), "bin", "java").toString(),
+                    "-Dfile.encoding=UTF-8", "-Dstdout.encoding=UTF-8", "-Dstderr.encoding=UTF-8",
+                    "-Dsun.stdout.encoding=UTF-8", "-Dsun.stderr.encoding=UTF-8",
+                    "-Ddemomode=true", "-Dcsvpath=missing.csv", "-jar", jar.toString())
+                    .directory(directory.toFile()).redirectErrorStream(true)
+                    .redirectOutput(outputFile.toFile()).start();
+            try {
+                assertThat(process.waitFor(30, TimeUnit.SECONDS)).isTrue();
+                assertThat(process.exitValue()).withFailMessage("Application failed:\n%s",
+                        Files.readString(outputFile, StandardCharsets.UTF_8)).isZero();
+                assertThat(protocolFiles()).hasSize(run);
+            } finally {
+                process.destroyForcibly();
+            }
+        }
+        for (Path protocol : protocolFiles()) {
+            assertThat(Files.readString(protocol, StandardCharsets.UTF_8))
+                    .contains("MAILVERSENDALA: Starting", "Mailversendala is shutting down")
+                    .doesNotContain("ERROR", "Exception");
+        }
+    }
+
+    @Test
+    void recordsStartupFailureInProtocolAndKeepsNonzeroExitCode() throws Exception {
+        Path jar = Path.of(System.getProperty("executableJar")).toAbsolutePath();
+        Path outputFile = directory.resolve("console-error.log");
+        Process process = new ProcessBuilder(
+                Path.of(System.getProperty("java.home"), "bin", "java").toString(),
+                "-Dfile.encoding=UTF-8", "-Dstdout.encoding=UTF-8", "-Dstderr.encoding=UTF-8",
+                "-Dsun.stdout.encoding=UTF-8", "-Dsun.stderr.encoding=UTF-8",
+                "-Dconfig=" + directory.resolve("missing.properties"), "-jar", jar.toString())
+                .directory(directory.toFile()).redirectErrorStream(true)
+                .redirectOutput(outputFile.toFile()).start();
+        try {
+            assertThat(process.waitFor(30, TimeUnit.SECONDS)).isTrue();
+            assertThat(process.exitValue()).isNotZero();
+            List<Path> protocols = protocolFiles();
+            assertThat(protocols).hasSize(1);
+            assertThat(Files.readString(protocols.get(0), StandardCharsets.UTF_8))
+                    .contains("ERROR", "Mailversendala run failed", "Cannot read configuration file")
+                    .doesNotContain("successfully sent out");
+        } finally {
+            process.destroyForcibly();
+        }
+    }
+
+    private List<Path> protocolFiles() throws Exception {
+        List<Path> files = new ArrayList<>();
+        try (var entries = Files.newDirectoryStream(directory, "mailversendala-*.log")) {
+            entries.forEach(files::add);
+        }
+        return files;
     }
 
     @ParameterizedTest
@@ -122,6 +184,13 @@ class ExecutableJarIT {
                             "test-password", "Using TLS", "Using SSL", "email initialized",
                             "Initializing SMTP clients", "Successfully processed mail", "erfolgreich gesendet an:",
                             "Prepared unrendered test mail");
+            List<Path> protocols = protocolFiles();
+            assertThat(protocols).hasSize(1);
+            assertThat(Files.readString(protocols.get(0), StandardCharsets.UTF_8))
+                    .contains("Mail 1/2 im DEMO-Modus vorbereitet für: myself@example.test",
+                            "Mail 2/2 im DEMO-Modus vorbereitet für: recipient@example.test",
+                            "2 successfully sent out", "0 errors", "Mailversendala is shutting down")
+                    .doesNotContain("test-password", "Prepared unrendered test mail");
         } finally {
             process.destroyForcibly();
         }

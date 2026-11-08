@@ -28,7 +28,6 @@ import org.apache.commons.mail2.jakarta.DefaultAuthenticator;
 import org.apache.commons.mail2.jakarta.Email;
 import org.apache.commons.mail2.jakarta.HtmlEmail;
 import org.apache.commons.mail2.jakarta.SimpleEmail;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
@@ -42,7 +41,7 @@ import java.util.Date;
  */
 public class SendOut {
     private static final Logger LOG =
-            LogManager.getLogger(SendOut.class);
+            RunLogging.getLogger(SendOut.class);
 
     // is transformed into User-Agent-Header
     private static final String SENT_BY = "X-Mailer";
