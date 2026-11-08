@@ -60,8 +60,6 @@ public class Mailversendala {
         LOG.info("Consuming CSV: {}", csvPath);
 
         if (!Strings.isNullOrEmpty(csvPath)) {
-            LOG.info(configuration.getCsvPath());
-
             File asFile = new File(configuration.getCsvPath());
             if (asFile.exists()) {
                 try (FileReader r = new FileReader(asFile, StandardCharsets.UTF_8)) {
@@ -96,11 +94,23 @@ public class Mailversendala {
                         }
                     }
                     // Validate every recipient's resource references before the first SMTP delivery.
+                    if (!prepared.isEmpty()) {
+                        LOG.info("SMTP transport: {}", configuration.getPort() == 465 ? "SMTPS" : "STARTTLS");
+                        if (!configuration.sendOutMails()) {
+                            LOG.warn("Running in DEMO mode, thus no mails will be sent out.");
+                        }
+                    }
+                    int mailNumber = 0;
                     for (PreparedMail mail : prepared) {
+                        mailNumber++;
                         try {
                             new SendOut(mail.recipient(), configuration).send(mail.template(), resources);
                             result.addSuccess();
-                            LOG.info("Successfully send out {}.mail", result.getMailCounter().orElse(new AtomicInteger(0)));
+                            if (configuration.sendOutMails()) {
+                                LOG.info("Mail {}/{} erfolgreich gesendet an: {}", mailNumber, total, mail.recipient().email());
+                            } else {
+                                LOG.info("Mail {}/{} im DEMO-Modus vorbereitet für: {}", mailNumber, total, mail.recipient().email());
+                            }
                         } catch (EmailException e) {
                             result.addError();
                             LOG.error("Problem while sending out {}", mail.recipient(), e);

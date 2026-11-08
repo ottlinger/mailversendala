@@ -80,10 +80,10 @@ public class SendOut {
         this.htmlEmail = htmlEmail;
 
         if (!mailConfig.sendOutMails()) {
-            LOG.warn("Running in DEMO mode, thus no mails will be sent out.");
+            LOG.debug("Running in DEMO mode, thus no mails will be sent out.");
         }
 
-        LOG.info("Initialized authentication.");
+        LOG.debug("Initializing SMTP clients with {}.", mailConfig.getPort() == 465 ? "SMTPS" : "STARTTLS");
         DefaultAuthenticator authenticator = new DefaultAuthenticator(mailConfig.getUsername(), mailConfig.getPassword());
 
         int port = mailConfig.getPort();
@@ -93,32 +93,28 @@ public class SendOut {
         email.setAuthenticator(authenticator);
         email.setSSLCheckServerIdentity(true);
         if (465 == port) {
-            LOG.info("Using SSL.");
             email.setSSLOnConnect(true);
         } else {
-            LOG.info("Using TLS.");
             email.setStartTLSEnabled(true);
             email.setStartTLSRequired(true);
         }
         email.setBounceAddress(mailConfig.getFrom());
         email.addHeader(SENT_BY, SENT_BY_ME);
-        LOG.info("Simple email initialized.");
+        LOG.debug("Simple email initialized.");
 
         htmlEmail.setHostName(mailConfig.getHost());
         htmlEmail.setSmtpPort(port);
         htmlEmail.setSSLCheckServerIdentity(true);
         if (465 == port) {
-            LOG.info("Using SSL.");
             htmlEmail.setSSLOnConnect(true);
         } else {
-            LOG.info("Using TLS.");
             htmlEmail.setStartTLSEnabled(true);
             htmlEmail.setStartTLSRequired(true);
         }
         htmlEmail.setBounceAddress(mailConfig.getFrom());
         htmlEmail.setAuthenticator(authenticator);
         htmlEmail.addHeader(SENT_BY, SENT_BY_ME);
-        LOG.info("HTML and text email initialized.");
+        LOG.debug("HTML and text email initialized.");
     }
 
     /**
@@ -135,6 +131,10 @@ public class SendOut {
 
             Mailing mailing = Mailing.builder().email(email).firstname("Your name").surname("Is my name").build();
             MailConfig configuration = new MailConfig();
+            LOG.info("SMTP transport: {}", configuration.getPort() == 465 ? "SMTPS" : "STARTTLS");
+            if (!configuration.sendOutMails()) {
+                LOG.warn("Running in DEMO mode, thus no mails will be sent out.");
+            }
             VelocityMailTemplate templates = new VelocityMailTemplate(configuration);
             SendOut sendOut = new SendOut(mailing, configuration);
             sendOut.send(templates.render(mailing));

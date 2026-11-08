@@ -17,6 +17,8 @@ package de.aikiit.mailversendala;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -50,8 +52,9 @@ class ExecutableJarIT {
         }
     }
 
-    @Test
-    void startsPackagedApplicationWithLoggingAndExternalTemplates() throws Exception {
+    @ParameterizedTest
+    @ValueSource(ints = {465, 587})
+    void startsPackagedApplicationWithLoggingAndExternalTemplates(int port) throws Exception {
         Path jar = Path.of(System.getProperty("executableJar")).toAbsolutePath();
         assertThat(jar).isRegularFile();
         Path csv = directory.resolve("recipients.csv");
@@ -89,6 +92,7 @@ class ExecutableJarIT {
                 "-Dconfig=" + config,
                 // JVM properties must still override values from the external file.
                 "-Dcsvpath=" + csv,
+                "-Dport=" + port,
                 "-jar", jar.toString())
                 .directory(directory.toFile())
                 .redirectErrorStream(true)
@@ -105,8 +109,13 @@ class ExecutableJarIT {
                             "Running in DEMO mode",
                             "Prepared unrendered test mail to: myself@example.test",
                             "2 successfully send out", "0 errors", "Mailversendala is shutting down")
+                    .containsOnlyOnce("SMTP transport: " + (port == 465 ? "SMTPS" : "STARTTLS"))
+                    .containsOnlyOnce("Running in DEMO mode")
+                    .containsOnlyOnce("Mail 1/2 im DEMO-Modus vorbereitet für: myself@example.test")
+                    .containsOnlyOnce("Mail 2/2 im DEMO-Modus vorbereitet für: recipient@example.test")
                     .doesNotContain("ERROR", "StatusLogger", "Exception", "Reading Tamaya configuration",
-                            "test-password");
+                            "test-password", "Using TLS", "Using SSL", "email initialized",
+                            "Initializing SMTP clients", "Successfully processed mail", "erfolgreich gesendet an:");
         } finally {
             process.destroyForcibly();
         }
