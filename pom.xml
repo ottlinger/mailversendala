@@ -68,6 +68,10 @@
         <plugin>
           <artifactId>maven-site-plugin</artifactId>
           <version>3.22.0</version>
+          <configuration>
+            <!-- keep site generation timestamp instead of release timestamp -->
+            <outputTimestamp>x</outputTimestamp>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-antrun-plugin</artifactId>
