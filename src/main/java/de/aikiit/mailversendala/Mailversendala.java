@@ -118,7 +118,7 @@ public class Mailversendala {
                     }
 
                     LOG.info("**** MAILVERSENDALA-report: {} total mails ****", total);
-                    LOG.info("**** MAILVERSENDALA-report: {} successfully send out ****", result.getMailCounter().orElse(new AtomicInteger(0)));
+                    LOG.info("**** MAILVERSENDALA-report: {} successfully sent out ****", result.getMailCounter().orElse(new AtomicInteger(0)));
                     LOG.info("**** MAILVERSENDALA-report: {} errors ****", result.getErrorCounter().orElse(new AtomicInteger(0)));
                 }
 

@@ -114,7 +114,7 @@ class ExecutableJarIT {
                     .contains("INFO", "Mailversendala", "Loaded external configuration file:",
                             "Running in DEMO mode",
                             "Prepared unrendered test mail to: myself@example.test",
-                            "2 successfully send out", "0 errors", "Mailversendala is shutting down")
+                            "2 successfully sent out", "0 errors", "Mailversendala is shutting down")
                     .containsOnlyOnce("SMTP transport: " + (port == 465 ? "SMTPS" : "STARTTLS"))
                     .containsOnlyOnce("Running in DEMO mode")
                     .containsOnlyOnce("Mail 1/2 im DEMO-Modus vorbereitet für: myself@example.test")
