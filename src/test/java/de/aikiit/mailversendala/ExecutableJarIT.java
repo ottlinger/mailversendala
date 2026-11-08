@@ -66,17 +66,27 @@ class ExecutableJarIT {
             Files.copy(pdf, directory.resolve("attachments/information.pdf"));
         }
         Files.writeString(directory.resolve("welcome.txt"), "${salutation} ${firstName} ${lastName}");
+        Path config = directory.resolve("mailversendala.properties");
+        Files.writeString(config, """
+                demomode=true
+                host=localhost
+                port=465
+                username=test-user
+                password=test-password
+                from=sender@example.test
+                subject=Packaged application test
+                templatepath=.
+                htmltemplate=welcome.html
+                plaintexttemplate=welcome.txt
+                attachments=attachments/information.pdf
+                csvpath=missing.csv
+                """);
         Path outputFile = directory.resolve("application.log");
 
         Process process = new ProcessBuilder(
                 Path.of(System.getProperty("java.home"), "bin", "java").toString(),
-                "-Ddemomode=true",
-                "-Dhost=localhost", "-Dport=465",
-                "-Dusername=test-user", "-Dpassword=test-password",
-                "-Dfrom=sender@example.test", "-Dsubject=Packaged application test",
-                "-Dtemplatepath=" + directory,
-                "-Dhtmltemplate=welcome.html", "-Dplaintexttemplate=welcome.txt",
-                "-Dattachments=attachments/information.pdf",
+                "-Dconfig=" + config,
+                // JVM properties must still override values from the external file.
                 "-Dcsvpath=" + csv,
                 "-jar", jar.toString())
                 .directory(directory.toFile())
@@ -90,9 +100,11 @@ class ExecutableJarIT {
             String output = Files.readString(outputFile);
             assertThat(process.exitValue()).withFailMessage("Application failed:\n%s", output).isZero();
             assertThat(output)
-                    .contains("INFO", "Mailversendala", "Running in DEMO mode",
+                    .contains("INFO", "Mailversendala", "Loaded external configuration file:",
+                            "Running in DEMO mode",
                             "1 successfully send out", "0 errors", "Mailversendala is shutting down")
-                    .doesNotContain("ERROR", "StatusLogger", "Exception", "Reading Tamaya configuration");
+                    .doesNotContain("ERROR", "StatusLogger", "Exception", "Reading Tamaya configuration",
+                            "test-password");
         } finally {
             process.destroyForcibly();
         }

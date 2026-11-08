@@ -24,6 +24,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.tamaya.Configuration;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Properties;
+
 
 /**
  * Encapsulates the configuration of this application.
@@ -49,11 +56,17 @@ public class MailConfig {
     private final boolean isDemoMode;
 
     /**
-     * Read from Tamaya configuration or fallback to dummy default values.
+     * Read an optional UTF-8 properties file specified by {@code -Dconfig=path}.
+     * JVM properties and environment variables override the file, which overrides
+     * Tamaya's classpath configuration and the built-in defaults.
      */
     public MailConfig() {
+        this(loadExternalConfiguration());
+    }
+
+    private MailConfig(Properties external) {
         LOG.debug("Reading Tamaya configuration ...");
-        final Configuration configuration = Configuration.current();
+        final ConfigValues configuration = new ConfigValues(external, Configuration.current());
 
         this.host = configuration.getOrDefault("host", "smtp.example.com");
         this.port = Integer.parseInt(configuration.getOrDefault("port", "465"));
@@ -69,6 +82,38 @@ public class MailConfig {
         this.plaintextTemplate = configuration.getOrDefault("plaintexttemplate", MailTemplate.BASE_NAME_PLAINTEXT);
         this.attachments = configuration.getOrDefault("attachments", "");
         LOG.debug("Configuration: DONE.");
+    }
+
+    private static Properties loadExternalConfiguration() {
+        Properties properties = new Properties();
+        String filename = System.getProperty("config");
+        if (filename != null) {
+            if (filename.isBlank()) {
+                throw new IllegalArgumentException("Configuration file path (-Dconfig) must not be blank");
+            }
+            Path path = Path.of(filename).toAbsolutePath().normalize();
+            try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+                properties.load(reader);
+            } catch (IOException | IllegalArgumentException e) {
+                // Do not expose property values (in particular SMTP credentials).
+                throw new IllegalArgumentException("Cannot read configuration file: " + path);
+            }
+            LOG.info("Loaded external configuration file: {}", path);
+        }
+        return properties;
+    }
+
+    private record ConfigValues(Properties external, Configuration tamaya) {
+        private String getOrDefault(String key, String fallback) {
+            String value = System.getProperty(key);
+            if (value == null) {
+                value = System.getenv(key);
+            }
+            if (value == null) {
+                value = external.getProperty(key);
+            }
+            return value == null ? tamaya.getOrDefault(key, fallback) : value;
+        }
     }
 
     /**

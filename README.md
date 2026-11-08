@@ -88,8 +88,8 @@ In case you want to use the application productively you need to configure it, p
 
 In order to properly configure the application you need to set some mail-related properties.
 Use [javaconfiguration.properties.template](./src/test/resources/META-INF/javaconfiguration.properties.template)
-as a starting point and save it as `META-INF/javaconfiguration.properties` in a directory
-on the classpath. See the external configuration example below.
+as a starting point and pass the saved UTF-8 properties file using `-Dconfig=path`.
+See the external configuration example below.
 
 Technically the configuration is based on [Apache Tamaya (incubating)](https://tamaya.apache.org)
 
@@ -109,10 +109,15 @@ $ java -Dcsvpath=/tmp/my.csv -jar target/mailversendala-1.0.0-SNAPSHOT-executabl
 
 ### External configuration without credentials on the command line
 
-You can keep your SMTP credentials in an external configuration file without changing
-the application or including them in the JAR. Tamaya loads
-`META-INF/javaconfiguration.properties` from the classpath. Simply placing the file
-beside the JAR and starting with `java -jar` is **not sufficient**.
+You can keep your SMTP credentials in an external UTF-8 configuration file without
+including them in the JAR. Pass the file explicitly using **`-Dconfig=path` before
+`-jar`**. Simply placing the file beside the JAR is **not sufficient**.
+
+Configuration precedence (highest first): JVM properties (`-Dkey=value`), environment
+variables, the explicit config file, Tamaya configuration from the classpath, built-in
+defaults. An unreadable or malformed explicit config file aborts startup; it does not
+silently fall back to the JAR values. The loaded file's path is logged, but its contents
+are not.
 
 For example, organise your files as follows:
 
@@ -179,19 +184,20 @@ ${salutation} ${firstName},
 Here is your invitation.
 ```
 
-From `mailing/`, start the application on macOS or Linux with:
+From `mailing/`, start the application with (also works on Windows):
 
 ```sh
-java -cp "config:mailversendala-1.0.0-SNAPSHOT-executable.jar" \
-  de.aikiit.mailversendala.App
+java -Dconfig=config/META-INF/javaconfiguration.properties \
+  -jar mailversendala-1.0.0-SNAPSHOT-executable.jar
 ```
 
-Use **`-cp` instead of `-jar`** to include the external configuration directory in the
-classpath. On Windows, use `;` instead of `:` as the classpath separator:
+On Windows, enter the command on a single line. The explicit file can have any name
+and does not need a `META-INF` directory.
 
-```sh
-java -cp "config;mailversendala-1.0.0-SNAPSHOT-executable.jar" de.aikiit.mailversendala.App
-```
+Legacy classpath configuration via `-cp "config:mailversendala-1.0.0-SNAPSHOT-executable.jar"`
+and main class `de.aikiit.mailversendala.App` remains supported (use `;` on Windows).
+However, classpath order alone does not guarantee precedence between multiple Tamaya
+configuration resources. Prefer `-Dconfig` for a deterministic external override.
 
 Keep `demomode=true` for the initial test. Set `demomode=false` in the configuration
 file only when you are ready to send emails. Replace the example recipient addresses

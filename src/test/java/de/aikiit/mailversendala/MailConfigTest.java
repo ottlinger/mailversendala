@@ -19,10 +19,14 @@ package de.aikiit.mailversendala;
 
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Created by hirsch on 15.05.17.
@@ -30,6 +34,58 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MailConfigTest {
 
     private final MailConfig mailConfig = new MailConfig();
+
+    @TempDir
+    Path directory;
+
+    @Test
+    void readsExternalUtf8ConfigurationAndAllowsJvmOverrides() throws Exception {
+        Path file = directory.resolve("mail.properties");
+        Files.writeString(file, "subject=Einladung für Jörg\nhtmltemplate=external.html\ndemomode=true\n");
+        String previousConfig = System.getProperty("config");
+        String previousSubject = System.getProperty("subject");
+        try {
+            System.setProperty("config", file.toString());
+            System.clearProperty("subject");
+            MailConfig external = new MailConfig();
+            assertThat(external.getSubject()).isEqualTo("Einladung für Jörg");
+            assertThat(external.getHtmlTemplate()).isEqualTo("external.html");
+            assertThat(external.sendOutMails()).isFalse();
+            assertThat(external.getPlaintextTemplate()).isEqualTo("mailtemplate.txt");
+
+            System.setProperty("subject", "JVM override");
+            assertThat(new MailConfig().getSubject()).isEqualTo("JVM override");
+        } finally {
+            restoreProperty("config", previousConfig);
+            restoreProperty("subject", previousSubject);
+        }
+    }
+
+    @Test
+    void rejectsMissingBlankAndMalformedConfigurationInsteadOfUsingDefaults() throws Exception {
+        String previousConfig = System.getProperty("config");
+        Path malformed = directory.resolve("malformed.properties");
+        Files.writeString(malformed, "password=secret\\uINVALID\n");
+        try {
+            for (String path : Arrays.asList(directory.resolve("missing.properties").toString(),
+                    directory.toString(), " ", malformed.toString())) {
+                System.setProperty("config", path);
+                assertThatThrownBy(MailConfig::new)
+                        .isInstanceOf(IllegalArgumentException.class)
+                        .hasMessageNotContaining("secret");
+            }
+        } finally {
+            restoreProperty("config", previousConfig);
+        }
+    }
+
+    private static void restoreProperty(String key, String previous) {
+        if (previous == null) {
+            System.clearProperty(key);
+        } else {
+            System.setProperty(key, previous);
+        }
+    }
 
     @Test
     public void ensureConfigurationIsValid() {
