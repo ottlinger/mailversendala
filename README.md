@@ -73,7 +73,7 @@ $ ./mvnw verify
 [INFO] Final Memory: 34M/481M
 [INFO] ------------------------------------------------------------------------
 
- $ java -jar target/mailversendala-1.0.0-SNAPSHOT-executable.jar
+ $ java -jar target/mailversendala-2.0.0-SNAPSHOT-executable.jar
 2024-12-22 00:48:00,714 DEBUG d.a.m.MailConfig [main] Reading Tamaya configuration ...
 Dez. 22, 2024 12:48:00 AM org.apache.tamaya.spi.ServiceContextManager loadDefaultServiceProvider
 INFORMATION: Using Service Context of type: org.apache.tamaya.spisupport.DefaultServiceContext
@@ -101,13 +101,13 @@ Technically the configuration is based on [Apache Tamaya (incubating)](https://t
 
 If you are running the application as a fat JAR you may want to overwrite each of the configuration keys either by environment variable or runtime property:
 ```
-$ java -jar target/mailversendala-1.0.0-SNAPSHOT-executable.jar
+$ java -jar target/mailversendala-2.0.0-SNAPSHOT-executable.jar
 // runs with default parameters from within the JAR
 
-$ export csvpath=/tmp/my.csv; java -jar target/mailversendala-1.0.0-SNAPSHOT-executable.jar
+$ export csvpath=/tmp/my.csv; java -jar target/mailversendala-2.0.0-SNAPSHOT-executable.jar
 // configuration set as environment variable
 
-$ java -Dcsvpath=/tmp/my.csv -jar target/mailversendala-1.0.0-SNAPSHOT-executable.jar
+$ java -Dcsvpath=/tmp/my.csv -jar target/mailversendala-2.0.0-SNAPSHOT-executable.jar
 // configuration option set as JVM parameter
 ```
 
@@ -127,7 +127,7 @@ For example, organise your files as follows:
 
 ```text
 mailing/
-├── mailversendala-1.0.0-SNAPSHOT-executable.jar
+├── mailversendala-2.0.0-SNAPSHOT-executable.jar
 ├── config/
 │   └── META-INF/
 │       └── javaconfiguration.properties
@@ -194,13 +194,13 @@ From `mailing/`, start the application with (also works on Windows):
 
 ```sh
 java -Dconfig=config/META-INF/javaconfiguration.properties \
-  -jar mailversendala-1.0.0-SNAPSHOT-executable.jar
+  -jar mailversendala-2.0.0-SNAPSHOT-executable.jar
 ```
 
 On Windows, enter the command on a single line. The explicit file can have any name
 and does not need a `META-INF` directory.
 
-Legacy classpath configuration via `-cp "config:mailversendala-1.0.0-SNAPSHOT-executable.jar"`
+Legacy classpath configuration via `-cp "config:mailversendala-2.0.0-SNAPSHOT-executable.jar"`
 and main class `de.aikiit.mailversendala.App` remains supported (use `;` on Windows).
 However, classpath order alone does not guarantee precedence between multiple Tamaya
 configuration resources. Prefer `-Dconfig` for a deterministic external override.
@@ -279,7 +279,7 @@ Start the application normally:
 
 ```sh
 java -Dconfig=config/META-INF/javaconfiguration.properties \
-  -jar mailversendala-1.0.0-SNAPSHOT-executable.jar
+  -jar mailversendala-2.0.0-SNAPSHOT-executable.jar
 ```
 
 During the CSV run, **one additional test mail** is prepared for `to` and sent before
@@ -330,7 +330,7 @@ java -Dtemplatepath=/tmp/mailversendala \
      -Dhtmltemplate=welcome.html \
      -Dplaintexttemplate=welcome.txt \
      -Dcsvpath=/tmp/recipients.csv \
-     -jar target/mailversendala-1.0.0-SNAPSHOT-executable.jar
+     -jar target/mailversendala-2.0.0-SNAPSHOT-executable.jar
 ```
 
 SMTP credentials and `from` must also be configured. Demo mode is enabled by default;

@@ -24,7 +24,9 @@ These instructions apply to the entire repository.
   templates, delivery behavior or logging. It is the source for user-facing usage
   instructions and the Maven site's landing page.
 - Consult [CHANGELOG.md](CHANGELOG.md) for existing changes and compatibility notes.
-  The current documented release is **v1.0.0**. Summarize user-visible changes in the
+  The documented release is **v1.0.0**; the current development version in `pom.xml`
+  is **2.0.0-SNAPSHOT**. Keep current build/run examples aligned with `pom.xml`, without
+  rewriting historical release notes. Summarize user-visible changes in the
   appropriate release section, explaining their practical impact rather than copying
   commit messages. Do not invent release dates or change versions without a request.
 - Keep the README, changelog, configuration template and relevant tests consistent
