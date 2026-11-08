@@ -113,7 +113,6 @@ class ExecutableJarIT {
             assertThat(output)
                     .contains("INFO", "Mailversendala", "Loaded external configuration file:",
                             "Running in DEMO mode",
-                            "Prepared unrendered test mail to: myself@example.test",
                             "2 successfully sent out", "0 errors", "Mailversendala is shutting down")
                     .containsOnlyOnce("SMTP transport: " + (port == 465 ? "SMTPS" : "STARTTLS"))
                     .containsOnlyOnce("Running in DEMO mode")
@@ -121,7 +120,8 @@ class ExecutableJarIT {
                     .containsOnlyOnce("Mail 2/2 im DEMO-Modus vorbereitet für: recipient@example.test")
                     .doesNotContain("ERROR", "StatusLogger", "Exception", "Reading Tamaya configuration",
                             "test-password", "Using TLS", "Using SSL", "email initialized",
-                            "Initializing SMTP clients", "Successfully processed mail", "erfolgreich gesendet an:");
+                            "Initializing SMTP clients", "Successfully processed mail", "erfolgreich gesendet an:",
+                            "Prepared unrendered test mail");
         } finally {
             process.destroyForcibly();
         }

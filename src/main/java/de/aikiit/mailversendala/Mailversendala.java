@@ -81,7 +81,7 @@ public class Mailversendala {
                         resources.validate(rawTemplate);
                         Mailing testRecipient = Mailing.builder().email(testAddress.trim()).build();
                         prepared.add(new PreparedMail(testRecipient, rawTemplate));
-                        LOG.info("Prepared unrendered test mail to: {}", testRecipient.email());
+                        LOG.debug("Prepared unrendered test mail to: {}", testRecipient.email());
                     }
                     for (Mailing mailing : mailings) {
                         try {
