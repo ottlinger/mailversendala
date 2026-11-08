@@ -20,6 +20,7 @@ package de.aikiit.mailversendala;
 
 import de.aikiit.mailversendala.csv.CsvParser;
 import de.aikiit.mailversendala.csv.Mailing;
+import de.aikiit.mailversendala.template.FileMailTemplate;
 import de.aikiit.mailversendala.template.MailResources;
 import de.aikiit.mailversendala.template.MailTemplate;
 import de.aikiit.mailversendala.template.VelocityMailTemplate;
@@ -69,11 +70,21 @@ public class Mailversendala {
 
                     // Load and compile both external templates before sending any messages.
                     final VelocityMailTemplate templates = new VelocityMailTemplate(configuration);
-                    final int total = mailings.size();
+                    String testAddress = configuration.getTo();
+                    boolean sendTestMail = testAddress != null && !testAddress.isBlank();
+                    final int total = mailings.size() + (sendTestMail ? 1 : 0);
                     LOG.info("Will send out {} mails ... hold on tight :-)", total);
 
                     MailResources resources = new MailResources(configuration);
                     List<PreparedMail> prepared = new ArrayList<>();
+                    if (sendTestMail) {
+                        // The single test mail deliberately keeps all placeholders unresolved.
+                        MailTemplate rawTemplate = new FileMailTemplate(configuration);
+                        resources.validate(rawTemplate);
+                        Mailing testRecipient = Mailing.builder().email(testAddress.trim()).build();
+                        prepared.add(new PreparedMail(testRecipient, rawTemplate));
+                        LOG.info("Prepared unrendered test mail to: {}", testRecipient.email());
+                    }
                     for (Mailing mailing : mailings) {
                         try {
                             MailTemplate rendered = templates.render(mailing);

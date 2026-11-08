@@ -235,7 +235,40 @@ The following parameters can be set:
 | subject | full subject line of the example mail | Whatever you want is a subject line |
 | from | mail address that is sent from | santa@cruz.com |
 | replyto | Optional single Reply-To email address; empty or omitted means replies go to `from` | replies@example.com (default: empty) |
-| to | mail address that an example mail is sent to **deprecated** | xmas@man.com |
+| to | Optional recipient of one additional, unrendered test mail during the normal CSV run | xmas@man.com (default: empty) |
+
+### Additional test mail to yourself during the CSV run
+
+Set `to` to your own email address in the config file:
+
+```properties
+to=xmas@man.com
+demomode=true
+```
+
+Start the application normally:
+
+```sh
+java -Dconfig=config/META-INF/javaconfiguration.properties \
+  -jar mailversendala-1.0.0-SNAPSHOT-executable.jar
+```
+
+During the CSV run, **one additional test mail** is prepared for `to` and sent before
+any personalized CSV messages. It contains the original HTML and plain-text template
+contents, including unresolved placeholders such as `${firstName}` or `${unknownField}`.
+Rendering errors for CSV recipients therefore do not prevent this test mail.
+CSV recipients are still personalized separately; `to` does not replace them.
+The report includes the additional test mail in its success/error counts.
+
+The test mail uses the same SMTP settings, subject, Reply-To, images and attachments.
+Template files and resource references must still be valid and readable; safety checks
+are not bypassed (unresolved placeholders in image paths cannot identify a real file).
+Omit `to` or leave it empty to disable the additional test mail. There is no default
+test recipient.
+
+Keep `demomode=true` for preparation without delivery. With `demomode=false`, **both
+the test mail and all successfully rendered CSV messages are sent**; setting `to`
+is not a test-only mode.
 
 ### HTML and plain-text mail templates
 

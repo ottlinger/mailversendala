@@ -74,6 +74,7 @@ class ExecutableJarIT {
                 username=test-user
                 password=test-password
                 from=sender@example.test
+                to=myself@example.test
                 subject=Packaged application test
                 templatepath=.
                 htmltemplate=welcome.html
@@ -102,7 +103,8 @@ class ExecutableJarIT {
             assertThat(output)
                     .contains("INFO", "Mailversendala", "Loaded external configuration file:",
                             "Running in DEMO mode",
-                            "1 successfully send out", "0 errors", "Mailversendala is shutting down")
+                            "Prepared unrendered test mail to: myself@example.test",
+                            "2 successfully send out", "0 errors", "Mailversendala is shutting down")
                     .doesNotContain("ERROR", "StatusLogger", "Exception", "Reading Tamaya configuration",
                             "test-password");
         } finally {

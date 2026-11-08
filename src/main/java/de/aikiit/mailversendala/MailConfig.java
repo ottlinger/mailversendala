@@ -73,7 +73,7 @@ public class MailConfig {
         this.port = Integer.parseInt(configuration.getOrDefault("port", "465"));
         this.username = configuration.getOrDefault("username", "user@example.com");
         this.password = configuration.getOrDefault("password", "chooseMeWisely");
-        this.to = configuration.getOrDefault("to", "xmas@man.com");
+        this.to = configuration.getOrDefault("to", "");
         this.from = configuration.getOrDefault("from", "santa@cruz.com");
         this.replyTo = configuration.getOrDefault("replyto", "");
         this.subject = configuration.getOrDefault("subject", "Do adapt your configuration - will not work");

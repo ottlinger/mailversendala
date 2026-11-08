@@ -42,7 +42,7 @@ public class MailConfigTest {
     void readsExternalUtf8ConfigurationAndAllowsJvmOverrides() throws Exception {
         Path file = directory.resolve("mail.properties");
         Files.writeString(file, "subject=Einladung für Jörg\nhtmltemplate=external.html\ndemomode=true\n"
-                + "replyto=antwort@example.test\n");
+                + "replyto=antwort@example.test\nto=myself@example.test\n");
         String previousConfig = System.getProperty("config");
         String previousSubject = System.getProperty("subject");
         try {
@@ -52,6 +52,7 @@ public class MailConfigTest {
             assertThat(external.getSubject()).isEqualTo("Einladung für Jörg");
             assertThat(external.getHtmlTemplate()).isEqualTo("external.html");
             assertThat(external.getReplyTo()).isEqualTo("antwort@example.test");
+            assertThat(external.getTo()).isEqualTo("myself@example.test");
             assertThat(external.sendOutMails()).isFalse();
             assertThat(external.getPlaintextTemplate()).isEqualTo("mailtemplate.txt");
 
@@ -100,5 +101,6 @@ public class MailConfigTest {
         assertThat(mailConfig.getPlaintextTemplate()).isEqualTo("mailtemplate.txt");
         assertThat(mailConfig.getAttachments()).isEmpty();
         assertThat(mailConfig.getReplyTo()).isEmpty();
+        assertThat(mailConfig.getTo()).isEmpty();
     }
 }
