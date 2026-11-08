@@ -18,7 +18,6 @@ package de.aikiit.mailversendala;
  */
 
 
-import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 import de.aikiit.mailversendala.csv.Mailing;
 import de.aikiit.mailversendala.template.MailResources;
@@ -35,6 +34,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 /**
@@ -157,7 +157,7 @@ public class SendOut {
 
     /** Send using the resources validated and snapshotted for the entire run. */
     void send(MailTemplate template, MailResources resources) throws EmailException {
-        htmlEmail.setCharset(Charsets.UTF_8.name());
+        htmlEmail.setCharset(StandardCharsets.UTF_8.name());
         htmlEmail.setFrom(mailConfig.getFrom());
         configureReplyTo(htmlEmail);
         htmlEmail.addTo(recipient.email());
@@ -184,7 +184,7 @@ public class SendOut {
         configureReplyTo(email);
         email.addTo(this.recipient.email());
 
-        email.setCharset(Charsets.UTF_8.name());
+        email.setCharset(StandardCharsets.UTF_8.name());
 
         email.setSubject(mailConfig.getSubject() + " " + new Date());
         email.setMsg("This is a test mail from Mailversendala... :-)");
